@@ -1,0 +1,9 @@
+title: User List
+desc: Present a list of active users.
+version: 1.0.2
+author: Jim Lehmann a.k.a. Ravenswood
+url: http://www.scriptmonkeys.us/
+category: user_features
+
+hook: start_output|phorum_mod_user_list_start_output
+hook: addon|phorum_mod_user_list_display

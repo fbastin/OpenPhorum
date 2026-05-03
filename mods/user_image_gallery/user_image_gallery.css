@@ -1,0 +1,24 @@
+
+#phorum table.list td.row1 {
+  border-bottom: none;
+}
+
+.gallery_button {
+  margin: 5px 0px;
+  padding: 0px;
+}
+
+.uploadblank {
+  margin: 5px 0px;
+  padding: 0;
+}
+
+.input_text {
+  width: 300px;
+}
+
+.input_textarea {
+  width: 300px;
+  height: 75px;
+}
+

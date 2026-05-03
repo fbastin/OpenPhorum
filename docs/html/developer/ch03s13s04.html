@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.13.4. admin_editforum_form_save_inherit_others</title><link rel="stylesheet" href="../phorum_docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="Phorum Developer Reference Manual"><link rel="up" href="ch03s13.html" title="3.13. Admin interface"><link rel="prev" href="ch03s13s03.html" title="3.13.3. admin_editforum_form_save_inherit"><link rel="next" href="ch03s13s05.html" title="3.13.5. admin_editforum_section_edit_forum"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td width="20%" align="left"><a accesskey="p" href="ch03s13s03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03s13s05.html">Next</a></td></tr></table><hr></div><div class="section" title="3.13.4. admin_editforum_form_save_inherit_others"><div class="titlepage"><div><div><h3 class="title"><a name="hook.admin_editforum_form_save_inherit_others"></a>3.13.4. admin_editforum_form_save_inherit_others</h3></div></div></div><p>
+
+This hook gets called for every other forum which
+inherits settings from this forum and thus gets updated.
+This can be used to prevent other settings from inherited.
+Be cautious what you modify in $forum_settings, as it
+will be used without re-initialization in the loop going
+through all forums which inherit from this one!
+      </p><p>
+        <span class="bold"><strong>
+          Call time:
+        </strong></span>
+      </p><p>
+
+When iterating over all forums which inherit from this
+forum.
+      </p><p>
+        <span class="bold"><strong>
+          Hook input:
+        </strong></span>
+      </p><p>
+
+The $forum_settings which will be applied to the
+inherited forums and the $inherit_setting .
+      </p><p>
+        <span class="bold"><strong>
+          Hook output:
+        </strong></span>
+      </p><p>
+
+$forum_settings, modified at wish, but be cautious, as it
+gets re-used during the loop
+      </p><p>
+        <span class="bold"><strong>
+          Example code:
+        </strong></span>
+      </p><p>
+
+</p><pre class="programlisting">
+function phorum_mod_foo_admin_editforum_form_save_inherit_others ($forum_settings, $inherit_setting)
+{
+    return $forum_settings;
+
+}
+</pre><p>
+
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s13s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03s13.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s13s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

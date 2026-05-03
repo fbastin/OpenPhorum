@@ -1,0 +1,76 @@
+Module  : Content Restrictions
+Version : 1.0.1 (29/10/2012)
+Author  : Adam Sheik
+
+This module implements configurable features for enforcing message content restrictions,
+for example, to stop new users spamming your forum with lots of links.
+
+Restrictions are configurable based on three types of user:
+- Unregistered
+- Newly registered
+- Registered
+
+[notes on the design of this module can be seen at http://www.phorum.org/phorum5/read.php?20,152210,152210]
+
+
+Available restrictions are:
+===========================
+
+Number of hyperlinks in any one message
+---------------------------------------
+Please note, for the purposes of this module, hyperlinks are considered to be clickable links or non clickable strings of the form www.somesite... 
+
+Size of message in bytes
+------------------------
+Suggested values could be 5000, 10000 and 30000 for unregistered, newly registered and registered respectively.
+For 8 bit encoded text, you can assume that bytes = characters, for unicode characters one character may equal more than one byte.
+That is why I have specified "bytes" rather than "characters".
+
+Just to confuse matters more, note if your host uses PHP's multibyte string overrides these values may represent characters instead of bytes. 
+However, Phorum's core uses the same method as I am (it tests against the hard-coded limit in constants.php, which defaults to 65000).
+
+Remove Restrictions for Premium Subscribers
+-------------------------------------------
+This requires the Subscribers module (http://www.phorum.org/phorum5/read.php?16,50056) to be installed.
+If you have installed this module, presumably your Premium Subscribers are trusted, so you can choose to remove all of the restrictions from this module
+for those users.
+
+
+Possible To Do List:
+====================
+- restrict number of images posted
+- restrict based on number of posts user has made (after any deletions)
+
+Install:
+========
+
+- Unpack the archive;
+
+- Move the directory "content_restrictions" to the directory "mods"
+  within your Phorum installation;
+
+- Login as administrator in Phorum's administrative interface and
+  go to the "Modules" section;
+
+- Enable the module "Content Restrictions".
+
+- Edit the settings for the module to setup the restrictions that
+  you want to use for your Phorum installation.
+
+
+Customization:
+==============
+
+You can translate the error messages that this module produces by writing a
+language file "mods/content_restrictions/lang/<yourlang>.php".
+In this filename <yourlang> has to be the same name as the main language
+file that you use (i.e. "include/lang/<yourlang>.php"). If you write a
+translation for this module, then please post it in the module's thread
+at phorum.org, so we can include it in the distribution.
+
+Acknowledgements:
+=================
+Thanks to Thomas Seifert for taking the time in the forums to advise me on
+which hook to use for this module.
+And (obviously) to the core Phorum team who have kept this amazing project
+running smoothly for so long.

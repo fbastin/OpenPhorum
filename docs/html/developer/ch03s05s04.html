@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.5.4. before_pm_list</title><link rel="stylesheet" href="../phorum_docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="Phorum Developer Reference Manual"><link rel="up" href="ch03s05.html" title="3.5. Private message system"><link rel="prev" href="ch03s05s03.html" title="3.5.3. pm_before_send"><link rel="next" href="ch03s05s05.html" title="3.5.5. pm_list"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td width="20%" align="left"><a accesskey="p" href="ch03s05s03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03s05s05.html">Next</a></td></tr></table><hr></div><div class="section" title="3.5.4. before_pm_list"><div class="titlepage"><div><div><h3 class="title"><a name="hook.before_pm_list"></a>3.5.4. before_pm_list</h3></div></div></div><p>
+        (Phorum 5 &gt;= 5.2.17)
+      </p><p>
+
+This hook can be used for retreiveing a list of messages
+via an alernate method other than the built in.
+      </p><p>
+        <span class="bold"><strong>
+          Call time:
+        </strong></span>
+      </p><p>
+
+Before the private message list is retreived from the database
+      </p><p>
+        <span class="bold"><strong>
+          Hook input:
+        </strong></span>
+      </p><p>
+
+A PM folder id
+      </p><p>
+        <span class="bold"><strong>
+          Hook output:
+        </strong></span>
+      </p><p>
+
+A list of private messages compatible with
+phourm_db_pm_list()
+      </p><p>
+        <span class="bold"><strong>
+          Example code:
+        </strong></span>
+      </p><p>
+
+</p><pre class="programlisting">
+function phorum_mod_foo_before_pm_list($folder_id)
+{
+    // Query the db directly and apply custom code
+
+    return $messages;
+}
+</pre><p>
+
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s05s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03s05.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s05s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

@@ -1,0 +1,9 @@
+title: Admin Mass Email
+category: admin
+category: email
+author: Joe Curia (aka Azumandias)
+desc: This mod allows the admin to send a mass email to all users, selected users, users which meet a specific criteria, or users in selected groups.
+version: 5.2.1.06
+hook: lang|
+hook: tpl_cc_usersettings|phorum_mod_admin_mass_email_tpl_cc_usersettings
+url: http://www.phorum.org/phorum5/read.php?62,133125

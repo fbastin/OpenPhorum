@@ -1,0 +1,19 @@
+title: Private Message Alerts
+desc:  This module alerts users to new private messages through on screen alerts.
+version: 5.2.1.00
+
+author: Azumandias
+
+url: http://www.phorum.org/phorum5/read.php?62,133904
+
+category: viewlayout
+category: user_features
+
+hook: lang|
+
+hook: before_footer|phorum_mod_pm_alerts_before_footer
+hook: pm_read|phorum_mod_pm_alerts_pm_read
+hook: pm_sent|phorum_mod_pm_alerts_pm_sent
+hook: tpl_cc_usersettings|phorum_mod_pm_alerts_tpl_cc_usersettings
+
+

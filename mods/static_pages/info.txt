@@ -1,0 +1,9 @@
+title: Static Pages
+desc: This module allows for the creation of pages of text which will be displayed using the colors and style of the current Phorum template.
+version: 1.0
+author: Jim Lehmann a.k.a. Ravenswood
+url: http://www.scriptmonkeys.us/
+category: admin
+
+hook: start_output|phorum_mod_static_pages_start_output
+hook: addon|phorum_mod_static_pages_display

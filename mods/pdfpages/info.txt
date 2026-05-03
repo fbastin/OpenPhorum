@@ -1,0 +1,12 @@
+title: PDF Pages Module
+desc: This module implements an addon page, which generates PDF pages for read pages.
+author: Thomas Seifert
+url: http://www.phorum.org/phorum5/read.php?62,137865
+category: viewlayout
+category: user_features
+require_version: 5.2.0
+version: 1.0.3
+
+hook: addon|phorum_mod_pdfpages_addon
+hook: read|phorum_mod_pdfpages_read
+hook: lang|

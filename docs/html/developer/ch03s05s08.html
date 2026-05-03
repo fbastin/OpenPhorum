@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.5.8. pm_before_editor</title><link rel="stylesheet" href="../phorum_docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="Phorum Developer Reference Manual"><link rel="up" href="ch03s05.html" title="3.5. Private message system"><link rel="prev" href="ch03s05s07.html" title="3.5.7. pm_send_init"><link rel="next" href="ch03s06.html" title="3.6. Buddies system"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td width="20%" align="left"><a accesskey="p" href="ch03s05s07.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03s06.html">Next</a></td></tr></table><hr></div><div class="section" title="3.5.8. pm_before_editor"><div class="titlepage"><div><div><h3 class="title"><a name="hook.pm_before_editor"></a>3.5.8. pm_before_editor</h3></div></div></div><p>
+        (Phorum 5 &gt;= 5.2.15)
+      </p><p>
+
+This hook can be used for tweaking the template data that
+is used for setting up the private message editor.
+      </p><p>
+        <span class="bold"><strong>
+          Call time:
+        </strong></span>
+      </p><p>
+
+Right after Phorum has formatted the template data for the
+editor and just before the editor template is loaded.
+      </p><p>
+        <span class="bold"><strong>
+          Hook input:
+        </strong></span>
+      </p><p>
+
+Two arguments: the private message data array and the action that
+is being handled (one of NULL (initial request), rpct_add,
+preview, posting).
+      </p><p>
+        <span class="bold"><strong>
+          Hook output:
+        </strong></span>
+      </p><p>
+
+The private message data, possibly modified.
+      </p><p>
+        <span class="bold"><strong>
+          Example code:
+        </strong></span>
+      </p><p>
+
+</p><pre class="programlisting">
+function phorum_mod_foo_pm_before_editor($message)
+{
+    return $message;
+}
+</pre><p>
+
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s05s07.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03s05.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

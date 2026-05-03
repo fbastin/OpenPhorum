@@ -1,0 +1,58 @@
+Social Media Sharing Module
+
+Instructions:
+
+1. Install module into mods directory.
+2. Make necessary changes to read.tpl, read_hybrid.tpl, and read_threads.tpl (Emerald based templates):
+
+   read.tpl, read_hybrid.tpl
+   -------------------------
+
+** To create the social links in the individual message boxes next to the reply/quote buttons
+   Find:
+   {IF MESSAGES->URL->REPORT}<a class="icon icon-exclamation" href="{MESSAGES->URL->REPORT}">{LANG->Report}</a>{/IF}
+
+   On a new line after this, add:
+   {HOOK "social_share" MESSAGES}
+
+
+** To create the social links for the entire topic near the print/follow/rss/moderator functions
+   Find:
+   {IF TOPIC->URL->MOVE}<a class="icon icon-move" href="{TOPIC->URL->MOVE}">{LANG->MoveThread}</a>{/IF}
+   {/IF}
+
+   On a new line after this, add:
+   {HOOK "social_share" TOPIC}
+
+   read_threads.tpl
+   -------------------------
+
+** To create the social links in the individual message boxes next to the reply/quote buttons
+   Find:
+   {IF MESSAGE->URL->REPORT}<a class="icon icon-exclamation" href="{MESSAGE->URL->REPORT}">{LANG->Report}</a>{/IF}
+
+   On a new line after this, add:
+   {HOOK "social_share" MESSAGE}
+
+
+** To create the social links for the entire topic near the print/follow/rss/moderator functions
+   Find:
+   {IF URL->FEED}
+        <a class="icon icon-feed" href="{URL->FEED}">{FEED}</a>
+   {/IF}
+
+   On a new line after this, add:
+   {HOOK "social_share" TOPIC}
+
+3. For Facebook and Google+ sharing, I recommend selecting a site image that is reasonably sized 
+   and adding it to phorum_directory/images. Then add the following line to Phorum Head Tags in 
+   General settings:
+
+   <link rel="image_src" href="http://www.domain.name/images/icon-site.png" />
+
+   This will cause Facebook and Google+ to use that image for posts.
+4. Configure options.
+5. Enable module.
+
+Adding social networks is not a trivial task at the moment. I'd like to include a much easier way 
+to do so in the future, but I don't know if time will permit it.

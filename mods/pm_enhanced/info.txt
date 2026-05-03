@@ -1,0 +1,8 @@
+title: Enhanced Private Messages
+desc: Adds the ability to page through private messages and search them
+author: Phorum Dev Team
+url: http://www.phorum.org/
+version: 1.0
+
+hook: before_pm_list|pm_enhanced_get_list
+hook: common_pre|pm_enhanced_intercept_search_form

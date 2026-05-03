@@ -1,0 +1,11 @@
+title: Single Notification
+desc: This module limits the notifications to a single notification per thread until the forum is visited again.
+version: 0.9
+category: email
+author: Thomas Seifert
+url: http://www.phorum-support.de
+require_version: 5.2.15
+
+hook: lang|
+hook: common|mod_single_notification_common
+hook: email_user_start|mod_single_notification_email_user_start

@@ -1,0 +1,40 @@
+v5.2.1.06
+ - Enhancement: Added support for the new PHPMailer used but the latest release 
+   of the SMTP Mail module.  For now, support is still offered for the 
+   SwiftMailer used by previous releases of the SMTP Mail module.
+ - Enhancement: Added support for the Admin Token required by Phorum 5.2.11 and 
+   beyond.
+v5.2.1.05
+ - Bugfix: On systems with a large number of users (over 2000) it is not 
+   feasible to grab all of the users information in one go.  This would cause a 
+   failure when sending to conditional users.  Thanks go to Phorum user sedget 
+   for reporting this problem and allowing the access needed to debug and repair 
+   it.
+ - Enhancement: Debugging added before conditional users are selected.
+ - Bugfix: Fixed a bug which could cause problems when sending to a group.
+ - Enhancement:  Added debugging options to the Edit Settings tab of the 
+   settings page which allow debugging the first or all emails and also allow 
+   the admin to debug emails without actually sending them.
+v5.2.1.04
+ - Added a batch sending system to send emails out in smaller batches to avoid 
+   timeouts. Big thanks go to Maurice Makaay for his guidance and previous code 
+   work on this.
+ - Fixed a bug which hindered sending mail to recipients based on selected 
+   criteria.
+v5.2.1.03
+ - Added the ability to add content to the subject and the body of the email 
+   based on selected criteria.
+ - Added the ability to select recipients based on selected criteria.
+ - Added the ability to preview the email as it would appear to a selected user.
+ - Added a language file to customize the unsubscribe option info.
+ - Fixed a bug which kept the unsubscribe option from appearing.
+v5.2.1.02
+ - Fixed a bug which caused the first user's data to replicate through all 
+   emails using replaceable user fields.
+v5.2.1.01
+ - Added the ability to add user fields to the email such as %display_name% or 
+   custom profile fields.
+   - Thank you Maurice Makaay for this suggestion and for the javascript code 
+     for easily inserting the fields.
+v5.2.1.00 
+ - Started

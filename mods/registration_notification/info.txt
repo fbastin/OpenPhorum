@@ -1,0 +1,11 @@
+title: Registration notification
+author: zwerfkat
+url: http://www.phorum.org/phorum5/read.php?62,136692
+desc: Sends a notification email to the administrator(s) after a new user has registered
+hook: lang|
+hook: after_register|phorum_mod_registration_notification
+require_version: 5.2.0
+category: admin
+category: moderators
+category: email
+category; user_management

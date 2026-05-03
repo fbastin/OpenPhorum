@@ -1,0 +1,85 @@
+v5.2.1.04
+  - Enhancement: Added support for the Admin Token required by Phorum 5.2.11 and
+    beyond.
+v5.2.1.03
+	- Bugfix: The admin_pre function was set to run a security check even 
+	  while installing or upgrading Phorum.  Phorum user Marian reported 
+	  that this derailed an upgrade from Phorum 5.2.7 to 5.2.9a.  Thanks 
+	  goes to Marian for helping find and fix this bug.
+v5.2.1.02
+	- Added a number of event flags to be logged in the Event Logging 
+	  module.  All are logged under the category "Security" and actual 
+	  failed attempts at login, captcha, override codes, etc will show as 
+	  alerts while other lower risk events will show as warnings.
+	- Check config.php file permissions to ensure that only the owner can 
+	  read it.  Check for the config.php.sample file as this may also 
+	  contain database password info if not deleted during the installation. 
+	  This can help avoid database intrusion on a shared host but this check 
+	  can be disabled if this is not a concern.
+	- Fixed numerous PHP errors.
+v5.2.1.01
+	- Added the ability to choose whether to ignore the captcha on the first
+	  login attempt.  Basically, this assumes that a bot isn't going to guess
+	  your admin password on the first attempt, so why use a captcha the first
+	  try.  With this setting enabled, the captcha is displayed, but you do not
+	  need to enter it on the first attempt.  If the incorrect password is 
+	  entered, each subsequent attempt will require the captcha.
+	- Fixed numerous PHP errors.
+v2.00
+	- Updated for Phorum 5.2 compatibility
+	- Removed the ability to centrally manage users with admin access as this
+	  can be done from "Edit Users" in Phorum 5.2.
+	- Removed the ability to log admin logins as this can be done from the
+	  "Event Logging" module in Phorum 5.2.
+v1.07
+	- Added the ability to monitor admin IP usage and block hackers from using
+	  a valid cookie to access the admin area without logging in.
+	- Added the ability to restrict admin logins to a scheduled time block such
+	  as 9 AM to 5 PM, as determined by your server's time offest by your time
+	  zone selection in the "General Settings" section.  A warning will be
+	  displayed at the top of the Admin section when you have less than 15
+	  minutes before the scheduled time is up.  After that, you have the option
+	  of allowing an override code to be sent which would allow for an hour of
+	  access.
+	- Updated the IP restriction function to allow the sending of an override
+	  code to users with admin access.
+	- Updated the code to be compatible with the coming "admin_pre" hook in
+	  future Phorum releases.
+v1.06
+	- Added the ability to send the lockout override code to the email address
+	  of the user who failed to login, but only if that user has admin access.
+	- Added the ability to centrally manage all users who have been granted
+	  Admin access.
+	- Added the ability to add a captcha to the admin login.
+	- More changes to the module's settings interface to add features and help.
+v1.05
+	- Fixed a bug in the title monitoring code which would not replace a
+	  hacker's code with the proper title.
+	- Added the ability to search through the settings saved from the admin
+	  area.  This is useful if you are looking for all instances of a
+	  hacker adding an iframe or the hacker's name to your site from the admin
+	  area. The results require some knowledge of the Phorum framework.
+	- Changed the module's settings interface to incorporate the new features.
+v1.04
+	- Added the ability to restrict admin login to set IP addresses.  If this
+	  is enabled there is also an option to allow the sending of an override
+	  code to the system email address.  This allows the system admin to access
+	  the admin section even from a restricted IP address after receiving the 
+	  override code via mail.
+v1.03
+	- Tweaked the admin lockout feature to display properly.
+	- Added the ability to allow a lockout override code to be sent to the
+	  system email address.  This should allow the system admin to login if
+	  a password is mistyped on accident but should still styme hackers and
+	  bots.
+v1.02
+	- Recoded the logging of admin logins.  Should work better now.
+	- Added the ability to lockout an IP address if too many failed 
+	  admin login attempts are made. Requires added "admin_pre" hook.
+	- Added the ability to clear out the log of admin logins.
+v1.01 
+	- Added the ability to log admin logins.  Requires added "admin_pre"
+	  hook as described under installation above.
+v1.00 
+	- Started
+

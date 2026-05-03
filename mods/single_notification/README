@@ -1,0 +1,18 @@
+Module: Single Notification
+Author: Thomas Seifert
+
+This module limits the notifications to one per thread until the forum is visited again.
+
+Installation instructions:
+--------------------------
+
+- Unpack the archive;
+
+- Move the directory "single_notification" to the directory "mods"
+  within your Phorum installation;
+
+- Login as administrator in Phorum's administrative interface and
+  go to the "Modules" section;
+
+- Enable the module "Single Notification".
+

@@ -1,0 +1,20 @@
+<!-- BEGIN TEMPLATE {TEMPLATE}/footer.tpl -->
+
+</div>
+</div>
+
+        </td>
+      </tr>
+    </table>
+
+<?php
+   $path = $_SERVER['DOCUMENT_ROOT'];
+   $path .= "/footer_main.php";
+   include_once($path);
+?>
+
+  </div id="phorum">
+
+</body>
+</html>
+<!-- END TEMPLATE {TEMPLATE}/footer.tpl -->

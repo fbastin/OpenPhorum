@@ -1,0 +1,46 @@
+Enhanced Private Messages
+==========================
+
+Paging
+-------
+This modules makes it possible to add pages to the private messages list page.
+It uses the standard Phorum paging logic, so a simple template modification is
+all that is needed to get it working.
+
+Search
+-------
+This module also allows searching of ones private messages. The search is a
+simple filter that searches the author, subject and message.
+
+Templating
+-----------
+For the Emerald template, you can insert this HTML into the top of pm_list.tpl
+
+<div class="nav">
+    {INCLUDE "paging"}
+    <form action="{URL->ACTION}" method="get">
+        <input type="hidden" name="action" value="list" />
+        <input type="hidden" name="forum_id" value="{FORUM_ID}" />
+        <input type="hidden" name="folder_id" value="{FOLDER_ID}" />
+        <input type="text" name="search" value="{SAFE_SEARCH}" />
+        <input type="submit" value="{LANG->Search}" />
+    </form>
+</div>
+
+To have paging at the bottom, you can simply put this at the bottom of
+pm_list.tpl.
+
+<div class="nav">
+    {INCLUDE "paging"}
+    <br>
+</div>
+
+A more seamless option is to edit pm_list_incoming.tpl and pm_list_outgoing.tpl
+and wrap the delete button like so.
+
+<div class="nav">
+    {INCLUDE "paging"}
+    <input type="submit" name="delete" value="{LANG->Delete}" onclick="return confirm('<?php echo addslashes($PHORUM['DATA']['LANG']['AreYouSure'])?>')" />
+</div>
+
+That puts the paging to the right of the delete button.

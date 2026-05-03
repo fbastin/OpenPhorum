@@ -1,0 +1,7 @@
+Phorum Template Bitmap World
+
+v 1.3
+2009-07-08
+* Template hacks for modules "User Avatar", "User List", and "New Messages Icon" are now pre-installed.
+* Other minor tweaks.
+ 

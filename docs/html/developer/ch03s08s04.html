@@ -1,0 +1,59 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.8.4. admin_editforum_form_save_after_defaults</title><link rel="stylesheet" href="../phorum_docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="Phorum Developer Reference Manual"><link rel="up" href="ch03s08.html" title="3.8. Admin interface"><link rel="prev" href="ch03s08s03.html" title="3.8.3. admin_menu"><link rel="next" href="ch03s08s05.html" title="3.8.5. admin_editforum_form_save_inherit"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td width="20%" align="left"><a accesskey="p" href="ch03s08s03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03s08s05.html">Next</a></td></tr></table><hr></div><div class="section" title="3.8.4. admin_editforum_form_save_after_defaults"><div class="titlepage"><div><div><h3 class="title"><a name="hook.admin_editforum_form_save_after_defaults"></a>3.8.4. admin_editforum_form_save_after_defaults</h3></div></div></div><p>
+
+This hook is called whenever a forum is created/saved and passes
+the basic checks (i.e. no error is generated there). The raw
+<code class="literal">$_POST</code> request can be accessed and a new
+custom error can be generated.
+At this stage, the <code class="literal">$_POST</code> is still
+accessible in it's (almost) original form.
+      </p><p>
+        <span class="bold"><strong>
+          Call time:
+        </strong></span>
+      </p><p>
+
+Forum created or saved, passing basic phorum verification steps.
+      </p><p>
+        <span class="bold"><strong>
+          Hook input:
+        </strong></span>
+      </p><p>
+
+The $error variable (a single string message). The first hook
+being called always has an empty error (as the whole hook chain
+is only invoked in such a case), but each hook may generate an
+error which is passed on to other hooks in the chain. It is
+strongly advised that, once your hook gets called and it detects
+the input string containing an error (i.e. is non-zero string
+length), simply bail out and return the error instead of doing
+work and possible generating a new error. Only one error at a
+time can be passed to the end user through the whole chain.
+      </p><p>
+        <span class="bold"><strong>
+          Hook output:
+        </strong></span>
+      </p><p>
+
+Same as input. However, a non-zero length string signals to abort
+and <span class="bold"><strong>not</strong></span> save any data!
+      </p><p>
+        <span class="bold"><strong>
+          Example code:
+        </strong></span>
+      </p><p>
+
+</p><pre class="programlisting">
+function phorum_mod_foo_admin_editforum_form_save_after_defaults ($error) 
+{
+    # Early bail out in case another hook generated already an error
+    if (strlen($error) &gt; 0) {
+        return $error;
+    }
+    # Do your stuff, possible setting $error to a error string
+    # for the user to be shown; or simply leave it untouched.
+    return $error;
+
+}
+</pre><p>
+
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s08s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03s08.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s08s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

@@ -1,0 +1,28 @@
+===== Check Modules for Upgrades v5.2.1.06 =====
+Created by Joe Curia (azumandias _ at _ hotmail.com)
+Original phorum coding by the Phorum Development Team (http://www.phorum.org)
+
+========        Brief Description         ========
+This module will check all Phorum 5.2 modules for upgrades and list their 
+status.
+
+========      Installation and Usage      ========
+This module installs like any other module.  Once enabled you will see update
+links next to any module on the module page which has a newer version available. 
+You can also set the module to display a list of modules with newer versions on 
+the index page for forum admin only.
+
+Please note: The current list of modules on the Phorum site only updates once
+daily.  If you install the latest version of a module before the listing is
+updated, you will see the previous version incorrectly listed as an update.
+	   	
+========                Todo              ========
+ - Add features as requested.
+ 
+========               Files              ========
+check_module_upgrades\
+	Changelog
+	check_module_upgrades.php
+	info.txt
+	README
+	settings.php

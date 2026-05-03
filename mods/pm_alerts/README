@@ -1,0 +1,28 @@
+======== Private Message Alerts v5.2.1.00 ========
+Created by Azumandias (azumandias _ at _ hotmail.com)
+Original phorum coding by the Phorum Development Team (http://www.phorum.org)
+
+========        Brief Description         ========
+This module alerts a user to new private messages through on screen alerts.  The 
+alerts will only be shown once per message (or group of messages if more than 
+one message was received between visits). The alerts will give the user the 
+option of going directly to the PM page.
+
+========      Installation and Usage      ========
+By default the private message alerts will appear on all pages and cannot be 
+disabled.  The options available in the settings page are to not show alerts on 
+PM pages and to allow the users to disable alerts for themselves.
+
+========                Todo              ========
+ - Add other options for alerts
+   - One possibility is a lightbox-like screen overlay instead of a popup alert
+ - Add further features as requested or as they pop into my head
+ 	
+========               Files              ========
+pm_alerts\
+	info.txt
+	pm_alerts.php
+	README
+	settings.php
+	lang\
+		english.php

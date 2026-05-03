@@ -1,0 +1,8 @@
+title: Content Restrictions
+desc: Configurable features for enforcing message body restrictions, such as number of hyperlinks etc.
+version: 1.0.3
+author: Adam Sheik
+url: http://www.phorum.org/phorum5/read.php?62,152289,152289#msg-152289
+category: spam
+hook: lang|
+hook: check_post|phorum_mod_content_restrictions_check_post

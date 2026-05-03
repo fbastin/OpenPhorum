@@ -1,0 +1,12 @@
+title: Admin Security Suite
+author: Joe Curia
+desc:  This module adds a host of security functions to the admin section.
+category: admin
+category: user_management
+version: 5.2.1.04
+url: http://www.phorum.org/phorum5/read.php?16,123253
+
+hook: lang|
+hook: common_pre|phorum_mod_admin_security_suite_common_pre
+hook: admin_pre|phorum_mod_admin_security_suite_admin_pre
+

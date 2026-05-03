@@ -1,0 +1,133 @@
+========   Forum Subscriptions Module v5.2.1.02  ========
+Created by Joe Curia (azumandias _ at _ hotmail.com)
+Original phorum coding by the Phorum Development Team (http://www.phorum.org)
+Dutch translation provided by Phorum user Franc
+
+========            Brief Description            ========
+This module allows users to subscribe to all forums or individual forums in 
+order to receive emails when new messages are posted.  It provides users with 
+the option to receive emails for all new messages or only new threads.  It also
+allows users to choose to receive an email for each new message when it is
+posted, or (if the admin allows it) in a daily or weekly digest email which 
+contains all of the messages from the previous day or week.
+
+If you are not able to create a cronjob to process mail queues, this module can
+still send emails after each message is posted.  If you are able to create a 
+cronjob, this module will queue the emails to be sent after each message is 
+posted so that the posting process is not delayed.  This module will also then 
+be able to send daily and weekly digests.
+
+========           Template Customization        ========
+If you would like to make subscription links available on the index and list
+pages of your forum you can make the following template edits.  These 
+subscription links will subscribe a user either to "All Forums" from the index
+page or to an individual forum from its list page.
+For the index page, edit {your_template}/index.tpl.  For the list page, edit
+{your_template}/list.tpl and {your_template}/list_threads.tpl.  Wherever you 
+want the link to appear, add these lines:
+{IF URL->FORUM_SUBSCRIPTION}
+<a href="{URL->FORUM_SUBSCRIPTION}">{FORUM_SUBSCRIPTION->SubscribeURLText}</a>
+{/IF}
+
+========            Message Customization        ========
+Before uploading this module, you may want to customize the email messages sent
+by the module.  Those messages are found in the 
+forum_subscriptions/lang/your_lang.php file.  Please note that the fields
+wrapped in %'s (e.g. %subject%) are variables drawn from the forum messages and 
+are inserted when the emails are sent.
+
+Subject for emails sent after each post: NewMessageSubject
+Body for emails sent after each post: NewMessage
+
+Subject for daily digest emails: DailyDigestSubject
+Body for daily digest emails: DailyDigestBody
+
+Subject for weekly digest emails: WeeklyDigestSubject
+Body for weekly digest emails: WeeklDigestBody
+
+Individual messages in an "All Forums" digest: AllForumsDigestFormat
+Individual messages in a single forum digest: SingleForumDigestFormat
+Separator which appears between messages in a digest: DigestSeparator
+* Please note that in the individual message formats there are a number of
+special fields (eg. %SubjectIntro%).  These fields are "digest_variables" which 
+can be found at the end of the language file.
+
+========              Example Email              ========
+From: System Email //set in the general settings
+To: User Email
+Subject: New message in the Sample forum at Sample Site.
+Body: //full body shown between ~~~ lines which do not appear in actual email
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Author: Sample Author
+Subject: First Post
+
+Message:
+Hi,  This is my first post to this sample forum.  I hope to become an active
+member here.
+
+View the full thread: http://www.samplephorum.com/read.php?1,1,1#msg-1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+========        Using a Cronjob Mail Queue       ========
+If you would like to use the Cronjob Mail Queue option you will need to complete
+two steps:
+
+First, you must add a cronjob to call the Phorum "scheduled" hook from the 
+Phorum script.php file.  I would recommend that this cronjob run every minute.  
+The module will handle any time-outs or errors which otherwise could cause the 
+cronjob to run two instances of this module.  This is one example cronjob:
+
+* * * * * cd your/phorum/root && /usr/bin/php ./script.php --scheduled
+
+There should be no output from this script unless there is an error.  If 
+possible I would also advise that you have the output from this script either 
+logged or emailed.
+
+Second, you must enable the Mail Queue option from this module's settings page.
+
+Your Forum Subscriptions emails should now be sent through the mail queue 
+system.  I would advise enabling the "Debug email" setting for this module until 
+you are sure the mail queue system is working properly.
+
+========                  Notes                  ========
+I would advise turning off email notification if you use this module as email 
+notification could result in a double email.  One from the forum subscription
+and one if the user elected to follow the thread.  If not you will probably
+want to educate your users as to the different options available.
+
+========                   Todo                  ========
+ - Add support for an unsubscribe link in each email which would automatically
+   unsubscribe the user from future emails sent by this module.
+ - Add support for HTML email.
+ - Add features as they are requested.
+ 
+========                   Files                 ========
+\forum_subscriptions\
+    db_functions.php
+    digest_functions.php
+    forum_subscriptions.php
+    forum_subscriptions_after_post.php
+    forum_subscriptions_cc_panel.php
+    forum_subscriptions_scheduled.php
+    info.txt
+    README
+    settings.php
+    settings_forum_functions.php
+    db_functions\
+        upgrade_1.php
+    lang\
+        dutch.php
+        english.php
+    templates\
+        classic\
+            cc_menu_item.tpl
+            cc_panel.tpl
+        emerald\
+            cc_menu_item.tpl
+            cc_panel.tpl
+        lightweight\
+            cc_menu_item.tpl
+            cc_panel.tpl
+        simple_rounded\
+            cc_menu_item.tpl
+            cc_panel.tpl

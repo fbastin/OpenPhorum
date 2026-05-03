@@ -1,0 +1,32 @@
+5.2.1.02
+    - Enhancement: Dutch translation provided by Phorum user Franc with thanks 
+      for the contribution.
+    - Bugfix: Digest messages would not show the proper forum_id in the read 
+      url.  Thanks go to Phorum users Marco and Lammi for reporting this bug.
+    - Bugfix: Removed a PHP notice which could be generated in the Control 
+      Center.  Thanks go to Phorum user korsakov for reporting this.
+    - Bugfix: The "Subscribe to All Forums" link would erroneously appear in 
+      folders within a vroot.
+    - Bugfix: Fixed a bug which would occur if a moderated message was approved.
+5.2.1.01
+    - Bugfix: Fixed a bug ironically caused by the debugging system which could 
+      cause a queue to exceed the PHP memory limit while attempting to insert 
+      events into the event logging system.
+    - Bugfix: Fixed a bug which could have caused messages in a digest to not 
+      be sorted by posting date/time.
+    - Bugfix: Fixed a bug which could cause a user to receive multiple emails 
+      if they first subscribed to an individual forum, then subscribed to all 
+      of the forums.
+    - Enhancement: If the cronjob mail queue is finished well before the time 
+      limit, the script will continue to the next queue rather than simply 
+      stopping and waiting for the next cronjob.
+    - Enhancement: Added the option to only show forums to which a user is 
+      currently subscribed in the Control Center.  Thanks go to Phorum user 
+      korsakov for suggesting this feature.
+    - Enhancement: Added the ability to show subscriptions to forums in all 
+      vroots in the Control Center.
+    - Enhancement: Added support for vroots.  Thanks go to Phorum developer 
+      Thomas Seifert for pointing out this need.
+    - Enhancement: Added support for potential future database changes.
+5.2.1.00
+    - Started

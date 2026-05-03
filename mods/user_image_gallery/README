@@ -1,0 +1,112 @@
+Module  : User Image Gallery
+Version : 1.1
+Author  : James Lehmann (Ravenswood)
+  Designed and requested by Ryan.
+
+Portions of this module were adapted from the module "User Avatars"
+by Chris Eaton, CZVilda, Thomas Seifert, and Maurice Makaay.
+
+class.upload.php by Colin Verot.
+
+- - - - - - - - - - - - - - - - - - - - - - - -
+
+This module allows users to upload images and maintain a gallery.
+
+For running this mod, you need Phorum 5.2.0 or later. It will not
+work for earlier versions of Phorum.
+
+This module has been tested on Phorum 5.2.10 and 5.2.13. It has not been tested 
+on other versions.
+
+Contents:
+1. License
+2. Installation
+3. Main template customization (for showing the avatars)
+4. Module template customization (for the control center interface)
+5. Language notes for translators
+
+
+1. License:
+-----------
+
+You are free to use this code freely and modify it as desired. This code comes
+with absolutly no warranty.
+
+"class.upload.php" has its own license, independant of User Image Gallery. See
+class.upload.php for further details.
+
+
+2. Installation:
+----------------
+
+- Unpack the archive;
+
+- Move the directory "user_image_gallery" to the directory "mods"
+  within your Phorum installation;
+
+- Login as administrator in Phorum's administrative interface and
+  go to the "Modules" section;
+
+- Enable the module "User Image Gallery".
+
+- Configure the module to your likings through the module's settings page.
+
+- Templates must be configured to link to gallery pages. Suggested template changes
+  are included in the "3. Main template customization" section below.
+  Alter your template to suit your needs and taste.
+
+
+3. Main template customization:
+-------------------------------
+
+To display a link to the user gallery pages, you will have to edit the
+Phorum template files. Here is a description of the files and the
+template variables that you can use and some some sample implementations.
+
+* profile.tpl (if you want a link to the user's gallery to appear on their
+                profile page)
+
+You can use the template variable {PROFILE->mod_user_image_gallery}
+for the gallery URL for the profile that is being viewed. You can check
+that same variable, to see if galleries are enabled or not.
+
+The most basic code for showing the gallery link on the profile page is:
+
+    {IF PROFILE->URL->user_image_gallery}
+      <dt><a href="{PROFILE->URL->user_image_gallery}">Gallery</a></dt>&nbsp;<br />
+    {/IF}
+
+
+
+4. Module template customization:
+---------------------------------
+
+By default, this module will use the template files from the directory
+"templates/emerald" for displaying an extra menu option in the control
+center (cc_menu_item.tpl) and for displaying the control center panel
+where the user can manage their gallery images (cc_panel.tpl).
+
+If you want to modify the templates to make them work better for your
+site's template, then do not edit the template files that were in
+the module distribution. Instead, copy the full directory
+
+  mods/user_avatar/templates/emerald
+
+to
+
+  mods/user_avatar/templates/yourtemplatename
+
+(asuming that your site's template is stored as "templates/yourtemplatename")
+and edit the files in the new directory. Phorum will automatically recognize
+that you have created a specific template set to use for your site's active
+template.
+
+
+5. Language notes for translators:
+----------------------------------
+
+The class file "class.upload.php" has its own language files, which are in a
+different format than Phorum. They are named "class.upload.((language)).php"
+and they are in the same directory as class.upload.php.
+
+

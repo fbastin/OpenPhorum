@@ -1,0 +1,59 @@
+Module: PDF Pages Module
+Author: Thomas Seifert <thomas@phorum.org>
+
+This module will add an addon page which generates and returns a pdf for a
+given thread in a plain readable format.
+
+It adds attachments as links to the pdf while images in the body are removed
+as the used PDF library doesn't work with remote images.
+
+Tested on version 5.2.20.
+
+
+Requirements:
+-------------
+
+The "Tidy Output Module" must be turned off for the "PDF Pages Module" to work.
+
+
+License:
+-------
+
+Free to use, modify, or redistribute this code so long as I am given credit for
+the original development somewhere. This code comes with absolutely no warranty.
+
+
+Installation:
+------------
+
+1. Unpack the archive.
+
+2. Move the directory "pdfpages" to the directory "mods" within your
+   Phorum installation. Don't change the directory name!
+
+3. Login as administrator in Phorum's administrative interface and go to the
+   "Modules" section.
+
+4. Enable the module "PDF Pages Module".
+
+
+Language support:
+----------------
+
+This module supports multiple languages. It currently only uses language
+strings from the main language file.
+
+
+Wishlist:
+--------
+
+- Add formatting options through a setting screen.
+- Make images work (for a sane solution it would require to download the images
+  and replace the img-tags in the body).
+- Make full forum pdfs with internal links.
+- Add internal links to each message and a ToC (like shown in
+  http://www.tecnick.com/public/code/cp_dpage.php?aiocp_dp=tcpdf_examples,
+  No. 45).
+- Add file attachments to pdf (like shown in
+  http://www.tecnick.com/public/code/cp_dpage.php?aiocp_dp=tcpdf_examples,
+  No. 41).

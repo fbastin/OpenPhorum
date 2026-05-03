@@ -1,0 +1,69 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.4.2. get_template_file</title><link rel="stylesheet" href="../phorum_docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="Phorum Developer Reference Manual"><link rel="up" href="ch03s04.html" title="3.4. Page output"><link rel="prev" href="ch03s04.html" title="3.4. Page output"><link rel="next" href="ch03s04s03.html" title="3.4.3. start_output"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td width="20%" align="left"><a accesskey="p" href="ch03s04.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03s04s03.html">Next</a></td></tr></table><hr></div><div class="section" title="3.4.2. get_template_file"><div class="titlepage"><div><div><h3 class="title"><a name="hook.get_template_file"></a>3.4.2. get_template_file</h3></div></div></div><p>
+        (Phorum 5 &gt;= 5.2.11)
+      </p><p>
+
+Allow modules to have influence on the results of the
+phorum_get_template_file() function. This function translates
+a page name (e.g. <code class="literal">list</code>) into a filename
+to use as the template source for that page (e.g.
+<code class="filename">/path/to/phorum/templates/emerald/list.tpl</code>).
+      </p><p>
+        <span class="bold"><strong>
+          Call time:
+        </strong></span>
+      </p><p>
+
+At the start of the phorum_get_template_file() function
+from <code class="filename">common.php</code>.
+      </p><p>
+        <span class="bold"><strong>
+          Hook input:
+        </strong></span>
+      </p><p>
+
+An array containing two elements:
+</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">page:
+The page that was requested.</li><li class="listitem">source:
+The file that has to be used as the source for the page.
+This one is initialized as NULL.</li></ul></div><p>
+      </p><p>
+        <span class="bold"><strong>
+          Hook output:
+        </strong></span>
+      </p><p>
+
+Same as input. Modules can override either or both of the array
+elements. When the "source" element is set after running the
+hook, then the file named in this element is directly used as
+the template source. It must end in either ".php" or ".tpl" to
+be accepted as a template source. Phorum does not do any additional
+checking on this source file name. It is the module's duty to
+provide a correct source file name.<br>
+Otherwise, the template source file is determined based on
+the value of the "page" element, following the standard
+Phorum template resolving rules.
+      </p><p>
+        <span class="bold"><strong>
+          Example code:
+        </strong></span>
+      </p><p>
+
+</p><pre class="programlisting">
+function phorum_mod_foo_get_template_file($data)
+{
+    // Override the index template with a custom template
+    // from the "foo" module.
+    if ($data['page'] == 'index_new') {
+        $data['page'] = 'foo::index_new';
+    }
+
+    // Point the "pm" template directly at a custom PHP script.
+    if ($data['page'] == 'pm') {
+        $data['source'] = './mods/foo/pm_output_handler.php';
+    }
+
+    return $data;
+}
+</pre><p>
+
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s04s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

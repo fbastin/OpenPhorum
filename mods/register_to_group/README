@@ -1,0 +1,27 @@
+
+This module adds each user after registration to the groups defined 
+in the settings.
+
+
+Installation instructions:
+--------------------------
+
+- Unpack the archive;
+
+- Move the directory "register_to_group" to the directory "mods"
+  within your Phorum installation;
+
+- Login as administrator in Phorum's administrative interface and
+  go to the "Modules" section;
+
+- Configure the module through the module's settings page.
+
+- Enable the module "Register To Group".
+
+
+ToDo:
+-----
+
+- add options to add users to groups only after all confirmation steps
+  (email and/or moderator) are done
+  

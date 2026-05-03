@@ -1,0 +1,80 @@
+Module  : User List
+Version : 1.0
+Author  : Jim Lehmann ( a.k.a. Ravenswood )
+
+This module implements an addon page, which displays a list of
+current active users.
+
+
+Installation:
+-------------
+
+- Unpack the archive;
+
+- Move the directory "user_list" to the directory "mods"
+  within your Phorum installation;
+
+- Login as administrator in Phorum's administrative interface and
+  go to the "Modules" section;
+
+- Enable the module "User List".
+
+- Templates must be configured to show the link to the user list page.
+  See below:
+
+
+Template customization:
+-----------------------
+
+To display the link to the user list page on various Phorum pages,
+you will have to edit the Phorum template files. In these template files,
+you can use the following template variable:
+
+{URL->USER_LIST->All}
+
+Example template code for adding a link to a template:
+
+    {IF URL->USER_LIST->All}<a href="{URL->USER_LIST->All}">User List</a>{/IF}
+
+The "IF" is there to hide the link when the User List mod is disabled.
+
+If you are adding the link to the Emerald template (the default Phorum 5.2
+template) or a template that is based on Emerald, then you can also use
+the following code to make it show an icon in front of the link.
+
+    {IF URL->USER_LIST->All}<a class="icon" style="background-image: url('mods/user_list/images/user_list.png');" href="{URL->USER_LIST->All}">User List</a>{/IF}
+
+For example, if you want the link to appear in the upper right corner of
+the page, then you can add the marked code from below to the file
+templates/emerald/header.tpl:
+
+    ......
+    ......
+      {! Code for logged in users }
+      {IF LOGGEDIN}
+        <span class="welcome">{LANG->Welcome}, {USER->username}</span>
+        <a class="icon icon-key-delete" href="{URL->LOGINOUT}">{LANG->LogOut}</a>
+        <a class="icon icon-user-edit" href="{URL->REGISTERPROFILE}">{LANG->MyProfile}</a>
+        {IF ENABLE_PM}
+          <a class="icon icon-user-comment" href="{URL->PM}">
+            {IF USER->new_private_messages}
+              <strong>{LANG->NewPrivateMessages}</strong>
+            {ELSE}
+              {LANG->PrivateMessages}
+            {/IF}
+          </a>
+        {/IF}
+   _____________________________________________________________________________________________________________________________________________________________________
+  |                                                                                                                                                                     |
+        {IF URL->USER_LIST->All}<a class="icon" style="background-image: url('mods/user_list/images/user_list.png');" href="{URL->USER_LIST->All}">User List</a>{/IF}
+  |_____________________________________________________________________________________________________________________________________________________________________|
+
+      {! Code for anonymous users }
+      {ELSE}
+        <span class="welcome">{LANG->Welcome}!</span>
+        <a class="icon icon-key-go" href="{URL->LOGINOUT}">{LANG->LogIn}</a>
+        <a class="icon icon-user-add" href="{URL->REGISTERPROFILE}">{LANG->Register}</a>
+      {/IF}
+    ......
+    ......
+

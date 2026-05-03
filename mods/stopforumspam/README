@@ -1,0 +1,18 @@
+Module: Stop Forum Spam
+
+This module uses stopforumspam.com to check newly registered users
+against their database of known spammers
+
+Installation instructions:
+--------------------------
+
+- Unpack the archive;
+
+- Move the directory "stopforumspam" to the directory "mods"
+  within your Phorum installation;
+
+- Login as administrator in Phorum's administrative interface and
+  go to the "Modules" section;
+
+- Enable the module "Stop Forum Spam" and configure its settings.
+

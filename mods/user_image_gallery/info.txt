@@ -1,0 +1,18 @@
+title: User Image Gallery
+desc: Allows users to upload images into a publicly-viewable gallery.
+author: James Lehmann (Ravenswood)
+url: http://scriptmonkeys.us
+version: 1.1
+require_version: 5.2.0
+category: user_features
+
+hook: common|mod_user_image_gallery_common
+hook: tpl_cc_menu_options_hook|mod_user_image_gallery_tpl_cc_menu_options_hook
+hook: cc_panel|mod_user_image_gallery_cc_panel
+hook: user_delete|mod_user_image_gallery_user_delete
+hook: addon|mod_user_image_gallery_addon
+hook: profile|mod_user_image_gallery_profile
+hook: css_register|mod_user_image_gallery_css_register
+hook: common_post_user|mod_user_image_gallery_common_post_user
+hook: read|mod_user_image_gallery_read
+hook: lang|

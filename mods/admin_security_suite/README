@@ -1,0 +1,33 @@
+======== Admin Security Suite Module v5.2.1.04 ========
+Created by Joe Curia (azumandias _ at _ hotmail.com)
+Original phorum coding by the Phorum Development Team (http://www.phorum.org)
+
+========        Brief Description         ========
+This security suite is designed to add additional security functions to a 
+Phorum install.  Currently this module can monitor the forum title for hacks,
+lockout IP addresses after a number of failed logins, restrict admin logins to
+a set list of IP addresses, allow the admin to search for specific terms in all
+of the settings saved in the admin area, add a captcha to the admin login, add 
+monitoring of IP sessions to stop hackers from using a cookie to access the 
+admin section without logging in, and restrict admin login to a schedule time 
+period such as 9 AM to 5 AM.  Most security events will also be displayed in 
+the Event Logging module.
+
+========      Installation and Usage      ========
+This module installs like any other module.  Help windows have been provided
+for easy usage.  It is suggested that you enable the Event Loggin module and set 
+it to display events on at least the warning level as a minimum.
+
+========                Todo              ========
+ - Add support for User Agent/User name session monitoring.
+
+ - Add further security features as requested or as they pop into my head.
+ 	
+========               Files              ========
+admin_security_suite\
+	admin_security_suite.php
+	Changelog
+	info.txt
+	README
+	settings.php
+	tmp_captchas\ *empty folder for storing temporary captcha images

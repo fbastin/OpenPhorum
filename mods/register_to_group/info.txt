@@ -1,0 +1,9 @@
+title: Register To Group
+category: admin
+author: Thomas Seifert
+desc: This mod allows you to add each user automatically to one or multiple groups on registration.
+version: 1.0
+
+hook: after_register|phorum_mod_register_to_group_after_register
+
+url: http://www.phorum-support.de

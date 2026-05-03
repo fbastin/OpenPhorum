@@ -1,0 +1,84 @@
+========   Admin Mass Email Module v5.2.1.06  ========
+Created by Joe Curia (azumandias _ at _ hotmail.com)
+Original phorum coding by the Phorum Development Team (http://www.phorum.org)
+Javascript for inserting user fields into the form fields by Maurice Makaay
+Javascript for selecting calendar dates by Matt Kruse (http://www.mattkruse.com)
+
+========        Brief Description         ========
+This mod allows the admin to send a mass email to all users, selected users, 
+selected users based on a set of criteria, or users in selected groups. The 
+sender can be the default admin email address or any custom email address. 
+Various user fields and custom profile fields can be placed in the subject or 
+body of the email, (ie. %display_name% becomes Azumandias). These fields can also 
+be used to add conditional content (ie. {IF %posts% > "49"}{THEN "Thank you for 
+being so active."}{/IF} becomes "Thank you for being so active." if the current 
+user has more than 49 posts). The mass email can also contain up to three 
+attachments.
+
+======= Conditional Criteria Instructions ========
+This mod employs a custom set of conditional code which allows the admin to add 
+content to the subject and body of the email based on the data for each user. The 
+easiest way to do this is to use the "Add Conditional Content" buttons from the 
+email creation page.  This will provide the admin with an easy way to create 
+criteria.  However, each usage is limited to one IF clause with up to two AND/OR 
+clauses, two ELSE IF clauses with up to two AND/OR clauses, and the ELSE clause. 
+The code is capable of unlimited ELSE IF and AND/OR clauses, but these must be 
+added manually.
+
+The basic structure of the conditional code is as follows:
+{IF %haystack% = "needle"}
+  {AND %haystack% = "needle"}
+  {OR %haystack% = "needle"}
+  {THEN "result"}
+    {ELSEIF %haystack% = "needle"}
+      {AND %haystack% = "needle"}
+      {OR %haystack% = "needle"}
+      {THEN "result"}
+{/IF}
+In this structure, only the {IF}, {THEN}, and {/IF} clauses are required.
+Some items to note:
+ - If you want to use quotes in the needle or result, you must escape them as \"
+ - The available operators are =, < , >, <=, >=, contains
+ - To express a negative operator you must add the word NOT to the code as shown 
+   in this example: {IF %admin% NOT = "1"}
+ - If the haystack is a date and you want to compare the needle as a date you 
+   must do so as follows: {IF %date_last_active% < DATE "MM/DD/YYYY"}.
+
+WARNING:
+Creating this conditional code was difficult enough without adding error 
+checking.  If you use any conditional code in your email, I urge you to first 
+preview the email before sending it out to be sure that the conditional code 
+works in the way that you expect.
+
+========              Notes               ========
+This module has not been tested with a large number of recipients.  When you 
+click on "Send" the email must be formatted and sent to each user individually. 
+This could take some time.  If you experience problems with this module, please 
+let me know by posting on the Phorum site or emailing me.
+
+========            Debugging             ========
+This module has three debugging options which can be set from the Edit Settings
+tab on the settings page.  The first simply enables debugging.  When enabled, 
+the results of the first email will be logged.  The second tells the debugger to 
+log the results of each email sent.  The final option allows the admin to log 
+the emails without actually sending any out.
+
+========                Todo              ========
+ - Add the ability to send HTML emails.
+ - Add the ability to send to CC and BCC addresses.
+ - Add features as they are requested.
+ 
+========               Files              ========
+\admin_mass_email\
+	admin_mass_email.js
+	admin_mass_email.php
+	AnchorPosition.js
+	calendar.js
+	Changelog
+	date.js
+	info.txt
+	PopupWindow.js
+	README
+	settings.php
+	lang\
+		english.php

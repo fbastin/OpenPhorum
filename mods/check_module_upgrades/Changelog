@@ -1,0 +1,25 @@
+v5.2.1.06
+    - Bugfix: If a module's name occurred at the end of another module's name, 
+      the wrong module's version would be reported.  Thanks go to Phorum user 
+      harryatkins for reporting this bug.
+v5.2.1.05
+	- Added the ability to set the mod to display a list of modules with 
+	  newer versions on the index page for forum admin only.
+	- Discovered the joys of ob_get_contents() and recoded the mod to display 
+	  on the modules page without javascript.
+v5.2.1.04
+	- Recoded the mod to display upgrade availability directly on the 
+	  modules page in the admin section.  The settings.php file has been
+	  removed as it is no longer necessary.
+v5.2.1.03
+	- Fixed a bug which could cause a modules online version to be mis-
+	  reported.
+	- Removed PHP warnings.
+v5.2.1.02
+	- Fixed the same bug with better code suggested by Maurice Makaay.  The
+	  new code will also catch connection errors and report them.
+v5.2.1.01
+	- Fixed a bug which would cause the module to fail when looking for 
+	  updates if your servers "allow_url_fopen" setting was off.
+v5.2.1.00 
+	- Started

@@ -1,0 +1,19 @@
+Changelog:
+----------
+2013-08-20 v1.0.3
+
+	- treat raw email addresses as hyperlinks
+
+2013-08-20 v1.0.2
+
+	- bugged release, sorry!
+
+2012-29-10 v1.0.1
+
+    - Added support to enter -1 to indicate no links are allowed
+
+
+2012-17-10 v1.0.0
+
+    - Initial revision
+

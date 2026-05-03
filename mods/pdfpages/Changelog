@@ -1,0 +1,16 @@
+Changelog:
+----------
+
+2017/04/04 version 1.0.3 by Oliver Riesen-Mallmann (oliver@riesen.org)
+- tcpdf updated from 4.6.003 to 6.2.13.
+
+2016/09/30 version 1.0.2 by Oliver Riesen-Mallmann (oliver@riesen.org)
+- Corrected undefined index notice edit_username.
+
+2016/05/19 version 1.0.1 by Oliver Riesen-Mallmann (oliver@riesen.org)
+- Changed URL to module thread.
+- README extended.
+- Corrected some undefined index notices.
+
+2009/04/23 version 1.0.0 by Thomas Seifert
+- Initial release.

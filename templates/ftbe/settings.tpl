@@ -58,13 +58,13 @@
 {VAR quote_border_color "#e0e4e8"}
 {VAR pre_border_color "#e1e4e8"}
 {VAR pre_background_color "#f6f8fa"}
-{VAR link_color "#2E5A1C"}
-{VAR link_hover_color "#4a8030"}
-{VAR new_color "#2E5A1C"}
+{VAR link_color "#2C3E50"}
+{VAR link_hover_color "#34495E"}
+{VAR new_color "#2C3E50"}
 {VAR logo_background_color "#ffffff"}
 {VAR breadcrumb_border_color "#e0e4e8"}
 {VAR post_moderation_background_color "#f6f8fa"}
-{VAR information_border_color "#2E5A1C"}
+{VAR information_border_color "#2C3E50"}
 {VAR information_background_color "#f0f8e8"}
 {VAR warning_border_color "#A76262"}
 {VAR warning_background_color "#FFD1D1"}

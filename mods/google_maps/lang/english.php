@@ -15,7 +15,7 @@ $PHORUM["DATA"]["LANG"]["mod_google_maps"] = array
     "NoLocationSet"       => "No location set",
     "IncompatibleBrowser" => "Sorry, but your browser does not support " .
                              "the required functionality for running " .
-                             "Google Maps.",
+                             "OpenStreetMap.",
     "NoSearchResults"     => "Sorry, but no results were found for your " .
                              "search query. ",
     "ProfileTitle"        => "This user's location:",

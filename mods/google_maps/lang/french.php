@@ -18,7 +18,7 @@ $PHORUM["DATA"]["LANG"]["mod_google_maps"] = array
     "IncompatibleBrowser" => "D&eacute;sol&eacute;, mais votre navigateur " .
                              "ne prend pas en charge les " .
                              "fonctionnalit&eacute;s requises pour faire " .
-                             "fonctionner Google Maps.",
+                             "fonctionner OpenStreetMap.",
     "NoSearchResults"     => "D&eacute;sol&eacute;, aucun r&eacute;sultat " .
                              "n'a &eacute;t&eacute; trouv&eacute; pour " .
                              "votre requ&ecirc;te. ",

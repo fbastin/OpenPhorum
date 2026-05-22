@@ -1,6 +1,6 @@
 <?php
 
-// This script is used to display a Google Map from within an <iframe>
+// This script is used to display an OpenStreetMap from within an <iframe>
 // in the page. It's a generic tool that can be used for displaying
 // all required kinds of maps (editing, viewing and overviews).
 //
@@ -48,7 +48,7 @@ foreach ($PHORUM['args'] as $k => $v) {
 
 // Check if all required arguments are set.
 foreach ($args as $k => $v) {
-    if (is_null($args[$k])) die("Missing Google Map parameter \"$k\"");
+    if (is_null($args[$k])) die("Missing map parameter \"$k\"");
 }
 
 // Easy access to the language data.
@@ -65,9 +65,12 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
       body { height: 100%; margin: 0px; padding: 0px }
       #map { height: 100%; width: 100%; }
     </style>
-    <title>Google Map interface</title>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&region=<?php print $lang['geocoding_lang'] ?>"></script>
-    <script type="text/javascript" src="<?php print $PHORUM['http_path'] ?>/mods/google_maps/maptool/fluster/lib/Fluster2.packed.js"></script>
+    <title>OpenStreetMap interface</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 
     <script type="text/javascript">
     //<![CDATA[
@@ -108,60 +111,43 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
         marker_latitude      : <?php print addslashes($args['marker_latitude']) ?>,
         marker_longitude     : <?php print addslashes($args['marker_longitude']) ?>,
         <?php } ?>
-
-        <?php if (isset($args['streetview_latitude']) &&
-                        $args['streetview_latitude'] !== '') { ?>
-        streetview_latitude  : <?php print addslashes($args['streetview_latitude']) ?>,
-        streetview_longitude : <?php print addslashes($args['streetview_longitude']) ?>,
-        streetview_zoom      : <?php print addslashes($args['streetview_zoom']) ?>,
-        streetview_heading   : <?php print addslashes($args['streetview_heading']) ?>,
-        streetview_pitch     : <?php print addslashes($args['streetview_pitch']) ?>
-        <?php } ?>
     };
 
 <?php if ($args["type"] == 'plotter') { ?>
-    var bounds = new google.maps.LatLngBounds();
-
-    var ploticon = new google.maps.MarkerImage(
-        "<?php print htmlspecialchars($PHORUM["http_path"]) .
+    var ploticon = L.icon({
+        iconUrl: "<?php print htmlspecialchars($PHORUM["http_path"]) .
                      "/mods/google_maps/maptool/marker.png" ?>",
-        new google.maps.Size(32, 32),  // size
-        new google.maps.Point(0, 0),   // origin
-        new google.maps.Point(16, 16), // anchor
-        new google.maps.Size(32, 32)   // scaled size
-    );
-
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+        popupAnchor: [0, -16]
+    });
 <?php } ?>
 
     // -----------------------------------------------------------------
-    // Initialize the Google Map
+    // Initialize the Map
     // -----------------------------------------------------------------
 
     var map;
-    var streetview;
 <?php if ($args["type"] == 'plotter') { ?>
-    var fluster
+    var markerClusterGroup;
 <?php } ?>
 
     function initialize()
     {
       // Create the map object.
-      map = new google.maps.Map(document.getElementById("map"), {
-          <?php if ($args["type"] == 'map-editor') { ?>
-          streetViewControl : false,
-          <?php } ?>
-          zoom      : 1,
-          center    : new google.maps.LatLng(40, -20),
-          mapTypeId : google.maps.MapTypeId.ROADMAP,
-      });
+      map = L.map('map', {
+          zoomControl: true,
+          scrollWheelZoom: true
+      }).setView([40, -20], 1);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
 
       <?php if ($args["type"] == 'plotter') { ?>
-      fluster = new Fluster2(map);
-      fluster.gridSize = 20;
+      markerClusterGroup = L.markerClusterGroup();
+      map.addLayer(markerClusterGroup);
       <?php } ?>
-
-      // Fetch the streetview object for this map.
-      streetview = map.getStreetView();
 
       // Initialize the start position of the map.
       startMap();
@@ -169,31 +155,18 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
 <?php if ($args["type"] == 'location-editor' ||
           $args['type'] == 'map-editor') { ?>
       // Setup events for keeping track of edit operations.
-      google.maps.event.addListener(map, 'zoom_changed', function () {
+      map.on('zoomend', function () {
           raiseMapToolChangeEvent();
       });
-      google.maps.event.addListener(map, 'dragend', function () {
+      map.on('moveend', function () {
           raiseMapToolChangeEvent();
       });
-      google.maps.event.addListener(map, 'maptypeid_changed', function () {
-          raiseMapToolChangeEvent();
-      });
-      google.maps.event.addListener(streetview, 'visible_changed', function () {
-          raiseMapToolChangeEvent();
-      });
-      google.maps.event.addListener(streetview, 'pano_changed', function () {
-          raiseMapToolChangeEvent();
-      });
-      google.maps.event.addListener(streetview, 'position_changed', function () {
-          raiseMapToolChangeEvent();
-      });
-      google.maps.event.addListener(streetview, 'pov_changed', function () {
-          raiseMapToolChangeEvent();
-      });
+      // maptypeid_changed not directly applicable in OSM simple setup
+
   <?php if ($args['type'] == 'location-editor') { ?>
-      google.maps.event.addListener(map, 'click', function (ev) {
-          placeEditMarker(ev.latLng);
-          lookupGeolocationInfo(ev.latLng);
+      map.on('click', function (ev) {
+          placeEditMarker(ev.latlng);
+          lookupGeolocationInfo(ev.latlng);
           raiseMapToolChangeEvent();
       });
   <?php } ?>
@@ -229,30 +202,35 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
 
 <?php if ($args['type'] == 'location-editor' ||
           $args['type'] == 'map-editor') { ?>
-    // Search for a textual location on the map, using Google's
+    // Search for a textual location on the map, using Nominatim
     // geocoder to translate the text into map coordinates.
     function searchLocation(description)
     {
         setLoading(true);
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({
-            address  : description,
-            language : api_language
-        }, function(result, status) {
-            setLoading(false);
-            if (status != google.maps.GeocoderStatus.OK) {
-                alert(document.getElementById('maptool_msg_notfound').innerHTML);
-            } else {
-                var point = result[0].geometry.location;
-                map.panTo(point);
-                streetview.setVisible(false);
-                <?php if ($args["type"] == 'location-editor') { ?>
-                placeEditMarker(point);
-                lookupGeolocationInfo(point);
-                <?php } ?>
-                raiseMapToolChangeEvent();
-            }
-        });
+        var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(description) + '&accept-language=' + api_language;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                setLoading(false);
+                if (data && data.length > 0) {
+                    var result = data[0];
+                    var point = L.latLng(result.lat, result.lon);
+                    map.panTo(point);
+                    <?php if ($args["type"] == 'location-editor') { ?>
+                    placeEditMarker(point);
+                    lookupGeolocationInfo(point);
+                    <?php } ?>
+                    raiseMapToolChangeEvent();
+                } else {
+                    alert(document.getElementById('maptool_msg_notfound').innerHTML);
+                }
+            })
+            .catch(error => {
+                setLoading(false);
+                console.error('Error:', error);
+                alert('Geocoding error');
+            });
         return false;
     }
 
@@ -263,21 +241,19 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
         // Create a marker in case there is no marker yet.
         if (! marker)
         {
-            marker = new google.maps.Marker({
-                position  : point,
-                map       : map,
-                draggable : true
-            });
+            marker = L.marker(point, {
+                draggable: true
+            }).addTo(map);
 
             // If the user drags the marker, then fire a change event.
-            google.maps.event.addListener(marker, 'dragend', function () {
+            marker.on('dragend', function () {
                 raiseMapToolChangeEvent();
-                lookupGeolocationInfo(marker.getPosition());
+                lookupGeolocationInfo(marker.getLatLng());
             });
         }
         // If we already have a marker, then move it to the new location.
         else {
-            marker.setPosition(point);
+            marker.setLatLng(point);
         }
 
         raiseMapToolChangeEvent();
@@ -288,79 +264,47 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
         geoloc_city = null;
         geoloc_country = null;
 
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({
-            location : point,
-            language : api_language
-        }, function(result, status) {
-            if (status === google.maps.GeocoderStatus.OK)
-            {
-                for (var i = 0; i < result.length; i++)
-                {
-                    var set = result[i];
-                    for (var j = 0; j < set.address_components.length; j++)
-                    {
-                        var comp  = set.address_components[j];
-                        for (var k = 0; k < comp.types.length; k++)
-                        {
-                            if (comp.types[k] === 'country') {
-                              geoloc_country = comp.long_name;
-                              break;
-                            } else if (comp.types[k] === 'locality') {
-                              geoloc_city    = comp.long_name;
-                              break;
-                            }
-                        }
+        var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + point.lat + '&lon=' + point.lng + '&accept-language=' + api_language;
 
-                        if (geoloc_country && geoloc_city) break;
-                    }
-                    if (geoloc_country && geoloc_city) break;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.address) {
+                    geoloc_country = data.address.country || null;
+                    geoloc_city = data.address.city || data.address.town || data.address.village || data.address.hamlet || null;
+                    raiseMapToolChangeEvent();
                 }
-
-                raiseMapToolChangeEvent();
-            }
-        });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
   <?php } ?>
 <?php } ?>
 
 <?php if ($args['type'] === 'plotter' || $args['type'] === 'viewer') { ?>
-    // The active infowindow.
-    var info_window = null;
-
     // Put a view marker on the map.
     function placeViewMarker(point, info)
     {
         // Create the marker.
-        var marker = new google.maps.Marker({
-            position  : point,
-            <?php if ($args['type'] !== 'plotter') { ?>
-            map       : map,
-            <?php } ?>
+        var m = L.marker(point, {
             <?php if ($args['type'] === 'plotter') { ?>
             icon      : ploticon,
-            flat      : true,
             <?php } ?>
             draggable : false
         });
 
         <?php if ($args['type'] === 'plotter') { ?>
-        fluster.addMarker(marker);
+        markerClusterGroup.addLayer(m);
+        <?php } else { ?>
+        m.addTo(map);
         <?php } ?>
 
         // If info is provided, then setup an info window for the marker.
         if (info) {
-            google.maps.event.addListener(marker, 'click', function () {
-                if (info_window) {
-                    info_window.close();
-                }
-                info_window = new google.maps.InfoWindow({
-                    content     : info,
-                    pixelOffset : new google.maps.Size(0, 16)
-                });
-                info_window.open(map, marker); 
-            });
+            m.bindPopup(info);
         }
+        return m;
     }
 <?php } ?>
 
@@ -390,33 +334,23 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
 
         // Compile map state.
         var center = map.getCenter();
-        state.map_latitude   = center.lat();
-        state.map_longitude  = center.lng();
+        state.map_latitude   = center.lat;
+        state.map_longitude  = center.lng;
         state.map_zoom       = map.getZoom();
-        state.map_type       = map.getMapTypeId();
+        state.map_type       = 'roadmap'; // Default for OSM
 
-        // Compile streetview state.
-        var sv_pos = streetview.getPosition();
-        var sv_pov = streetview.getPov();
-        if (streetview.getVisible()) {
-            state.streetview_latitude   = sv_pos ? sv_pos.lat()   : null,
-            state.streetview_longitude  = sv_pos ? sv_pos.lng()   : null,
-            state.streetview_heading    = sv_pos ? sv_pov.heading : null,
-            state.streetview_pitch      = sv_pos ? sv_pov.pitch   : null,
-            state.streetview_zoom       = sv_pos ? sv_pov.zoom    : null
-        } else {
-            state.streetview_latitude   = null,
-            state.streetview_longitude  = null,
-            state.streetview_heading    = null,
-            state.streetview_pitch      = null,
-            state.streetview_zoom       = null
-        }
+        // Compile streetview state (Not supported in OSM)
+        state.streetview_latitude   = null,
+        state.streetview_longitude  = null,
+        state.streetview_heading    = null,
+        state.streetview_pitch      = null,
+        state.streetview_zoom       = null
 
         // Compile marker state.
-        var marker_pos = marker ? marker.getPosition() : null;
+        var marker_pos = marker ? marker.getLatLng() : null;
         if (marker && marker_pos) {
-            state.marker_latitude   = marker_pos.lat(),
-            state.marker_longitude  = marker_pos.lng()
+            state.marker_latitude   = marker_pos.lat,
+            state.marker_longitude  = marker_pos.lng
         } else {
             state.marker_latitude   = null,
             state.marker_longitude  = null
@@ -441,29 +375,15 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
         // Keep track of the point that we want to be visible in the map.
         var focus_point = null;
 
-        // Set the map type.
-        var type = state.map_type;
-        if (state.map_type !== null && state.map_type !== undefined) {
-            // backward compatibility
-            if (state.map_type === 'normal') state.map_type = 'roadmap';
-
-            map.setMapTypeId(state.map_type);
-        }
-
-        // Set the map center.
+        // Set the map center and zoom.
         if (state.map_latitude  !== null      &&
             state.map_latitude  !== undefined &&
             state.map_longitude !== null      &&
             state.map_longitude !== undefined) {
-            var center = new google.maps.LatLng(
-                state.map_latitude, state.map_longitude);
-            map.setCenter(center);
-        }
-        focus_point = map.getCenter();
-
-        // Set the map zoom.
-        if (state.map_zoom !== null && state.map_zoom !== undefined) {
-            map.setZoom(state.map_zoom);
+            var center = L.latLng(state.map_latitude, state.map_longitude);
+            var zoom = (state.map_zoom !== null && state.map_zoom !== undefined) ? state.map_zoom : map.getZoom();
+            map.setView(center, zoom);
+            focus_point = center;
         }
 
         // Set the marker state.
@@ -472,55 +392,26 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
             state.marker_longitude !== null      &&
             state.marker_longitude !== undefined)
         {
+            var point = L.latLng(state.marker_latitude, state.marker_longitude);
             <?php if ($args["type"] == 'location-editor') { ?>
-            var point = new google.maps.LatLng(
-                state.marker_latitude, state.marker_longitude);
             placeEditMarker(point);
             <?php } ?>
 
             <?php if ($args["type"] == 'viewer') { ?>
-            var point = new google.maps.LatLng(
-                state.marker_latitude, state.marker_longitude);
             placeViewMarker(point);
             <?php } ?>
 
             focus_point = point;
         }
         else if (marker) {
-            marker.setMap(null);
+            map.removeLayer(marker);
             marker = null;
         }
 
-        // Set the streetview state.
-        if (state.streetview_latitude  !== null      && 
-            state.streetview_latitude  !== undefined && 
-            state.streetview_longitude !== null      && 
-            state.streetview_longitude !== undefined && 
-            state.streetview_pitch     !== null      && 
-            state.streetview_pitch     !== undefined && 
-            state.streetview_heading   !== null      && 
-            state.streetview_heading   !== undefined && 
-            state.streetview_zoom      !== null      && 
-            state.streetview_zoom      !== undefined)
-        {
-            streetview.setPosition(new google.maps.LatLng(
-                state.streetview_latitude,
-                state.streetview_longitude
-            ));
-            streetview.setPov({
-                heading    : state.streetview_heading,
-                pitch      : state.streetview_pitch,
-                zoom       : state.streetview_zoom
-            });
-            streetview.setVisible(true);
-        }
-        else {
-            streetview.setVisible(false);
-        }
-
+        // Streetview not supported.
+        
         // Make sure the focus point's position is visible.
-        var bounds = map.getBounds();
-        if (focus_point && bounds && bounds.contains(focus_point)) {
+        if (focus_point) {
             map.panTo(focus_point);
         }
     }
@@ -541,7 +432,6 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
     function geoLocationSupported()
     {
         if (navigator.geolocation) return true;
-        if (google.gears) return true;
         return false;
     }
 
@@ -552,7 +442,6 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
             alert(document.getElementById('maptool_msg_notfound').innerHTML);
         } else {
             map.panTo(point);
-            streetview.setVisible(false);
             <?php if ($args["type"] == 'location-editor') { ?>
             placeEditMarker(point);
             lookupGeolocationInfo(point);
@@ -563,35 +452,18 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
 
     function doGeoLocation()
     {
-        // Try W3C Geolocation (Preferred)
+        // Try W3C Geolocation
         if (navigator.geolocation)
         {
             setLoading(true);
             navigator.geolocation.getCurrentPosition(function(position) {
                 setLoading(false);
-                var point = new google.maps.LatLng(
+                var point = L.latLng(
                     position.coords.latitude,
                     position.coords.longitude
                 );
                 doGeoLocationCallback(point);
             }, function() {
-                setLoading(false);
-                doGeoLocationCallback(null);
-            });
-        }
-        // Try Google Gears Geolocation
-        else if (google.gears)
-        {
-            setLoading(true);
-            var geo = google.gears.factory.create('beta.geolocation');
-            geo.getCurrentPosition(function(position) {
-                setLoading(false);
-                var point = new google.maps.LatLng(
-                    position.latitude,
-                    position.longitude
-                );
-                doGeoLocationCallback(point);
-            }, function () {
                 setLoading(false);
                 doGeoLocationCallback(null);
             });
@@ -624,6 +496,33 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
     }
 <?php } ?>
 
+    // Compatibility shim for plotter.php
+    var google = {
+        maps: {
+            LatLng: function(lat, lng) {
+                return L.latLng(lat, lng);
+            },
+            LatLngBounds: function() {
+                var _bounds = null;
+                this.extend = function(latlng) {
+                    if (!_bounds) {
+                        _bounds = L.latLngBounds(latlng, latlng);
+                    } else {
+                        _bounds.extend(latlng);
+                    }
+                };
+                this.getLeafletBounds = function() {
+                    return _bounds;
+                };
+            }
+        }
+    };
+    var fluster = {
+        initialize: function() {
+            // Nothing needed here for markerClusterGroup
+        }
+    };
+
     //]]>
     </script>
   </head>
@@ -649,6 +548,7 @@ $lang = $PHORUM["DATA"]["LANG"]["mod_google_maps"];
                 left: 0;
                 bottom: 0;
                 right: 0;
+                z-index: 1000;
                 opacity: 0.20;
                 filter: progid:DXImageTransform.Microsoft.Alpha(opacity=20);
                 background: #000 url(<?php print $PHORUM["http_path"] ?>/mods/google_maps/maptool/loader.gif) center center no-repeat"></div>

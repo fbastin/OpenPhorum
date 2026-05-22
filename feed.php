@@ -71,14 +71,26 @@ if(!empty($cache)){
     // check if we are getting replies
     $replies = empty($PHORUM["args"]["replies"]) ? false : true;
 
+    // check if we are getting recently updated threads
+    $active = empty($PHORUM["args"]["active"]) ? false : true;
+
     // check the feed type
     $feed_type = empty($PHORUM["args"]["type"]) ? "rss" : $PHORUM["args"]["type"];
 
     // generate list of forum ids to grab data for
     $forum_ids = array_keys($forums);
 
+    // determine list type
+    if ($replies) {
+        $list_type = LIST_RECENT_MESSAGES;
+    } elseif ($active) {
+        $list_type = LIST_UPDATED_THREADS;
+    } else {
+        $list_type = LIST_RECENT_THREADS;
+    }
+
     // get messages
-    $messages = phorum_db_get_recent_messages(30, 0, $forum_ids, $thread, $replies ? LIST_RECENT_MESSAGES : LIST_RECENT_THREADS);
+    $messages = phorum_db_get_recent_messages(30, 0, $forum_ids, $thread, $list_type);
 
     // remove users from messages array
     $users = $messages["users"];

@@ -1,5 +1,5 @@
-title: Google Maps
-desc: This module implements Google Maps functionality in the user profile. The user can indicate in the control center where he/she lives and this location can be displayed to others on the profile viewing screen.
+title: OpenStreetMap
+desc: This module implements OpenStreetMap functionality in the user profile. The user can indicate in the control center where he/she lives and this location can be displayed to others on the profile viewing screen.
 version: 2.0.5
 require_version: 5.2.16
 author: Maurice Makaay <maurice@phorum.org>

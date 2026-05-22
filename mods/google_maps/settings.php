@@ -58,7 +58,7 @@ $frm = new PhorumInputForm ("", "post", "Save");
 $frm->hidden("module", "modsettings");
 $frm->hidden("mod", "google_maps"); 
 
-$frm->addbreak("Edit settings for the Google Maps module");
+$frm->addbreak("Edit settings for the OpenStreetMap module");
 
 $row = $frm->addrow(
     "Display automatically in the user's profile",

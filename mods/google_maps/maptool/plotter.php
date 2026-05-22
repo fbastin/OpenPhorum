@@ -28,34 +28,20 @@ var markers = [
 
 function onGoogleMapReady(frame, map)
 {
-    var e = null;
-    var w = null;
-    var n = null;
-    var s = null;
+    var latlngs = [];
 
-    var i = 0;
     for (var i = 0; i < markers.length; i++)
     {
         var m = markers[i];
-
-        // Keep track of the bounds.
-        if (n == null || n < m[1]) n = m[1];
-        if (e == null || e < m[0]) e = m[0];
-        if (s == null || s > m[1]) s = m[1];
-        if (w == null || w > m[0]) w = m[0];
-
-        // Create the marker object.
-        var point = new frame.google.maps.LatLng(m[0], m[1]);
+        var point = frame.L.latLng(m[0], m[1]);
         frame.placeViewMarker(point, m[2]); 
+        latlngs.push(point);
     }
 
-    frame.fluster.initialize();
-
-    // Update the map to contain the plot bounds.
-    map.fitBounds(new frame.google.maps.LatLngBounds(
-        new frame.google.maps.LatLng(w, s),
-        new frame.google.maps.LatLng(e, n)
-    ));
+    if (latlngs.length > 0) {
+        var bounds = frame.L.latLngBounds(latlngs);
+        map.fitBounds(bounds);
+    }
 }
 // ]]>
 </script>

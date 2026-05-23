@@ -1,0 +1,9 @@
+title: jsCalendar Integration
+desc: Modern event calendar for members using jsCalendar.
+author: Gemini CLI
+url: https://gramthanos.github.io/jsCalendar/
+category: user_features
+required_version: 5.2.0
+version: 0.1.2
+
+hook: addon|phorum_mod_js_calendar_addon

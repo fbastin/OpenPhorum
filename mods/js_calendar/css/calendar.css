@@ -1,0 +1,21 @@
+.jsCalendar table { width: 100%; }
+.jsCalendar .jsCalendar-title { background-color: var(--color-accent, #2C3E50); }
+.jsCalendar .jsCalendar-current { background-color: var(--color-accent, #2C3E50) !important; }
+.jsCalendar td.jsCalendar-selected {
+    background-color: #e8f5e9 !important;
+    color: #1b5e20 !important;
+    font-weight: bold;
+    position: relative;
+}
+.jsCalendar td.jsCalendar-selected::after {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: var(--color-accent, #2E5A1C);
+    border-radius: 50%;
+    margin: 1px auto 0;
+}
+.event-item { position: relative; margin-bottom: 1rem; border-left: 3px solid var(--color-accent, #2E5A1C); padding: 0.5rem 10px 0.5rem 10px; padding-right: 30px; background: #f9f9f9; }
+.btn-delete-event { position: absolute; top: 5px; right: 8px; color: #cc0000; cursor: pointer; font-weight: bold; font-size: 1.2em; opacity: 0.6; }
+.btn-delete-event:hover { opacity: 1; }

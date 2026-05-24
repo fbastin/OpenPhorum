@@ -1,5 +1,4 @@
 <?php
-
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // Copyright (C) 2010  Phorum Development Team                                //
@@ -994,7 +993,7 @@ switch ($page) {
     // Read a single private message.
     case "read":
 
-        if (($message=phorum_db_pm_get($pm_id, $folder_id))) {
+        if (($message = phorum_db_pm_get($pm_id, $folder_id))) {
 
             // Mark the message read.
             if (! $message['read_flag']) {

@@ -12,7 +12,7 @@
 
 <table cellspacing="0" class="list">
     <tr>
-        <th align="left" colspan="2">
+        <th align="left">&nbsp;</th><th align="left">
             {LANG->Subject}
         </th>
         {IF VIEWCOUNT_COLUMN}

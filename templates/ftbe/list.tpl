@@ -13,8 +13,21 @@
 </div>
 
 <table cellspacing="0" class="list">
+    <colgroup>
+        <col class="col-icon" />
+        <col class="col-subject" />
+        {IF VIEWCOUNT_COLUMN}
+            <col class="col-views" />
+        {/IF}
+        <col class="col-posts" />
+        <col class="col-last" />
+        {IF MODERATOR true}
+            <col class="col-mod" />
+        {/IF}
+    </colgroup>
     <tr>
-        <th align="left" colspan="2">
+        <th align="left">&nbsp;</th>
+        <th align="left">
             {LANG->Subject}
         </th>
         {IF VIEWCOUNT_COLUMN}
@@ -65,8 +78,8 @@
 
     <tr>
 
-        <td width="1%" class="{altclass}"><a href="{IF MESSAGES->new}{MESSAGES->URL->NEWPOST}{ELSE}{MESSAGES->URL->READ}{/IF}" title="{title}"><img src="{URL->TEMPLATE}/images/{icon}.png" class="icon1616" alt="{alt}" /></a></td>
-        <td width="59%" class="{altclass}">
+        <td class="{altclass}"><a href="{IF MESSAGES->new}{MESSAGES->URL->NEWPOST}{ELSE}{MESSAGES->URL->READ}{/IF}" title="{title}"><img src="{URL->TEMPLATE}/images/{icon}.png" class="icon1616" alt="{alt}" /></a></td>
+        <td class="{altclass}">
             <span class="h4">
                 <a href="{MESSAGES->URL->READ}" class="{newclass}" title="{title}">{MESSAGES->subject}</a>
                 {IF MESSAGES->meta->attachments}<img src="{URL->TEMPLATE}/images/attach.png" class="icon1616" title="{LANG->Attachments}"  alt="{LANG->Attachments}" /> {/IF}
@@ -76,7 +89,7 @@
         </td>
 
         {IF VIEWCOUNT_COLUMN}
-            <td width="12%" align="center" class="{altclass}" nowrap="nowrap">
+            <td align="center" class="{altclass}" nowrap="nowrap">
                 {IF MESSAGES->moved}
                     &nbsp;
                 {ELSE}
@@ -86,17 +99,17 @@
         {/IF}
 
         {IF MESSAGES->moved}
-            <td width="30%" class="{altclass}">&nbsp;</td>
-            <td width="30%" align="left" class="{altclass}" nowrap="nowrap">{LANG->MovedSubject}</td>
+            <td class="{altclass}">&nbsp;</td>
+            <td align="left" class="{altclass}" nowrap="nowrap">{LANG->MovedSubject}</td>
         {ELSE}
 
-            <td width="12%" align="center" class="{altclass}" nowrap="nowrap">{MESSAGES->thread_count}</td>
-            <td width="15%" class="{altclass}" nowrap="nowrap">{MESSAGES->lastpost}<br /><a href="{MESSAGES->URL->LAST_POST}">{LANG->LastPostLink}</a> {LANG->by} {IF MESSAGES->URL->RECENT_AUTHOR_PROFILE}<a href="{MESSAGES->URL->RECENT_AUTHOR_PROFILE}">{/IF}{MESSAGES->recent_author}{IF MESSAGES->URL->RECENT_AUTHOR_PROFILE}</a>{/IF}</td>
+            <td align="center" class="{altclass}" nowrap="nowrap">{MESSAGES->thread_count}</td>
+            <td class="{altclass}" nowrap="nowrap">{MESSAGES->lastpost}<br /><a href="{MESSAGES->URL->LAST_POST}">{LANG->LastPostLink}</a> {LANG->by} {IF MESSAGES->URL->RECENT_AUTHOR_PROFILE}<a href="{MESSAGES->URL->RECENT_AUTHOR_PROFILE}">{/IF}{MESSAGES->recent_author}{IF MESSAGES->URL->RECENT_AUTHOR_PROFILE}</a>{/IF}</td>
 
         {/IF}
 
         {IF MODERATOR true}
-            <td width="1%" align="right" class="{altclass}" nowrap="nowrap">
+            <td align="right" class="{altclass}" nowrap="nowrap">
                 {IF MESSAGES->moved}
                     <a title="{LANG->DeleteMessage}" href="javascript:if(window.confirm('{LANG->ConfirmDeleteMessage}')) window.location='{MESSAGES->URL->DELETE_THREAD}';"><img src="{URL->TEMPLATE}/images/delete.png" class="icon1616" alt="{LANG->DeleteMessage}" /></a>
                 {ELSE}

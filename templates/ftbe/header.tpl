@@ -70,7 +70,7 @@ display: inline;
 {ELSE}
   <link rel="stylesheet" type="text/css" href="{URL->CSS}" media="screen" />
   <link rel="stylesheet" type="text/css" href="{URL->CSS_PRINT}" media="print" />
-  <link rel="stylesheet" type="text/css" href="/css/tireur.css?v=20260425d" media="all"/>
+  <link rel="stylesheet" type="text/css" href="/css/tireur.css?v=20260523l" media="all"/>
 {/IF}
 
 {! Load Javascript code. This code origins from core Phorum javascript }
@@ -138,10 +138,12 @@ Some Icons courtesy of:
 <div id="wrapper">
 
 <header id="header">
-<?php include '../logo.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/logo.php'; ?>
 </header>
 
-<?php include '../menu.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/partner_sidebar.php'; ?>
 
   <div id="phorum">
 
@@ -258,3 +260,12 @@ Some Icons courtesy of:
     {/IF}
 
 <!-- END TEMPLATE {TEMPLATE}/header.tpl -->
+<style type="text/css">
+#phorum table.list { border: 1px solid #ccc !important; table-layout: fixed !important; width: 100% !important; border-collapse: collapse !important; }
+#phorum table.list col.col-icon { width: 35px !important; }
+#phorum table.list col.col-views { width: 7% !important; }
+#phorum table.list col.col-posts { width: 7% !important; }
+#phorum table.list col.col-last { width: 30% !important; }
+#phorum table.list col.col-mod { width: 80px !important; }
+#phorum table.list th, #phorum table.list td { padding: 8px 10px !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+</style>

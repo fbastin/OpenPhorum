@@ -65,7 +65,7 @@ display: inline;
 {ELSE}
   <link rel="stylesheet" type="text/css" href="{URL->CSS}" media="screen" />
   <link rel="stylesheet" type="text/css" href="{URL->CSS_PRINT}" media="print" />
-  <link rel="stylesheet" type="text/css"  href="http://www.tireur.org/css/tireur.css" media="all"/>
+  <link rel="stylesheet" type="text/css"  href="/css/tireur.css?v=20260523q" media="all"/>
 {/IF}
 
 {! Load Javascript code. This code origins from core Phorum javascript }
@@ -130,6 +130,9 @@ Some Icons courtesy of:
 {! variable to specify what page element should get the focus. }
 <body onload="{IF FOCUS_TO_ID}var focuselt=document.getElementById('{FOCUS_TO_ID}'); if (focuselt) focuselt.focus();{/IF}">
 
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/partner_sidebar.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/forum_sidebar.php'; ?>
+
   {! Please, always keep this <div> in your template and do not change its id }
   {! It acts as the main Phorum content container, which will be used for }
   {! styling the pages using CSS and possibly for finding the Phorum content }
@@ -161,11 +164,9 @@ third row: footer
     <div id="logo">
 
 <?php
-
-include '../menu.php';
-include '../logo.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/menu.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/logo.php';
 ?>
-
 </div> <!-- end of div id=logo -->
 
     <div id="user-info" class="user-bar {IF LOGGEDIN}logged-in{ELSE}logged-out{/IF}">

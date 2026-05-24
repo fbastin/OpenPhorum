@@ -70,7 +70,7 @@ display: inline;
 {ELSE}
   <link rel="stylesheet" type="text/css" href="{URL->CSS}" media="screen" />
   <link rel="stylesheet" type="text/css" href="{URL->CSS_PRINT}" media="print" />
-  <link rel="stylesheet" type="text/css" href="/css/tireur.css?v=20260523l" media="all"/>
+  <link rel="stylesheet" type="text/css" href="/css/tireur.css?v=20260523q" media="all"/>
 {/IF}
 
 {! Load Javascript code. This code origins from core Phorum javascript }
@@ -144,9 +144,9 @@ Some Icons courtesy of:
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/partner_sidebar.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/forum_sidebar.php'; ?>
 
-  <div id="phorum">
-
+<div id="phorum">
   {IF NOT PRINTVIEW}
   {/IF}
 

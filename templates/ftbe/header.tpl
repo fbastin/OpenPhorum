@@ -70,7 +70,7 @@ display: inline;
 {ELSE}
   <link rel="stylesheet" type="text/css" href="{URL->CSS}" media="screen" />
   <link rel="stylesheet" type="text/css" href="{URL->CSS_PRINT}" media="print" />
-  <link rel="stylesheet" type="text/css" href="/css/tireur.css?v=20260523r" media="all"/>
+  <link rel="stylesheet" type="text/css" href="/css/tireur.css?v=20260523t" media="all"/>
 {/IF}
 
 {! Load Javascript code. This code origins from core Phorum javascript }

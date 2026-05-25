@@ -1,7 +1,14 @@
 title: SlashGallery Integration
 description: Integrates the site-wide SlashGallery with Phorum. Adds a gallery selector to the editor and auto-syncs attachments.
-version: 1.0.0
+version: 1.0.1
 author: Gemini CLI
 url: https://www.tireur.org
 category: interface
-hooks: editor_tool_plugin, after_post, after_edit, before_delete, javascript_register
+
+hook: common|phorum_mod_slashgallery_phorum_common
+hook: editor_tool_plugin|phorum_mod_slashgallery_phorum_editor_tool_plugin
+hook: after_post|phorum_mod_slashgallery_phorum_after_post
+hook: after_edit|phorum_mod_slashgallery_phorum_after_edit
+hook: before_delete|phorum_mod_slashgallery_phorum_before_delete
+hook: javascript_register|phorum_mod_slashgallery_phorum_javascript_register
+

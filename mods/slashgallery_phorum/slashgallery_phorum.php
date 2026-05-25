@@ -3,8 +3,12 @@ if(!defined("PHORUM")) return;
 
 require_once(__DIR__ . '/../../../libs/SlashGallery/src/SlashGallery.php');
 
+function phorum_mod_slashgallery_phorum_common() {
+    // Debug helper
+    if (isset($_GET['debug_mod'])) echo "<!-- SLASHGALLERY_PHORUM_ACTIVE -->";
+}
+
 function phorum_mod_slashgallery_phorum_editor_tool_plugin() {
-    $lang = $GLOBALS["PHORUM"]["DATA"]["LANG"]["mod_editor_tools"];
     editor_tools_register_tool(
         'slashgallery',
         'Insérer une image de ma galerie',

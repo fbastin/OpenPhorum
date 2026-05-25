@@ -1,6 +1,15 @@
 <?php
 if(!defined("PHORUM")) return;
 
+/**
+ * Helper to ensure SlashGallery is loaded
+ */
+function phorum_mod_slashgallery_phorum_load_library() {
+    if (!class_exists('SlashGallery')) {
+        require_once __DIR__ . '/../../../libs/SlashGallery/src/SlashGallery.php';
+    }
+}
+
 function phorum_mod_slashgallery_phorum_editor_tool_plugin() {
     // Only register the tool if editor_tools mod is active and we are in an editor context
     if (isset($GLOBALS["PHORUM"]["MOD_EDITOR_TOOLS"])) {
@@ -25,6 +34,14 @@ function phorum_mod_slashgallery_phorum_sync_attachments($message) {
     global $PHORUM;
     
     if (empty($message['message_id'])) return $message;
+    
+    // Load Phorum File API if not already loaded
+    if (!defined('PHORUM_API_FILE')) {
+        $api_path = __DIR__ . '/../../include/api/file.php';
+        if (file_exists($api_path)) require_once $api_path;
+    }
+    
+    phorum_mod_slashgallery_phorum_load_library();
     
     $galleryDir = __DIR__ . '/../../../uploads/gallery';
     $config = [
@@ -90,6 +107,8 @@ function phorum_mod_slashgallery_phorum_after_edit($message) {
 }
 
 function phorum_mod_slashgallery_phorum_before_delete($message_ids) {
+    phorum_mod_slashgallery_phorum_load_library();
+    
     $galleryDir = __DIR__ . '/../../../uploads/gallery';
     $config = [
         'db_path' => __DIR__ . '/../../../cache/gallery.db',

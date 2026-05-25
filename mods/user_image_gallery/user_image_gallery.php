@@ -114,6 +114,17 @@ function mod_user_image_gallery_tpl_cc_menu_options_hook()
 {
     global $PHORUM;
     
+    // Phase out old gallery: Only show menu item if user has existing images
+    $user_id = $PHORUM['user']['user_id'] ?? 0;
+    if (!$user_id) return;
+    
+    require_once('./include/api/file_storage.php');
+    $files = phorum_api_file_list('image_g', $user_id, NULL);
+    
+    if (empty($files)) {
+        return; // No images, don't show the deprecated panel
+    }
+    
     // Generate the require template data for the control panel menu button.
     if ($PHORUM["DATA"]["PROFILE"]["PANEL"] == 'image_gallery') {
         $PHORUM["DATA"]["IMAGE_GALLERY_PANEL_ACTIVE"] = TRUE;
@@ -241,11 +252,16 @@ function mod_user_image_gallery_get_image_info ($image_id) {
 // Add link to image gallery to user profiles.
 function mod_user_image_gallery_profile($profile)
 {
-    // don't if galleries are currently not visible
-//     if ( ! mod_user_image_gallery_visible() ):
-//       return $profile;
-//     endif;
-    $profile["URL"]["user_image_gallery"] = phorum_get_url(PHORUM_ADDON_URL, 'module=user_image_gallery', 'view=gallery', 'user='.$profile['user_id'] );
+    $user_id = $profile['user_id'] ?? 0;
+    if (!$user_id) return $profile;
+
+    require_once('./include/api/file_storage.php');
+    $files = phorum_api_file_list('image_g', $user_id, NULL);
+    
+    if (!empty($files)) {
+        $profile["URL"]["user_image_gallery"] = phorum_get_url(PHORUM_ADDON_URL, 'module=user_image_gallery', 'view=gallery', 'user='.$user_id );
+    }
+    
     return $profile;
 }
 

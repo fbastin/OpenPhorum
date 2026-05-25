@@ -1,20 +1,16 @@
 <?php
 if(!defined("PHORUM")) return;
 
-require_once(__DIR__ . '/../../../libs/SlashGallery/src/SlashGallery.php');
-
-function phorum_mod_slashgallery_phorum_common() {
-    // Debug helper
-    if (isset($_GET['debug_mod'])) echo "<!-- SLASHGALLERY_PHORUM_ACTIVE -->";
-}
-
 function phorum_mod_slashgallery_phorum_editor_tool_plugin() {
-    editor_tools_register_tool(
-        'slashgallery',
-        'Insérer une image de ma galerie',
-        $GLOBALS["PHORUM"]["http_path"] . '/mods/slashgallery_phorum/icon.png',
-        'slashgallery_open_selector()'
-    );
+    // Only register the tool if editor_tools mod is active and we are in an editor context
+    if (isset($GLOBALS["PHORUM"]["MOD_EDITOR_TOOLS"])) {
+        editor_tools_register_tool(
+            'slashgallery',
+            'Galerie Photos',
+            $GLOBALS["PHORUM"]["http_path"] . '/mods/slashgallery_phorum/icon.png',
+            'slashgallery_open_selector()'
+        );
+    }
 }
 
 function phorum_mod_slashgallery_phorum_javascript_register($data) {

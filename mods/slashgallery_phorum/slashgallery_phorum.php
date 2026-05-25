@@ -86,6 +86,7 @@ function phorum_mod_slashgallery_phorum_sync_attachments($message) {
                         $gallery->addTag($finalName, 'post_attachment');
                         $gallery->setPublic($finalName, false);
                         $gallery->setMessageId($finalName, $msg_id);
+                        try { $gallery->generateThumbnail($finalName); } catch (Exception $e) {}
                     }
                 }
             }

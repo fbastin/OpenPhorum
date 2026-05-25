@@ -35,14 +35,18 @@ function phorum_mod_slashgallery_phorum_sync_attachments($message) {
     
     if (empty($message['message_id'])) return $message;
     
+    phorum_mod_slashgallery_phorum_load_library();
+    if (!class_exists('SlashGallery')) return $message;
+
     // Load Phorum File API if not already loaded
     if (!defined('PHORUM_API_FILE')) {
-        $api_path = __DIR__ . '/../../include/api/file.php';
+        $phorum_root = realpath(__DIR__ . '/../..');
+        $api_path = $phorum_root . '/include/api/file.php';
         if (file_exists($api_path)) require_once $api_path;
     }
     
-    phorum_mod_slashgallery_phorum_load_library();
-    
+    if (!function_exists('phorum_api_file_get')) return $message;
+
     $galleryDir = __DIR__ . '/../../../uploads/gallery';
     $config = [
         'db_path' => __DIR__ . '/../../../cache/gallery.db',
@@ -106,9 +110,14 @@ function phorum_mod_slashgallery_phorum_after_edit($message) {
     return phorum_mod_slashgallery_phorum_sync_attachments($message);
 }
 
-function phorum_mod_slashgallery_phorum_before_delete($message_ids) {
+function phorum_mod_slashgallery_phorum_before_delete($data) {
+    // Phorum before_delete hook passes an array: 
+    // array($handled, $msg_ids, $msgthd_id, $message, $delete_mode)
+    if (!is_array($data)) return $data;
+
     phorum_mod_slashgallery_phorum_load_library();
-    
+    if (!class_exists('SlashGallery')) return $data;
+
     $galleryDir = __DIR__ . '/../../../uploads/gallery';
     $config = [
         'db_path' => __DIR__ . '/../../../cache/gallery.db',
@@ -118,8 +127,21 @@ function phorum_mod_slashgallery_phorum_before_delete($message_ids) {
     ];
     $gallery = new SlashGallery($config);
 
-    foreach ($message_ids as $id) {
-        $gallery->deleteByMessageId($id);
+    $msg_ids = $data[1];
+    $msgthd_id = $data[2];
+
+    if (!is_array($msg_ids)) {
+        $ids = !empty($msgthd_id) ? array($msgthd_id) : array();
+    } else {
+        $ids = $msg_ids;
     }
+
+    foreach ($ids as $id) {
+        if (!empty($id)) {
+            $gallery->deleteByMessageId((int)$id);
+        }
+    }
+
+    return $data;
 }
 ?>

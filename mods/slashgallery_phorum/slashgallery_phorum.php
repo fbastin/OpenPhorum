@@ -1,0 +1,106 @@
+<?php
+if(!defined("PHORUM")) return;
+
+require_once(__DIR__ . '/../../../libs/SlashGallery/src/SlashGallery.php');
+
+function phorum_mod_slashgallery_phorum_editor_tool_plugin() {
+    $lang = $GLOBALS["PHORUM"]["DATA"]["LANG"]["mod_editor_tools"];
+    editor_tools_register_tool(
+        'slashgallery',
+        'Insérer une image de ma galerie',
+        $GLOBALS["PHORUM"]["http_path"] . '/mods/slashgallery_phorum/icon.png',
+        'slashgallery_open_selector()'
+    );
+}
+
+function phorum_mod_slashgallery_phorum_javascript_register($data) {
+    $data[] = array(
+        "module" => "slashgallery_phorum",
+        "source" => "file(mods/slashgallery_phorum/slashgallery_phorum.js)"
+    );
+    return $data;
+}
+
+function phorum_mod_slashgallery_phorum_sync_attachments($message) {
+    global $PHORUM;
+    
+    if (empty($message['message_id'])) return $message;
+    
+    $galleryDir = __DIR__ . '/../../../uploads/gallery';
+    $config = [
+        'db_path' => __DIR__ . '/../../../cache/gallery.db',
+        'photo_base_dir' => $galleryDir,
+        'python_venv' => __DIR__ . '/../../../libs/SlashGallery/venv',
+        'base_url' => '/uploads/gallery/'
+    ];
+    $gallery = new SlashGallery($config);
+    $gallery->setSecurityContext(true); // Full access for sync
+
+    $username = strtolower($message['author']);
+    $add_time = $message['datestamp'];
+    $msg_id = $message['message_id'];
+
+    // 1. Get current attachments on SlashGallery for this message
+    $existing_in_gallery = $gallery->getByMessageId($msg_id);
+    $existing_filenames = array_map(function($img) { return basename($img['path']); }, $existing_in_gallery);
+
+    $current_attachment_filenames = [];
+
+    // 2. Add/Sync current attachments from Phorum
+    if (!empty($message['attachments'])) {
+        foreach ($message['attachments'] as $attachment) {
+            if (!preg_match('/\.(jpg|jpeg|png|webp|gif)$/i', $attachment['name'])) continue;
+            
+            $newName = preg_replace('/[^a-z0-9\._-]/i', '_', $attachment['name']);
+            $finalName = $username . '_' . $add_time . '_' . $newName;
+            $current_attachment_filenames[] = $finalName;
+
+            if (!in_array($finalName, $existing_filenames)) {
+                $phorum_file = phorum_api_file_get($attachment['file_id']);
+                if ($phorum_file && !empty($phorum_file['file_data'])) {
+                    $destPath = $galleryDir . '/' . $finalName;
+                    if (file_put_contents($destPath, $phorum_file['file_data'])) {
+                        $gallery->addTag($finalName, 'membre');
+                        $gallery->addTag($finalName, $username);
+                        $gallery->addTag($finalName, 'post_attachment');
+                        $gallery->setPublic($finalName, false);
+                        $gallery->setMessageId($finalName, $msg_id);
+                    }
+                }
+            }
+        }
+    }
+
+    // 3. Remove orphaned images (if attachment was removed in Phorum)
+    foreach ($existing_filenames as $filename) {
+        if (!in_array($filename, $current_attachment_filenames)) {
+            $gallery->deleteImage($filename);
+        }
+    }
+    
+    return $message;
+}
+
+function phorum_mod_slashgallery_phorum_after_post($message) {
+    return phorum_mod_slashgallery_phorum_sync_attachments($message);
+}
+
+function phorum_mod_slashgallery_phorum_after_edit($message) {
+    return phorum_mod_slashgallery_phorum_sync_attachments($message);
+}
+
+function phorum_mod_slashgallery_phorum_before_delete($message_ids) {
+    $galleryDir = __DIR__ . '/../../../uploads/gallery';
+    $config = [
+        'db_path' => __DIR__ . '/../../../cache/gallery.db',
+        'photo_base_dir' => $galleryDir,
+        'python_venv' => __DIR__ . '/../../../libs/SlashGallery/venv',
+        'base_url' => '/uploads/gallery/'
+    ];
+    $gallery = new SlashGallery($config);
+
+    foreach ($message_ids as $id) {
+        $gallery->deleteByMessageId($id);
+    }
+}
+?>

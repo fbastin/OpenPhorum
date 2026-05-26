@@ -1,12 +1,27 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.js"></script>
-<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525b">
+<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525c">
+
+<style>
+/* Emergency Inline Overrides */
+#my-calendar, .jsCalendar, .jsCalendar table {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    display: table !important;
+}
+.jsCalendar { display: block !important; }
+.jsCalendar table { display: table !important; }
+.jsCalendar .jsCalendar-body td {
+    height: 100px !important;
+}
+</style>
 
 <div class="PhorumStdBlockHeader PhorumHeaderText">Calendrier des &eacute;v&eacute;nements</div>
 <div class="PhorumStdBlock calendar-wrapper">
     <div class="calendar-container">
         <!-- Full width calendar -->
-        <div id="my-calendar" data-language="fr" class="full-width-calendar"></div>
+        <div id="my-calendar" data-language="fr" class="jsCalendar-full-width"></div>
         
         <div id="event-manager" class="event-manager-panel">
             <div id="event-list">

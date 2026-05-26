@@ -13,13 +13,14 @@
 #my-calendar {
     width: 100% !important;
     max-width: 100% !important;
-    display: block !important; /* Neutralize inline-block from library */
+    display: block !important;
 }
 
-/* Target the library generated div */
-.jsCalendar {
+/* Target the library classes specifically */
+.jsCalendar, .jsCalendar-full-width {
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 100% !important;
     border: none !important;
     box-sizing: border-box !important;
     display: block !important;
@@ -28,9 +29,10 @@
 .jsCalendar table {
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 100% !important;
     height: auto;
     border-collapse: collapse;
-    table-layout: fixed; /* Force equal column widths */
+    table-layout: fixed;
 }
 
 .jsCalendar .jsCalendar-title {
@@ -53,7 +55,7 @@
 }
 
 .jsCalendar .jsCalendar-body td {
-    height: 100px !important; /* Even taller for "Full Screen" feel */
+    height: 100px !important;
     vertical-align: top;
     padding: 10px !important;
     border: 1px solid #eee;

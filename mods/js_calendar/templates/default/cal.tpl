@@ -1,245 +1,340 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.js"></script>
-<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525_ULTRA">
+<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260526c">
 
-<style>
-/* Absolute priority width override */
-#phorum #my-calendar.jsCalendar {
-    width: 100% !important;
-    max-width: 100% !important;
-    display: block !important;
-}
-#phorum .jsCalendar table {
-    width: 100% !important;
-    max-width: 100% !important;
-    table-layout: fixed !important;
-}
-#phorum .jsCalendar .jsCalendar-body td {
-    height: 100px !important;
-}
-</style>
-
-<div class="PhorumStdBlockHeader PhorumHeaderText">Calendrier des &eacute;v&eacute;nements</div>
+<div class="calendar-page-header">Calendrier des &eacute;v&eacute;nements</div>
 <div class="PhorumStdBlock calendar-page-main">
     <div class="calendar-layout-container">
-        <!-- Calendar View -->
-        <div class="calendar-view-section">
-            <div id="my-calendar" data-language="fr" class="auto-jsCalendar"></div>
+        <div class="cal-nav-row">
+            <button type="button" id="cal-prev" class="cal-nav-btn" title="Mois pr&eacute;c&eacute;dent">&#8249;</button>
+            <div class="cal-grid">
+                <div class="cal-cell cal-side" id="cal-left"></div>
+                <div class="cal-cell cal-center" id="cal-center"></div>
+                <div class="cal-cell cal-side" id="cal-right"></div>
+            </div>
+            <button type="button" id="cal-next" class="cal-nav-btn" title="Mois suivant">&#8250;</button>
         </div>
-        
-        <!-- Details & Editor Panel -->
-        <div id="event-manager" class="calendar-details-section">
-            <div id="event-list" class="event-list-panel">
-                <h3 class="panel-title">&Eacute;v&eacute;nements le <span id="selected-date-str">-</span></h3>
-                <div id="events-container" class="events-scroll">Chargement...</div>
-            </div>
 
-            {IF CALENDAR->is_logged_in}
-            <div id="event-editor-section" class="event-form-panel">
-                <h3 id="form-action-title">Ajouter un &eacute;v&eacute;nement</h3>
-                <form id="event-form">
-                    <input type="hidden" id="event-id" name="event_id" value="">
-                    <div class="form-group">
-                        <label>Date :</label>
-                        <input type="date" id="event-date" name="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Titre :</label>
-                        <input type="text" id="event-title" name="title" required placeholder="Titre de l'événement">
-                    </div>
-                    <div class="form-group">
-                        <label>Description :</label>
-                        <textarea id="event-desc" name="description" placeholder="Détails, horaires, liens..."></textarea>
-                    </div>
-                    <div class="form-buttons">
-                        <button type="button" id="btn-save-event" class="PhorumSubmit">Enregistrer</button>
-                        <button type="button" id="btn-cancel-edit" class="btn-secondary" style="display:none">Annuler</button>
-                    </div>
-                </form>
+        <div class="calendar-events-panel">
+            <div class="events-panel-header">
+                <h3 class="events-panel-title">&Eacute;v&eacute;nements le <span id="selected-date-str">-</span></h3>
+                {IF CALENDAR->is_logged_in}
+                <button type="button" id="btn-open-add" class="btn-add-event">+ Ajouter</button>
+                {/IF}
             </div>
-            {ELSE}
-            <div class="event-form-panel">
-                <p style="color: #666; font-style: italic; margin: 0;">
-                    Connectez-vous pour proposer un &eacute;v&eacute;nement.
-                </p>
-            </div>
+            <div id="events-container" class="events-scroll">S&eacute;lectionnez une date.</div>
+            {IF NOT CALENDAR->is_logged_in}
+            <p style="color: #888; font-style: italic; margin: 1rem 0 0; font-size: 0.9rem;">
+                Connectez-vous pour proposer un &eacute;v&eacute;nement.
+            </p>
             {/IF}
         </div>
     </div>
 </div>
 
+{IF CALENDAR->is_logged_in}
+<div id="cal-modal-overlay" class="cal-modal-overlay">
+    <div class="cal-modal" role="dialog" aria-labelledby="modal-title">
+        <div class="cal-modal-head">
+            <h3 id="modal-title">Ajouter un &eacute;v&eacute;nement</h3>
+            <button type="button" class="cal-modal-close" id="modal-close">&times;</button>
+        </div>
+        <div class="cal-modal-body">
+            <form id="event-form">
+                <input type="hidden" id="event-id" name="event_id" value="">
+                <div class="form-group">
+                    <label for="event-date">Date</label>
+                    <input type="date" id="event-date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-title">Titre</label>
+                    <input type="text" id="event-title" name="title" required placeholder="Titre de l'&eacute;v&eacute;nement">
+                </div>
+                <div class="form-group">
+                    <label for="event-desc">Description</label>
+                    <textarea id="event-desc" name="description" placeholder="D&eacute;tails, horaires, lieu..."></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="cal-modal-foot">
+            <button type="button" id="btn-save" class="btn-save">Enregistrer</button>
+            <button type="button" id="btn-cancel" class="btn-cancel">Annuler</button>
+            <button type="button" id="btn-modal-delete" class="btn-delete" style="display:none">Supprimer</button>
+        </div>
+    </div>
+</div>
+{/IF}
+
 <script type="text/javascript">
 (function() {
-    var ajaxUrl = "{CALENDAR->ajax_url}";
-    var userId = {CALENDAR->user_id};
-    var isAdmin = {CALENDAR->is_admin};
-    
-    // Internal JS to ensure availability
-    var initPhorumCalendar = function() {
+    var AJAX_URL = "{CALENDAR->ajax_url}";
+    var USER_ID = {CALENDAR->user_id};
+    var IS_ADMIN = {CALENDAR->is_admin};
+
+    function boot() {
         if (typeof jsCalendar === 'undefined') {
-            console.warn("jsCalendar not loaded, retrying...");
-            setTimeout(initPhorumCalendar, 200);
+            setTimeout(boot, 150);
             return;
         }
-        
-        var calendarElt = document.getElementById('my-calendar');
-        if (!calendarElt) return;
-        
-        var calendar = jsCalendar.new(calendarElt);
-        var eventsContainer = document.getElementById('events-container');
-        var selectedDateStr = document.getElementById('selected-date-str');
-        var eventDateInput = document.getElementById('event-date');
-        var eventTitleInput = document.getElementById('event-title');
-        var eventDescInput = document.getElementById('event-desc');
-        var eventIdInput = document.getElementById('event-id');
-        var formActionTitle = document.getElementById('form-action-title');
-        var btnCancel = document.getElementById('btn-cancel-edit');
-        
-        var getUrl = function(action) {
-            return ajaxUrl + (ajaxUrl.indexOf('?') !== -1 ? '&' : ',') + "action=" + action + "&_t=" + Date.now();
-        };
 
-        var toDateObj = function(str) {
-            if (!str) return new Date();
-            var p = str.split('-');
-            return new Date(p[0], p[1] - 1, p[2]);
-        };
+        var calOpts = { language: 'fr', monthFormat: 'month YYYY' };
 
-        var escapeHtml = function(text) {
-            if (!text) return "";
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        };
+        var calL = jsCalendar.new('#cal-left',   null, calOpts);
+        var calC = jsCalendar.new('#cal-center', null, calOpts);
+        var calR = jsCalendar.new('#cal-right',  null, calOpts);
+        var cals = [calL, calC, calR];
 
-        var fetchEvents = function(date) {
-            eventsContainer.innerHTML = "<div class='loader'>Chargement...</div>";
-            fetch(getUrl("list") + "&date=" + date)
-                .then(r => r.json())
-                .then(data => {
-                    if (!data || !Array.isArray(data) || data.length === 0) {
-                        eventsContainer.innerHTML = "<p class='no-events'>Aucun événement prévu.</p>";
-                    } else {
-                        var html = '';
-                        data.forEach((ev, idx) => {
-                            var canEdit = userId > 0 && (isAdmin || userId == ev.user_id);
-                            html += '<div class="event-item' + (canEdit ? ' editable' : '') + '" id="ev-link-' + idx + '">';
-                            if (canEdit) {
-                                html += '<span class="btn-delete-event" data-id="' + ev.event_id + '">&times;</span>';
-                            }
-                            html += '<div class="event-title">' + escapeHtml(ev.title) + '</div>';
-                            html += '<div class="event-author">Par ' + escapeHtml(ev.username) + '</div>';
-                            if (ev.description) {
-                                html += '<div class="event-desc">' + escapeHtml(ev.description) + '</div>';
-                            }
-                            html += '</div>';
-                        });
-                        eventsContainer.innerHTML = html;
-                        
-                        data.forEach((ev, idx) => {
-                            var el = document.getElementById('ev-link-' + idx);
-                            if (el) el.onclick = function() { editEvent(ev); };
-                            var del = el.querySelector('.btn-delete-event');
-                            if (del) del.onclick = function(e) {
-                                e.stopPropagation();
-                                deleteEvent(ev.event_id, date);
-                            };
-                        });
-                    }
-                });
-        };
+        var centerDate = new Date();
+        centerDate.setDate(1);
 
-        var highlightEventDates = function() {
-            fetch(getUrl("list_all_dates"))
-                .then(r => r.json())
-                .then(dates => {
-                    calendar.clearselect();
-                    if (Array.isArray(dates)) {
-                        calendar.select(dates.map(toDateObj));
-                    }
-                });
-        };
-
-        var updateDateSelection = function(date, skipFormUpdate) {
-            var dateStr = jsCalendar.tools.dateToString(date, "YYYY-MM-DD", "en");
-            selectedDateStr.innerText = jsCalendar.tools.dateToString(date, "DD/MM/YYYY", "fr");
-            if (eventDateInput && !skipFormUpdate) {
-                eventDateInput.value = dateStr;
-            }
-            fetchEvents(dateStr);
-        };
-
-        var editEvent = function(ev) {
-            if (!eventTitleInput) return;
-            eventIdInput.value = ev.event_id;
-            eventTitleInput.value = ev.title;
-            eventDescInput.value = ev.description || '';
-            eventDateInput.value = ev.event_date || ev.date;
-            formActionTitle.innerText = "Modifier l'événement";
-            btnCancel.style.display = 'inline-block';
-            document.getElementById('event-editor-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            eventTitleInput.focus();
-        };
-
-        var deleteEvent = function(eventId, date) {
-            if (confirm("Supprimer cet événement ?")) {
-                fetch(getUrl("delete") + "&event_id=" + eventId)
-                    .then(r => r.json())
-                    .then(data => {
-                        if (data.success) {
-                            fetchEvents(date);
-                            highlightEventDates();
-                            if (eventIdInput.value == eventId) resetForm();
-                        } else { alert("Erreur: " + data.error); }
-                    });
-            }
-        };
-
-        var resetForm = function() {
-            if (!eventTitleInput) return;
-            eventIdInput.value = '';
-            eventTitleInput.value = '';
-            eventDescInput.value = '';
-            formActionTitle.innerText = "Ajouter un événement";
-            btnCancel.style.display = 'none';
-        };
-
-        if (btnCancel) btnCancel.onclick = resetForm;
-
-        var btnSave = document.getElementById('btn-save-event');
-        if (btnSave) {
-            btnSave.onclick = function() {
-                var title = eventTitleInput.value.trim();
-                if (!title) { alert("Saisissez un titre."); return; }
-                var formData = new FormData(document.getElementById('event-form'));
-                btnSave.disabled = true;
-                fetch(getUrl("save"), { method: 'POST', body: formData })
-                    .then(r => r.json())
-                    .then(data => {
-                        if (data.success) {
-                            resetForm();
-                            fetchEvents(eventDateInput.value);
-                            highlightEventDates();
-                        } else { alert("Erreur: " + data.error); }
-                    })
-                    .finally(() => { btnSave.disabled = false; });
-            };
+        function shiftMonth(d, n) {
+            var r = new Date(d.getFullYear(), d.getMonth() + n, 1);
+            return r;
         }
 
-        var today = new Date();
-        updateDateSelection(today);
-        highlightEventDates();
-        
-        calendar.onDateClick(function(event, date) {
-            updateDateSelection(date);
-        });
-    };
+        function syncCalendars() {
+            calL.goto(shiftMonth(centerDate, -1));
+            calC.goto(centerDate);
+            calR.goto(shiftMonth(centerDate, 1));
+        }
 
-    // Ensure JS execution even if browser/Phorum delays DOM events
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-        initPhorumCalendar();
+        syncCalendars();
+
+        document.getElementById('cal-prev').addEventListener('click', function() {
+            centerDate = shiftMonth(centerDate, -1);
+            syncCalendars();
+            refreshSelections();
+        });
+        document.getElementById('cal-next').addEventListener('click', function() {
+            centerDate = shiftMonth(centerDate, 1);
+            syncCalendars();
+            refreshSelections();
+        });
+
+        var $events = document.getElementById('events-container');
+        var $dateLabel = document.getElementById('selected-date-str');
+
+        var $overlay = document.getElementById('cal-modal-overlay');
+        var $modalTitle = document.getElementById('modal-title');
+        var $modalClose = document.getElementById('modal-close');
+        var $dateInput = document.getElementById('event-date');
+        var $titleInput = document.getElementById('event-title');
+        var $descInput = document.getElementById('event-desc');
+        var $idInput = document.getElementById('event-id');
+        var $btnSave = document.getElementById('btn-save');
+        var $btnCancel = document.getElementById('btn-cancel');
+        var $btnDelete = document.getElementById('btn-modal-delete');
+        var $btnAdd = document.getElementById('btn-open-add');
+
+        var currentDate = '';
+        var editingId = 0;
+        var allEventDates = [];
+
+        function apiUrl(action) {
+            return AJAX_URL + ',action=' + action;
+        }
+
+        function toDate(s) {
+            var p = s.split('-');
+            return new Date(parseInt(p[0]), parseInt(p[1]) - 1, parseInt(p[2]));
+        }
+
+        function fmtDate(d) {
+            var y = d.getFullYear();
+            var m = ('0' + (d.getMonth() + 1)).slice(-2);
+            var day = ('0' + d.getDate()).slice(-2);
+            return y + '-' + m + '-' + day;
+        }
+
+        function fmtDateFR(d) {
+            var months = ['janvier','février','mars','avril','mai','juin',
+                          'juillet','août','septembre','octobre','novembre','décembre'];
+            return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+        }
+
+        function esc(text) {
+            if (!text) return '';
+            var d = document.createElement('div');
+            d.textContent = text;
+            return d.innerHTML;
+        }
+
+        function refreshSelections() {
+            var dateObjs = allEventDates.map(toDate);
+            for (var i = 0; i < cals.length; i++) {
+                cals[i].clearselect();
+                if (dateObjs.length) cals[i].select(dateObjs);
+            }
+        }
+
+        /* --- Modal --- */
+        function openModal(mode, ev) {
+            if (!$overlay) return;
+            editingId = 0;
+            if (mode === 'edit' && ev) {
+                editingId = ev.event_id;
+                $modalTitle.textContent = "Modifier l'événement";
+                $idInput.value = ev.event_id;
+                $titleInput.value = ev.title;
+                $descInput.value = ev.description || '';
+                $dateInput.value = ev.event_date;
+                $btnDelete.style.display = 'inline-block';
+            } else {
+                $modalTitle.textContent = "Ajouter un événement";
+                $idInput.value = '';
+                $titleInput.value = '';
+                $descInput.value = '';
+                $dateInput.value = currentDate;
+                $btnDelete.style.display = 'none';
+            }
+            $overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            setTimeout(function() { $titleInput.focus(); }, 100);
+        }
+
+        function closeModal() {
+            if (!$overlay) return;
+            $overlay.classList.remove('open');
+            document.body.style.overflow = '';
+            editingId = 0;
+        }
+
+        if ($overlay) {
+            $modalClose.addEventListener('click', closeModal);
+            $btnCancel.addEventListener('click', closeModal);
+            $overlay.addEventListener('click', function(e) {
+                if (e.target === $overlay) closeModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && $overlay.classList.contains('open')) closeModal();
+            });
+        }
+
+        if ($btnAdd) {
+            $btnAdd.addEventListener('click', function() { openModal('add'); });
+        }
+
+        /* --- Events --- */
+        function loadEvents(date) {
+            currentDate = date;
+            $dateLabel.textContent = fmtDateFR(toDate(date));
+            $events.innerHTML = '<div class="loader">Chargement...</div>';
+
+            fetch(apiUrl('list') + ',date=' + date)
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (!data || data.error || !Array.isArray(data) || data.length === 0) {
+                        $events.innerHTML = '<p class="no-events">Aucun événement prévu.</p>';
+                        return;
+                    }
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var ev = data[i];
+                        var canEdit = USER_ID > 0 && (IS_ADMIN || USER_ID == ev.user_id);
+                        html += '<div class="event-item' + (canEdit ? ' editable' : '') + '" data-idx="' + i + '">';
+                        if (canEdit) {
+                            html += '<span class="btn-delete-event" data-id="' + ev.event_id + '" title="Supprimer">&times;</span>';
+                        }
+                        html += '<div class="event-title">' + esc(ev.title) + '</div>';
+                        html += '<div class="event-author">Par ' + esc(ev.username) + '</div>';
+                        if (ev.description) {
+                            html += '<div class="event-desc">' + esc(ev.description) + '</div>';
+                        }
+                        html += '</div>';
+                    }
+                    $events.innerHTML = html;
+
+                    var items = $events.querySelectorAll('.event-item.editable');
+                    for (var j = 0; j < items.length; j++) {
+                        (function(el) {
+                            var idx = parseInt(el.getAttribute('data-idx'));
+                            el.addEventListener('click', function() { openModal('edit', data[idx]); });
+                            var del = el.querySelector('.btn-delete-event');
+                            if (del) {
+                                del.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    deleteEvent(data[idx].event_id);
+                                });
+                            }
+                        })(items[j]);
+                    }
+                })
+                .catch(function() {
+                    $events.innerHTML = '<p class="no-events">Erreur de chargement.</p>';
+                });
+        }
+
+        function highlightDates() {
+            fetch(apiUrl('list_all_dates'))
+                .then(function(r) { return r.json(); })
+                .then(function(dates) {
+                    allEventDates = Array.isArray(dates) ? dates : [];
+                    refreshSelections();
+                });
+        }
+
+        function deleteEvent(eventId) {
+            if (!confirm("Supprimer cet événement ?")) return;
+            fetch(apiUrl('delete') + ',event_id=' + eventId)
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        closeModal();
+                        loadEvents(currentDate);
+                        highlightDates();
+                    } else {
+                        alert('Erreur: ' + (data.error || 'Inconnue'));
+                    }
+                });
+        }
+
+        /* --- Save --- */
+        if ($btnSave) {
+            $btnSave.addEventListener('click', function() {
+                if (!$titleInput.value.trim()) { $titleInput.focus(); return; }
+                if (!$dateInput.value) { $dateInput.focus(); return; }
+                $btnSave.disabled = true;
+                var fd = new FormData(document.getElementById('event-form'));
+                fetch(apiUrl('save'), { method: 'POST', body: fd })
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (data.success) {
+                            var targetDate = $dateInput.value;
+                            closeModal();
+                            loadEvents(targetDate);
+                            highlightDates();
+                        } else {
+                            alert('Erreur: ' + (data.error || 'Inconnue'));
+                        }
+                    })
+                    .catch(function() { alert('Erreur réseau.'); })
+                    .finally(function() { $btnSave.disabled = false; });
+            });
+        }
+
+        if ($btnDelete) {
+            $btnDelete.addEventListener('click', function() {
+                if (editingId) deleteEvent(editingId);
+            });
+        }
+
+        /* --- Date click on any calendar --- */
+        function onDateClicked(event, date) {
+            loadEvents(fmtDate(date));
+        }
+        calL.onDateClick(onDateClicked);
+        calC.onDateClick(onDateClicked);
+        calR.onDateClick(onDateClicked);
+
+        /* --- Init --- */
+        loadEvents(fmtDate(new Date()));
+        highlightDates();
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        boot();
     } else {
-        document.addEventListener('DOMContentLoaded', initPhorumCalendar);
+        document.addEventListener('DOMContentLoaded', boot);
     }
 })();
 </script>

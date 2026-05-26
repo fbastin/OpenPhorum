@@ -53,7 +53,7 @@ function phorum_mod_js_calendar_addon() {
         'ajax_url' => phorum_get_url(PHORUM_ADDON_URL, 'module=js_calendar')
     );
 
-    phorum_output('js_calendar::calendar');
+    phorum_output('js_calendar::cal');
 }
 
 /**
@@ -127,15 +127,28 @@ function phorum_mod_js_calendar_save_event() {
     $title = isset($_POST['title']) ? trim($_POST['title']) : '';
     $desc = isset($_POST['description']) ? trim($_POST['description']) : '';
     $date = isset($_POST['date']) ? $_POST['date'] : '';
+    $event_id = isset($_POST['event_id']) ? (int)$_POST['event_id'] : 0;
 
     if (empty($title) || empty($date)) return array('success' => false, 'error' => 'Champs requis manquants');
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) return array('success' => false, 'error' => 'Date invalide');
 
     $quoted_title = phorum_db_interact(DB_RETURN_QUOTED, $title);
     $quoted_desc = phorum_db_interact(DB_RETURN_QUOTED, $desc);
     $quoted_date = phorum_db_interact(DB_RETURN_QUOTED, $date);
     $user_id = (int)$PHORUM['user']['user_id'];
 
-    $sql = "INSERT INTO phorum_calendar_events (user_id, title, description, event_date) VALUES ($user_id, '$quoted_title', '$quoted_desc', '$quoted_date')";
+    if ($event_id > 0) {
+        $res = phorum_db_interact(DB_RETURN_RES, "SELECT user_id FROM phorum_calendar_events WHERE event_id = $event_id");
+        $row = $res ? phorum_db_fetch_row($res, DB_RETURN_ASSOC) : null;
+        if (!$row) return array('success' => false, 'error' => 'Événement introuvable');
+        if ($row['user_id'] != $user_id && empty($PHORUM['user']['admin'])) {
+            return array('success' => false, 'error' => 'Accès interdit');
+        }
+        $sql = "UPDATE phorum_calendar_events SET title = '$quoted_title', description = '$quoted_desc', event_date = '$quoted_date' WHERE event_id = $event_id";
+    } else {
+        $sql = "INSERT INTO phorum_calendar_events (user_id, title, description, event_date) VALUES ($user_id, '$quoted_title', '$quoted_desc', '$quoted_date')";
+    }
+
     phorum_db_interact(DB_RETURN_RES, $sql);
     return array('success' => true);
 }

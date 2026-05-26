@@ -1,7 +1,27 @@
-/* --- Calendar Page Specific Layout --- */
+/* --- Calendar: break out of container to match menu width --- */
+.calendar-page-header,
+.calendar-page-main {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    width: calc(100% + 3rem);
+}
+
+.calendar-page-header {
+    background-color: var(--color-nav-bg, #141D26);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radius, 6px) var(--radius, 6px) 0 0;
+}
+
 .calendar-page-main {
     padding: 0 !important;
     overflow: hidden;
+    background: #fff !important;
+    border: 1px solid var(--color-border, #e0e4e8) !important;
+    border-top: none !important;
+    border-radius: 0 0 var(--radius, 6px) var(--radius, 6px) !important;
 }
 
 .calendar-layout-container {
@@ -10,181 +30,485 @@
     width: 100%;
 }
 
-/* --- jsCalendar Core Overrides --- */
-.auto-jsCalendar, 
-.jsCalendar {
+/* ============================================================
+   3-month navigation row
+   ============================================================ */
+.cal-nav-row {
+    display: flex;
+    align-items: stretch;
+}
+
+.cal-nav-btn {
+    flex: 0 0 44px;
+    background: var(--color-code-bg, #f6f8fa);
+    border: none;
+    border-right: 1px solid #eee;
+    font-size: 2rem;
+    color: var(--color-text-light, #5a6a7a);
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.cal-nav-btn:last-of-type {
+    border-right: none;
+    border-left: 1px solid #eee;
+}
+
+.cal-nav-btn:hover {
+    background: var(--color-accent, #2980b9);
+    color: #fff;
+}
+
+.cal-grid {
+    flex: 1;
+    display: flex;
+    min-width: 0;
+}
+
+.cal-cell {
+    flex: 1;
+    min-width: 0;
+}
+
+.cal-cell + .cal-cell {
+    border-left: 1px solid var(--color-border, #e0e4e8);
+}
+
+/* Side calendars slightly muted */
+.cal-side {
+    background: #fcfcfc;
+}
+
+/* ============================================================
+   Hide native jsCalendar navigation arrows (we use our own)
+   ============================================================ */
+.calendar-page-main .jsCalendar .jsCalendar-nav-left,
+.calendar-page-main .jsCalendar .jsCalendar-nav-right {
+    visibility: hidden !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+/* ============================================================
+   Reset global table styles inside jsCalendar
+   ============================================================ */
+.calendar-page-main .jsCalendar table,
+.calendar-page-main .jsCalendar th,
+.calendar-page-main .jsCalendar td {
+    border: none !important;
+    margin: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* --- jsCalendar Core --- */
+.calendar-page-main .jsCalendar {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
     font-family: inherit !important;
     border: none !important;
     box-shadow: none !important;
+    background: transparent !important;
 }
 
-.jsCalendar table {
+.calendar-page-main .jsCalendar table {
     width: 100% !important;
-    height: auto !important;
     border-collapse: collapse !important;
     table-layout: fixed !important;
 }
 
-.jsCalendar .jsCalendar-title {
-    background-color: var(--color-accent, #2C3E50) !important;
-    padding: 20px 0 !important;
-    font-size: 1.5rem !important;
+/* Title bar (month + year) */
+.calendar-page-main .jsCalendar .jsCalendar-title-row td {
+    background-color: var(--color-nav-bg, #141D26) !important;
+    color: #fff !important;
+    padding: 0 !important;
+    height: auto !important;
+    vertical-align: middle !important;
 }
 
-.jsCalendar .jsCalendar-nav-left,
-.jsCalendar .jsCalendar-nav-right {
-    line-height: 60px !important;
+.calendar-page-main .jsCalendar .jsCalendar-title-name {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    line-height: 44px !important;
+    text-transform: capitalize !important;
 }
 
-.jsCalendar thead {
-    background: #f8f9fa !important;
+/* Center month title slightly bigger */
+.cal-center .jsCalendar .jsCalendar-title-name {
+    font-size: 1.15rem !important;
 }
 
-.jsCalendar th {
-    padding: 15px 0 !important;
-    color: #666 !important;
+/* Day-of-week headers */
+.calendar-page-main .jsCalendar .jsCalendar-head td {
+    padding: 8px 0 !important;
+    color: var(--color-text-light, #5a6a7a) !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
-    font-size: 0.8rem !important;
-    border-bottom: 1px solid #eee !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.04em !important;
+    background: var(--color-code-bg, #f6f8fa) !important;
+    border-bottom: 1px solid var(--color-border, #e0e4e8) !important;
+    text-align: center !important;
+    vertical-align: middle !important;
 }
 
-.jsCalendar .jsCalendar-body td {
-    height: 100px !important;
+/* Day cells */
+.calendar-page-main .jsCalendar .jsCalendar-body td {
+    height: 62px !important;
     vertical-align: top !important;
-    padding: 10px !important;
+    padding: 6px 8px !important;
     border: 1px solid #f0f0f0 !important;
-    font-size: 1.1rem !important;
+    font-size: 0.95rem !important;
     text-align: right !important;
-    transition: background 0.2s !important;
-}
-
-.jsCalendar .jsCalendar-body td:hover {
-    background-color: #f0f7ff !important;
-    color: var(--color-accent) !important;
+    background: #fff !important;
+    transition: background-color 0.12s, color 0.12s !important;
     cursor: pointer;
+    position: relative;
 }
 
-/* Today's highlighting */
-.jsCalendar .jsCalendar-current {
-    background-color: #fcfcfc !important;
-    color: var(--color-accent) !important;
-    border: 2px solid var(--color-accent) !important;
-    font-weight: bold !important;
+/* Side calendars inherit their background */
+.cal-side .jsCalendar .jsCalendar-body td {
+    background: #fcfcfc !important;
 }
 
-/* Selected/Event dates */
-.jsCalendar td.jsCalendar-selected {
+.calendar-page-main .jsCalendar .jsCalendar-body td:hover {
+    background-color: #eef5ff !important;
+    color: var(--color-accent, #2980b9) !important;
+}
+
+/* Previous/next month days */
+.calendar-page-main .jsCalendar .jsCalendar-previous,
+.calendar-page-main .jsCalendar .jsCalendar-next {
+    color: #ccc !important;
+}
+
+.calendar-page-main .jsCalendar .jsCalendar-previous:hover,
+.calendar-page-main .jsCalendar .jsCalendar-next:hover {
+    color: #aaa !important;
+}
+
+/* Today */
+.calendar-page-main .jsCalendar .jsCalendar-current {
+    background-color: #f0f7ff !important;
+    color: var(--color-accent, #2980b9) !important;
+    font-weight: 700 !important;
+    box-shadow: inset 0 0 0 2px var(--color-accent, #2980b9) !important;
+}
+
+/* Dates with events (selected) */
+.calendar-page-main .jsCalendar td.jsCalendar-selected {
     background-color: #e8f5e9 !important;
     color: #1b5e20 !important;
+    font-weight: 600 !important;
 }
 
-.jsCalendar td.jsCalendar-selected::after {
+.calendar-page-main .jsCalendar td.jsCalendar-selected::after {
     content: '';
     display: block;
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     background: #2ecc71;
     border-radius: 50%;
-    margin: 5px 0 0 auto;
+    position: absolute;
+    bottom: 5px;
+    right: 8px;
 }
 
-/* --- Details & Form Panel --- */
-.calendar-details-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    padding: 2rem;
+/* ============================================================
+   Event Panel below calendar
+   ============================================================ */
+.calendar-events-panel {
+    padding: 1.5rem 2rem;
     background: #fafafa;
-    border-top: 1px solid #eee;
+    border-top: 2px solid var(--color-border, #e0e4e8);
 }
 
-@media (max-width: 900px) {
-    .calendar-details-section { grid-template-columns: 1fr; padding: 1rem; }
-    .jsCalendar .jsCalendar-body td { height: 60px !important; font-size: 0.9rem !important; }
+.events-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
-.panel-title {
-    margin: 0 0 1rem 0;
-    font-size: 1.25rem;
-    color: var(--color-text);
-    border-bottom: 2px solid var(--color-accent);
-    padding-bottom: 5px;
+.events-panel-title {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--color-text, #2c3e50);
+    border-bottom: 2px solid var(--color-accent, #2980b9);
+    padding-bottom: 6px;
+}
+
+.btn-add-event {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-accent, #2980b9);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius, 6px);
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    font-family: inherit;
+}
+
+.btn-add-event:hover {
+    background: var(--color-accent-light, #3498db);
 }
 
 .events-scroll {
-    max-height: 450px;
+    max-height: 350px;
     overflow-y: auto;
 }
 
-/* --- Event Card Styling --- */
+/* --- Event Cards --- */
 .event-item {
     position: relative;
     background: #fff;
     border: 1px solid #eee;
-    border-left: 4px solid var(--color-accent);
-    padding: 15px;
-    margin-bottom: 12px;
+    border-left: 4px solid var(--color-accent, #2980b9);
+    padding: 12px 15px;
+    margin-bottom: 10px;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    transition: transform 0.2s;
+    transition: transform 0.15s, border-color 0.15s;
 }
 
 .event-item.editable:hover {
     transform: translateX(4px);
-    border-color: var(--color-accent);
+    border-color: var(--color-accent, #2980b9);
     cursor: pointer;
 }
 
-.event-title { font-weight: 700; color: var(--color-accent); margin-bottom: 4px; font-size: 1.1rem; }
-.event-author { font-size: 0.75rem; color: #999; margin-bottom: 8px; }
-.event-desc { font-size: 0.95rem; color: #444; line-height: 1.5; white-space: pre-wrap; }
+.event-title { font-weight: 700; color: var(--color-accent, #2980b9); margin-bottom: 3px; font-size: 1.02rem; }
+.event-author { font-size: 0.75rem; color: #999; margin-bottom: 6px; }
+.event-desc { font-size: 0.9rem; color: #444; line-height: 1.5; white-space: pre-wrap; }
 
 .btn-delete-event {
     position: absolute;
-    top: 10px;
+    top: 8px;
     right: 10px;
     color: #e74c3c;
     font-size: 1.2rem;
     cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 0.2s;
+    opacity: 0.4;
+    transition: opacity 0.15s;
+    line-height: 1;
 }
 .btn-delete-event:hover { opacity: 1; }
 
-/* --- Form Styling --- */
-.event-form-panel {
-    background: #fff;
-    padding: 1.5rem;
-    border: 1px solid #eee;
-    border-radius: 8px;
+.no-events { text-align: center; color: #999; padding: 1.5rem; font-style: italic; margin: 0; }
+.loader { text-align: center; color: #888; font-style: italic; padding: 1.5rem; }
+
+/* ============================================================
+   Modal Overlay
+   ============================================================ */
+.cal-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
 }
 
-.form-group { margin-bottom: 1.25rem; }
-.form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; color: #555; }
-.form-group input, .form-group textarea {
+.cal-modal-overlay.open {
+    display: flex;
+}
+
+.cal-modal {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: calModalIn 0.2s ease-out;
+}
+
+@keyframes calModalIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.cal-modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.cal-modal-head h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--color-text, #2c3e50);
+}
+
+.cal-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.15s;
+}
+.cal-modal-close:hover { color: #333; }
+
+.cal-modal-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.cal-modal-body .form-group { margin-bottom: 1.25rem; }
+.cal-modal-body .form-group:last-child { margin-bottom: 0; }
+.cal-modal-body .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+    color: #555;
+}
+.cal-modal-body .form-group input[type="date"],
+.cal-modal-body .form-group input[type="text"],
+.cal-modal-body .form-group textarea {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 6px;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
 }
-.form-group textarea { height: 100px; resize: vertical; }
+.cal-modal-body .form-group input:focus,
+.cal-modal-body .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-accent, #2980b9);
+    box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.12);
+}
+.cal-modal-body .form-group textarea { height: 100px; resize: vertical; }
 
-.form-buttons { display: flex; gap: 10px; margin-top: 1rem; }
+.cal-modal-foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 1.5rem 1.5rem;
+}
 
-.btn-secondary {
+.cal-modal-foot .btn-save {
+    background: var(--color-accent, #2980b9);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius, 6px);
+    padding: 0.55rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.15s;
+}
+.cal-modal-foot .btn-save:hover { background: var(--color-accent-light, #3498db); }
+.cal-modal-foot .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.cal-modal-foot .btn-cancel {
     background: #f1f1f1;
     border: 1px solid #ddd;
-    padding: 10px 20px;
-    border-radius: 4px;
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--radius, 6px);
     cursor: pointer;
     font-weight: 600;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: background-color 0.15s;
+}
+.cal-modal-foot .btn-cancel:hover { background: #e8e8e8; }
+
+.cal-modal-foot .btn-delete {
+    margin-left: auto;
+    background: none;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius, 6px);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: background-color 0.15s, color 0.15s;
+}
+.cal-modal-foot .btn-delete:hover { background: #e74c3c; color: #fff; }
+
+/* ============================================================
+   Mobile: full-screen modal
+   ============================================================ */
+@media (max-width: 600px) {
+    .cal-modal-overlay { padding: 0; align-items: stretch; }
+    .cal-modal {
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .cal-modal-body { flex: 1; overflow-y: auto; }
 }
 
-.loader { text-align: center; color: #888; font-style: italic; padding: 2rem; }
-.no-events { text-align: center; color: #999; padding: 2rem; font-style: italic; }
+/* ============================================================
+   Responsive: single month on small screens
+   ============================================================ */
+@media (max-width: 900px) {
+    .calendar-page-header,
+    .calendar-page-main {
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+    }
+
+    .cal-side { display: none; }
+
+    .cal-cell + .cal-cell { border-left: none; }
+
+    .cal-nav-btn { flex: 0 0 40px; font-size: 1.6rem; }
+
+    .calendar-events-panel { padding: 1rem; }
+
+    .calendar-page-main .jsCalendar .jsCalendar-body td {
+        height: 55px !important;
+        padding: 5px !important;
+        font-size: 0.9rem !important;
+    }
+    .calendar-page-main .jsCalendar .jsCalendar-title-name {
+        font-size: 1.1rem !important;
+        line-height: 40px !important;
+    }
+    .calendar-page-main .jsCalendar .jsCalendar-head td {
+        padding: 6px 0 !important;
+        font-size: 0.65rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar-page-header,
+    .calendar-page-main {
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+    }
+}

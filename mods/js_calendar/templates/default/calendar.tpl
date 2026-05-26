@@ -1,35 +1,44 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.js"></script>
-<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525c">
+<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525d">
 
 <style>
-/* Absolute Full Width Overrides */
-.calendar-wrapper, .calendar-container, #my-calendar, .jsCalendar, .jsCalendar table {
+/* ULTIMATE OVERRIDE: Break all parent constraints for this page */
+html, body, #wrapper, #phorum, #content, #forum-content, #cadre, 
+.PhorumStdBlock, .calendar-wrapper, .calendar-container {
     width: 100% !important;
-    max-width: 100% !important;
+    max-width: none !important;
     min-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     box-sizing: border-box !important;
 }
-.jsCalendar { 
-    display: block !important; 
-}
-.jsCalendar table { 
-    display: table !important; 
-    table-layout: fixed !important;
-}
-.jsCalendar .jsCalendar-body td {
-    height: 100px !important;
-    width: 14.28% !important; /* Force 7 columns exactly */
-}
-/* Force the main Phorum container to be full width on this page */
-#phorum {
-    max-width: 100% !important;
+
+/* Force the calendar library to stretch */
+#my-calendar, .jsCalendar {
     width: 100% !important;
-}
-/* Ensure Phorum containers aren't capping us */
-#phorum .PhorumStdBlock, #phorum .PhorumStdBlockHeader {
     max-width: none !important;
-    width: auto !important;
+    display: block !important;
+}
+
+.jsCalendar table {
+    width: 100% !important;
+    max-width: none !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+}
+
+.jsCalendar .jsCalendar-body td {
+    height: 120px !important;
+    font-size: 1.3rem !important;
+}
+
+/* Ensure header and logo stay visible if needed but centerted */
+#header, #menu {
+    max-width: 1100px !important;
+    margin: 0 auto !important;
 }
 </style>
 
@@ -89,6 +98,21 @@
         if (typeof jsCalendar === 'undefined') return;
         
         var calendar = jsCalendar.new("#my-calendar");
+        
+        // ULTIMATE JS FIX: Force width after library init
+        var forceFullWidth = function() {
+            var tables = document.querySelectorAll('.jsCalendar table');
+            tables.forEach(t => {
+                t.style.width = '100%';
+                t.style.maxWidth = 'none';
+            });
+            var body = document.querySelector('.jsCalendar-body');
+            if (body) body.style.width = '100%';
+        };
+        setTimeout(forceFullWidth, 100);
+        setTimeout(forceFullWidth, 500);
+        setTimeout(forceFullWidth, 1000);
+        
         var eventsContainer = document.getElementById('events-container');
         var selectedDateStr = document.getElementById('selected-date-str');
         var eventDateInput = document.getElementById('event-date');

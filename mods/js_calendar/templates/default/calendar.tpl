@@ -1,40 +1,48 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.js"></script>
-<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css">
+<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525">
 
 <div class="PhorumStdBlockHeader PhorumHeaderText">Calendrier des &eacute;v&eacute;nements</div>
-<div class="PhorumStdBlock">
-    <div style="display: flex; flex-wrap: wrap; gap: 2rem; padding: 1rem;">
-        <div id="my-calendar" data-language="fr"></div>
-        <div id="event-manager" style="flex: 1; min-width: 300px;">
+<div class="PhorumStdBlock calendar-wrapper">
+    <div class="calendar-container">
+        <!-- Full width calendar -->
+        <div id="my-calendar" data-language="fr" class="full-width-calendar"></div>
+        
+        <div id="event-manager" class="event-manager-panel">
             <div id="event-list">
-                <h3>&Eacute;v&eacute;nements le <span id="selected-date-str">-</span></h3>
-                <div id="events-container">Cliquer sur une date pour voir les &eacute;v&eacute;nements.</div>
+                <h3 class="panel-title">&Eacute;v&eacute;nements le <span id="selected-date-str">-</span></h3>
+                <div id="events-container" class="events-scroll">Cliquer sur une date pour voir les &eacute;v&eacute;nements.</div>
             </div>
 
             {IF CALENDAR->is_logged_in}
-            <div id="add-event-form" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ccc;">
-                <h3>Ajouter un &eacute;v&eacute;nement</h3>
-                <form id="new-event-form">
-                    <div style="margin-bottom: 10px;">
-                        <label>Date :</label><br>
-                        <input type="date" id="event-date" name="date" style="width: 100%;">
+            <div id="event-editor-section" class="form-panel">
+                <h3 id="form-action-title">Ajouter un &eacute;v&eacute;nement</h3>
+                <form id="event-form">
+                    <input type="hidden" id="event-id" name="event_id" value="">
+                    <div class="form-group">
+                        <label>Date :</label>
+                        <input type="date" id="event-date" name="date" required>
                     </div>
-                    <div style="margin-bottom: 10px;">
-                        <label>Titre :</label><br>
-                        <input type="text" id="event-title" name="title" style="width: 100%;">
+                    <div class="form-group">
+                        <label>Titre :</label>
+                        <input type="text" id="event-title" name="title" required placeholder="Ex: Championnat Provincial">
                     </div>
-                    <div style="margin-bottom: 10px;">
-                        <label>Description :</label><br>
-                        <textarea id="event-desc" name="description" style="width: 100%; height: 80px;"></textarea>
+                    <div class="form-group">
+                        <label>Description :</label>
+                        <textarea id="event-desc" name="description" placeholder="Informations complémentaires..."></textarea>
                     </div>
-                    <button type="button" id="btn-save-event" class="PhorumSubmit">Enregistrer</button>
+                    <div class="form-buttons">
+                        <button type="button" id="btn-save-event" class="PhorumSubmit">Enregistrer</button>
+                        <button type="button" id="btn-cancel-edit" class="btn-secondary" style="display:none">Annuler</button>
+                    </div>
                 </form>
             </div>
             {ELSE}
-            <p style="margin-top: 2rem; color: #666;">
-                <em>Vous devez être <a href="{URL->LOGINOUT}">identifié</a> pour ajouter des événements.</em>
-            </p>
+            <div class="form-panel">
+                <p style="color: #666; margin: 0;">
+                    <em>Vous devez être <a href="{URL->LOGINOUT}">identifié</a> pour proposer des événements.</em>
+                </p>
+            </div>
             {/IF}
         </div>
     </div>
@@ -42,7 +50,6 @@
 
 <script type="text/javascript">
 (function() {
-    // Config injected via template
     var ajaxUrl = "{CALENDAR->ajax_url}";
     var userId = {CALENDAR->user_id};
     var isAdmin = {CALENDAR->is_admin};
@@ -54,16 +61,14 @@
         var eventsContainer = document.getElementById('events-container');
         var selectedDateStr = document.getElementById('selected-date-str');
         var eventDateInput = document.getElementById('event-date');
+        var eventTitleInput = document.getElementById('event-title');
+        var eventDescInput = document.getElementById('event-desc');
+        var eventIdInput = document.getElementById('event-id');
+        var formActionTitle = document.getElementById('form-action-title');
+        var btnCancel = document.getElementById('btn-cancel-edit');
         
         var getUrl = function(action) {
             return ajaxUrl + ",action=" + action + ",_t=" + Date.now();
-        };
-
-        var updateDateSelection = function(date) {
-            var dateStr = jsCalendar.tools.dateToString(date, "YYYY-MM-DD", "en");
-            selectedDateStr.innerText = jsCalendar.tools.dateToString(date, "DD/MM/YYYY", "fr");
-            if (eventDateInput) eventDateInput.value = dateStr;
-            fetchEvents(dateStr);
         };
 
         var toDateObj = function(str) {
@@ -71,31 +76,46 @@
             return new Date(p[0], p[1] - 1, p[2]);
         };
 
+        var updateDateSelection = function(date, skipFormUpdate) {
+            var dateStr = jsCalendar.tools.dateToString(date, "YYYY-MM-DD", "en");
+            selectedDateStr.innerText = jsCalendar.tools.dateToString(date, "DD/MM/YYYY", "fr");
+            if (eventDateInput && !skipFormUpdate) {
+                eventDateInput.value = dateStr;
+            }
+            fetchEvents(dateStr);
+        };
+
         var highlightEventDates = function() {
             fetch(getUrl("list_all_dates"))
                 .then(r => r.json())
                 .then(dates => {
                     calendar.clearselect();
-                    if (Array.isArray(dates)) calendar.select(dates.map(toDateObj));
+                    if (Array.isArray(dates)) {
+                        calendar.select(dates.map(toDateObj));
+                    }
                 });
         };
 
         var fetchEvents = function(date) {
-            eventsContainer.innerHTML = "<em>Chargement...</em>";
+            eventsContainer.innerHTML = "<div class='loader'>Chargement...</div>";
             fetch(getUrl("list") + ",date=" + date)
                 .then(r => r.json())
                 .then(data => {
                     if (!data || !Array.isArray(data) || data.length === 0) {
-                        eventsContainer.innerHTML = "Aucun &eacute;v&eacute;nement pr&eacute;vu.";
+                        eventsContainer.innerHTML = "<p class='no-events'>Aucun &eacute;v&eacute;nement pour cette date.</p>";
                     } else {
                         var html = '';
                         data.forEach(ev => {
-                            html += '<div class="event-item">';
-                            if (userId > 0 && (isAdmin || userId == ev.user_id)) {
-                                html += '<span class="btn-delete-event" title="Supprimer" onclick="window.phorumCalendarDelete(' + ev.event_id + ', \'' + date + '\')">&times;</span>';
+                            var canEdit = userId > 0 && (isAdmin || userId == ev.user_id);
+                            html += '<div class="event-item' + (canEdit ? ' editable' : '') + '" onclick="window.phorumCalendarEdit(' + JSON.stringify(ev).replace(/"/g, '&quot;') + ')">';
+                            if (canEdit) {
+                                html += '<span class="btn-delete-event" title="Supprimer" onclick="window.phorumCalendarDelete(event, ' + ev.event_id + ', \'' + date + '\')">&times;</span>';
                             }
-                            html += '<strong>' + escapeHtml(ev.title) + '</strong> <small>(par ' + escapeHtml(ev.username) + ')</small><br>';
-                            html += '<div style="color: #666; font-size: 0.9em; white-space: pre-wrap;">' + (ev.description ? escapeHtml(ev.description) : "") + '</div>';
+                            html += '<div class="event-title">' + escapeHtml(ev.title) + '</div>';
+                            html += '<div class="event-author">Posté par ' + escapeHtml(ev.username) + '</div>';
+                            if (ev.description) {
+                                html += '<div class="event-desc">' + escapeHtml(ev.description) + '</div>';
+                            }
                             html += '</div>';
                         });
                         eventsContainer.innerHTML = html;
@@ -103,7 +123,25 @@
                 });
         };
 
-        window.phorumCalendarDelete = function(eventId, date) {
+        window.phorumCalendarEdit = function(ev) {
+            if (!eventTitleInput) return; // Not logged in
+            
+            // Populate form
+            eventIdInput.value = ev.event_id;
+            eventTitleInput.value = ev.title;
+            eventDescInput.value = ev.description || '';
+            eventDateInput.value = ev.date;
+            
+            formActionTitle.innerText = "Modifier l'événement";
+            btnCancel.style.display = 'inline-block';
+            
+            // Scroll to form
+            document.getElementById('event-editor-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            eventTitleInput.focus();
+        };
+
+        window.phorumCalendarDelete = function(e, eventId, date) {
+            e.stopPropagation();
             if (confirm("Voulez-vous vraiment supprimer cet événement ?")) {
                 fetch(getUrl("delete") + ",event_id=" + eventId)
                     .then(r => r.json())
@@ -111,6 +149,7 @@
                         if (data.success) {
                             fetchEvents(date);
                             highlightEventDates();
+                            if (eventIdInput.value == eventId) resetForm();
                         } else {
                             alert("Erreur: " + data.error);
                         }
@@ -118,19 +157,31 @@
             }
         };
 
+        function resetForm() {
+            if (!eventTitleInput) return;
+            eventIdInput.value = '';
+            eventTitleInput.value = '';
+            eventDescInput.value = '';
+            formActionTitle.innerText = "Ajouter un événement";
+            btnCancel.style.display = 'none';
+        }
+
+        if (btnCancel) btnCancel.onclick = resetForm;
+
         var btnSave = document.getElementById('btn-save-event');
         if (btnSave) {
             btnSave.addEventListener('click', function() {
-                var formData = new FormData(document.getElementById('new-event-form'));
+                var title = eventTitleInput.value.trim();
+                if (!title) { alert("Veuillez saisir un titre."); return; }
+                
+                var formData = new FormData(document.getElementById('event-form'));
                 btnSave.disabled = true;
                 fetch(getUrl("save"), { method: 'POST', body: formData })
                     .then(r => r.json())
                     .then(data => {
                         if (data.success) {
-                            alert("Évènement enregistré !");
-                            document.getElementById('event-title').value = '';
-                            document.getElementById('event-desc').value = '';
-                            var targetDate = document.getElementById('event-date').value;
+                            resetForm();
+                            var targetDate = eventDateInput.value;
                             fetchEvents(targetDate);
                             highlightEventDates();
                         } else {
@@ -141,26 +192,23 @@
             });
         }
 
-        if (eventDateInput) {
-            eventDateInput.addEventListener('change', function() {
-                var dateParts = this.value.split('-');
-                if (dateParts.length === 3) {
-                    var newDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                    calendar.set(newDate);
-                    updateDateSelection(newDate);
-                }
-            });
-        }
-
         var today = new Date();
         updateDateSelection(today);
         highlightEventDates();
         
         calendar.onDateClick(function(event, date) {
             updateDateSelection(date);
+            if (eventTitleInput) {
+                // Focus add form on click
+                document.getElementById('event-editor-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (eventIdInput.value === '') {
+                     eventTitleInput.focus();
+                }
+            }
         });
 
         function escapeHtml(text) {
+            if (!text) return "";
             var div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;

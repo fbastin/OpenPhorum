@@ -3,17 +3,33 @@
 <link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525c">
 
 <style>
-/* Emergency Inline Overrides */
-#my-calendar, .jsCalendar, .jsCalendar table {
+/* Absolute Full Width Overrides */
+.calendar-wrapper, .calendar-container, #my-calendar, .jsCalendar, .jsCalendar table {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 100% !important;
-    display: table !important;
+    box-sizing: border-box !important;
 }
-.jsCalendar { display: block !important; }
-.jsCalendar table { display: table !important; }
+.jsCalendar { 
+    display: block !important; 
+}
+.jsCalendar table { 
+    display: table !important; 
+    table-layout: fixed !important;
+}
 .jsCalendar .jsCalendar-body td {
     height: 100px !important;
+    width: 14.28% !important; /* Force 7 columns exactly */
+}
+/* Force the main Phorum container to be full width on this page */
+#phorum {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+/* Ensure Phorum containers aren't capping us */
+#phorum .PhorumStdBlock, #phorum .PhorumStdBlockHeader {
+    max-width: none !important;
+    width: auto !important;
 }
 </style>
 

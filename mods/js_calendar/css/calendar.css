@@ -11,13 +11,17 @@
 /* --- jsCalendar Overrides for "Full Screen" feel --- */
 .full-width-calendar {
     width: 100% !important;
+    max-width: 100% !important;
     border-radius: 0 !important;
     box-shadow: none !important;
 }
 
+/* Force the library container to take full width */
 .jsCalendar {
     width: 100% !important;
+    max-width: 100% !important;
     border: none !important;
+    box-sizing: border-box !important;
 }
 
 .jsCalendar table {

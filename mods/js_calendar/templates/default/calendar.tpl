@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.js"></script>
-<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525">
+<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525b">
 
 <div class="PhorumStdBlockHeader PhorumHeaderText">Calendrier des &eacute;v&eacute;nements</div>
 <div class="PhorumStdBlock calendar-wrapper">

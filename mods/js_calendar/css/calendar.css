@@ -1,210 +1,190 @@
-/* --- General Layout --- */
-.calendar-wrapper { padding: 0 !important; border: none !important; }
+/* --- Calendar Page Specific Layout --- */
+.calendar-page-main {
+    padding: 0 !important;
+    overflow: hidden;
+}
 
-.calendar-container {
+.calendar-layout-container {
     display: flex;
     flex-direction: column;
-    width: 100% !important;
-    max-width: 100% !important;
-    background: #fff;
+    width: 100%;
 }
 
-/* --- jsCalendar Overrides for "Full Screen" feel --- */
-#my-calendar {
+/* --- jsCalendar Core Overrides --- */
+.auto-jsCalendar, 
+.jsCalendar {
     width: 100% !important;
     max-width: 100% !important;
-    display: block !important;
-}
-
-/* Target the library classes specifically */
-.jsCalendar, .jsCalendar-full-width {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 100% !important;
-    border: none !important;
     box-sizing: border-box !important;
-    display: block !important;
+    font-family: inherit !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .jsCalendar table {
     width: 100% !important;
-    max-width: 100% !important;
-    min-width: 100% !important;
-    height: auto;
-    border-collapse: collapse;
-    table-layout: fixed;
+    height: auto !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
 }
 
 .jsCalendar .jsCalendar-title {
-    background-color: var(--color-accent, #2C3E50);
-    padding: 1.5rem 0;
-    font-size: 1.6rem;
+    background-color: var(--color-accent, #2C3E50) !important;
+    padding: 20px 0 !important;
+    font-size: 1.5rem !important;
+}
+
+.jsCalendar .jsCalendar-nav-left,
+.jsCalendar .jsCalendar-nav-right {
+    line-height: 60px !important;
 }
 
 .jsCalendar thead {
-    background: #f8f9fa;
+    background: #f8f9fa !important;
 }
 
-.jsCalendar .jsCalendar-week-days th {
-    padding: 1.2rem 0;
-    color: #666;
-    font-weight: 700;
-    border-bottom: 1px solid #eee;
-    text-transform: uppercase;
-    font-size: 0.85rem;
+.jsCalendar th {
+    padding: 15px 0 !important;
+    color: #666 !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
+    border-bottom: 1px solid #eee !important;
 }
 
 .jsCalendar .jsCalendar-body td {
     height: 100px !important;
-    vertical-align: top;
+    vertical-align: top !important;
     padding: 10px !important;
-    border: 1px solid #eee;
-    font-size: 1.2rem;
-    transition: all 0.2s;
-    text-align: right;
+    border: 1px solid #f0f0f0 !important;
+    font-size: 1.1rem !important;
+    text-align: right !important;
+    transition: background 0.2s !important;
 }
 
 .jsCalendar .jsCalendar-body td:hover {
     background-color: #f0f7ff !important;
     color: var(--color-accent) !important;
+    cursor: pointer;
 }
 
+/* Today's highlighting */
 .jsCalendar .jsCalendar-current {
-    background-color: var(--color-accent, #2C3E50) !important;
-    color: #fff !important;
-    border-radius: 0 !important;
-    font-weight: bold;
+    background-color: #fcfcfc !important;
+    color: var(--color-accent) !important;
+    border: 2px solid var(--color-accent) !important;
+    font-weight: bold !important;
 }
 
+/* Selected/Event dates */
 .jsCalendar td.jsCalendar-selected {
     background-color: #e8f5e9 !important;
     color: #1b5e20 !important;
-    font-weight: bold;
 }
 
-/* Event indicator dot */
 .jsCalendar td.jsCalendar-selected::after {
     content: '';
     display: block;
-    width: 10px;
-    height: 10px;
-    background: #27ae60;
+    width: 8px;
+    height: 8px;
+    background: #2ecc71;
     border-radius: 50%;
-    margin: 8px 0 0 auto;
+    margin: 5px 0 0 auto;
 }
 
-/* --- Side/Bottom Panel --- */
-.event-manager-panel {
+/* --- Details & Form Panel --- */
+.calendar-details-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    padding: 2.5rem;
-    background: #fdfdfd;
-    border-top: 5px solid #f0f0f0;
+    padding: 2rem;
+    background: #fafafa;
+    border-top: 1px solid #eee;
 }
 
-@media (max-width: 1024px) {
-    .event-manager-panel { grid-template-columns: 1fr; }
-    .jsCalendar .jsCalendar-body td { height: 70px !important; }
+@media (max-width: 900px) {
+    .calendar-details-section { grid-template-columns: 1fr; padding: 1rem; }
+    .jsCalendar .jsCalendar-body td { height: 60px !important; font-size: 0.9rem !important; }
 }
 
 .panel-title {
-    margin-top: 0;
-    padding-bottom: 0.75rem;
-    border-bottom: 3px solid var(--color-accent);
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
     color: var(--color-text);
-    font-size: 1.3rem;
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: 5px;
 }
 
-/* --- Event Items --- */
 .events-scroll {
-    max-height: 500px;
+    max-height: 450px;
     overflow-y: auto;
-    padding-right: 10px;
 }
 
+/* --- Event Card Styling --- */
 .event-item {
     position: relative;
-    margin-bottom: 1.25rem;
-    padding: 1.25rem;
     background: #fff;
     border: 1px solid #eee;
-    border-left: 5px solid var(--color-accent);
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 4px solid var(--color-accent);
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
 }
 
-.event-item.editable { cursor: pointer; }
 .event-item.editable:hover {
-    transform: translateX(5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    background: #f8faff;
+    transform: translateX(4px);
+    border-color: var(--color-accent);
+    cursor: pointer;
 }
 
-.event-title { font-weight: 800; color: var(--color-accent); margin-bottom: 5px; font-size: 1.15rem; }
-.event-author { font-size: 0.8rem; color: #999; margin-bottom: 10px; }
-.event-desc { font-size: 1rem; color: #333; white-space: pre-wrap; line-height: 1.5; }
+.event-title { font-weight: 700; color: var(--color-accent); margin-bottom: 4px; font-size: 1.1rem; }
+.event-author { font-size: 0.75rem; color: #999; margin-bottom: 8px; }
+.event-desc { font-size: 0.95rem; color: #444; line-height: 1.5; white-space: pre-wrap; }
 
 .btn-delete-event {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 26px;
-    height: 26px;
-    line-height: 24px;
-    text-align: center;
-    background: #fee2e2;
-    color: #ef4444;
-    border-radius: 50%;
-    cursor: pointer;
-    font-weight: bold;
+    top: 10px;
+    right: 10px;
+    color: #e74c3c;
     font-size: 1.2rem;
-    z-index: 10;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
 }
+.btn-delete-event:hover { opacity: 1; }
 
-.btn-delete-event:hover { background: #ef4444; color: #fff; }
-
-/* --- Form --- */
-.form-panel {
+/* --- Form Styling --- */
+.event-form-panel {
     background: #fff;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 1px solid #eee;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    border-radius: 8px;
 }
 
-.form-group { margin-bottom: 1.5rem; }
-.form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.95rem; color: #444; }
+.form-group { margin-bottom: 1.25rem; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; color: #555; }
 .form-group input, .form-group textarea {
     width: 100%;
-    padding: 12px;
+    padding: 10px 12px;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: 4px;
     font-family: inherit;
     font-size: 1rem;
-    background: #fafafa;
 }
-.form-group input:focus, .form-group textarea:focus {
-    border-color: var(--color-accent);
-    background: #fff;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.1);
-}
-.form-group textarea { height: 120px; resize: vertical; }
+.form-group textarea { height: 100px; resize: vertical; }
 
-.form-buttons { display: flex; gap: 15px; margin-top: 1rem; }
+.form-buttons { display: flex; gap: 10px; margin-top: 1rem; }
+
 .btn-secondary {
-    background: #f3f4f6;
-    border: 1px solid #e5e7eb;
-    padding: 12px 25px;
-    border-radius: 6px;
+    background: #f1f1f1;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
-    color: #4b5563;
-    transition: all 0.2s;
 }
-.btn-secondary:hover { background: #e5e7eb; color: #1f2937; }
 
-.loader { color: #888; font-style: italic; padding: 20px; text-align: center; }
-.no-events { color: #888; padding: 40px 0; text-align: center; font-style: italic; }
+.loader { text-align: center; color: #888; font-style: italic; padding: 2rem; }
+.no-events { text-align: center; color: #999; padding: 2rem; font-style: italic; }

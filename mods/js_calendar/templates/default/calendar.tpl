@@ -1,61 +1,25 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.js"></script>
-<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525d">
-
-<style>
-/* ULTIMATE OVERRIDE: Break all parent constraints for this page */
-html, body, #wrapper, #phorum, #content, #forum-content, #cadre, 
-.PhorumStdBlock, .calendar-wrapper, .calendar-container {
-    width: 100% !important;
-    max-width: none !important;
-    min-width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    box-sizing: border-box !important;
-}
-
-/* Force the calendar library to stretch */
-#my-calendar, .jsCalendar {
-    width: 100% !important;
-    max-width: none !important;
-    display: block !important;
-}
-
-.jsCalendar table {
-    width: 100% !important;
-    max-width: none !important;
-    table-layout: fixed !important;
-    border-collapse: collapse !important;
-}
-
-.jsCalendar .jsCalendar-body td {
-    height: 120px !important;
-    font-size: 1.3rem !important;
-}
-
-/* Ensure header and logo stay visible if needed but centerted */
-#header, #menu {
-    max-width: 1100px !important;
-    margin: 0 auto !important;
-}
-</style>
+<link rel="stylesheet" href="/forum/mods/js_calendar/css/calendar.css?v=20260525_FIX">
 
 <div class="PhorumStdBlockHeader PhorumHeaderText">Calendrier des &eacute;v&eacute;nements</div>
-<div class="PhorumStdBlock calendar-wrapper">
-    <div class="calendar-container">
-        <!-- Full width calendar -->
-        <div id="my-calendar" data-language="fr" class="jsCalendar-full-width"></div>
+<div class="PhorumStdBlock calendar-page-main">
+    <!-- Version Marker: V5_STABLE -->
+    <div class="calendar-layout-container">
+        <!-- Calendar View -->
+        <div class="calendar-view-section">
+            <div id="my-calendar" data-language="fr"></div>
+        </div>
         
-        <div id="event-manager" class="event-manager-panel">
-            <div id="event-list">
+        <!-- Details & Editor Panel -->
+        <div id="event-manager" class="calendar-details-section">
+            <div id="event-list" class="event-list-panel">
                 <h3 class="panel-title">&Eacute;v&eacute;nements le <span id="selected-date-str">-</span></h3>
                 <div id="events-container" class="events-scroll">Cliquer sur une date pour voir les &eacute;v&eacute;nements.</div>
             </div>
 
             {IF CALENDAR->is_logged_in}
-            <div id="event-editor-section" class="form-panel">
+            <div id="event-editor-section" class="event-form-panel">
                 <h3 id="form-action-title">Ajouter un &eacute;v&eacute;nement</h3>
                 <form id="event-form">
                     <input type="hidden" id="event-id" name="event_id" value="">
@@ -65,11 +29,11 @@ html, body, #wrapper, #phorum, #content, #forum-content, #cadre,
                     </div>
                     <div class="form-group">
                         <label>Titre :</label>
-                        <input type="text" id="event-title" name="title" required placeholder="Ex: Championnat Provincial">
+                        <input type="text" id="event-title" name="title" required placeholder="Titre de l'événement">
                     </div>
                     <div class="form-group">
                         <label>Description :</label>
-                        <textarea id="event-desc" name="description" placeholder="Informations complémentaires..."></textarea>
+                        <textarea id="event-desc" name="description" placeholder="Détails, horaires, liens..."></textarea>
                     </div>
                     <div class="form-buttons">
                         <button type="button" id="btn-save-event" class="PhorumSubmit">Enregistrer</button>
@@ -78,9 +42,9 @@ html, body, #wrapper, #phorum, #content, #forum-content, #cadre,
                 </form>
             </div>
             {ELSE}
-            <div class="form-panel">
-                <p style="color: #666; margin: 0;">
-                    <em>Vous devez être <a href="{URL->LOGINOUT}">identifié</a> pour proposer des événements.</em>
+            <div class="event-form-panel">
+                <p style="color: #666; font-style: italic; margin: 0;">
+                    Connectez-vous pour proposer un &eacute;v&eacute;nement.
                 </p>
             </div>
             {/IF}
@@ -99,20 +63,6 @@ html, body, #wrapper, #phorum, #content, #forum-content, #cadre,
         
         var calendar = jsCalendar.new("#my-calendar");
         
-        // ULTIMATE JS FIX: Force width after library init
-        var forceFullWidth = function() {
-            var tables = document.querySelectorAll('.jsCalendar table');
-            tables.forEach(t => {
-                t.style.width = '100%';
-                t.style.maxWidth = 'none';
-            });
-            var body = document.querySelector('.jsCalendar-body');
-            if (body) body.style.width = '100%';
-        };
-        setTimeout(forceFullWidth, 100);
-        setTimeout(forceFullWidth, 500);
-        setTimeout(forceFullWidth, 1000);
-        
         var eventsContainer = document.getElementById('events-container');
         var selectedDateStr = document.getElementById('selected-date-str');
         var eventDateInput = document.getElementById('event-date');
@@ -127,6 +77,7 @@ html, body, #wrapper, #phorum, #content, #forum-content, #cadre,
         };
 
         var toDateObj = function(str) {
+            if (!str) return new Date();
             var p = str.split('-');
             return new Date(p[0], p[1] - 1, p[2]);
         };
@@ -157,17 +108,17 @@ html, body, #wrapper, #phorum, #content, #forum-content, #cadre,
                 .then(r => r.json())
                 .then(data => {
                     if (!data || !Array.isArray(data) || data.length === 0) {
-                        eventsContainer.innerHTML = "<p class='no-events'>Aucun &eacute;v&eacute;nement pour cette date.</p>";
+                        eventsContainer.innerHTML = "<p class='no-events'>Aucun &eacute;v&eacute;nement pr&eacute;vu ce jour.</p>";
                     } else {
                         var html = '';
                         data.forEach(ev => {
                             var canEdit = userId > 0 && (isAdmin || userId == ev.user_id);
-                            html += '<div class="event-item' + (canEdit ? ' editable' : '') + '" onclick="window.phorumCalendarEdit(' + JSON.stringify(ev).replace(/"/g, '&quot;') + ')">';
+                            html += '<div class="event-item' + (canEdit ? ' editable' : '') + '" onclick=\'window.phorumCalendarEdit(' + JSON.stringify(ev).replace(/'/g, "&#39;") + ')\'>';
                             if (canEdit) {
                                 html += '<span class="btn-delete-event" title="Supprimer" onclick="window.phorumCalendarDelete(event, ' + ev.event_id + ', \'' + date + '\')">&times;</span>';
                             }
                             html += '<div class="event-title">' + escapeHtml(ev.title) + '</div>';
-                            html += '<div class="event-author">Posté par ' + escapeHtml(ev.username) + '</div>';
+                            html += '<div class="event-author">Par ' + escapeHtml(ev.username) + '</div>';
                             if (ev.description) {
                                 html += '<div class="event-desc">' + escapeHtml(ev.description) + '</div>';
                             }
@@ -179,19 +130,14 @@ html, body, #wrapper, #phorum, #content, #forum-content, #cadre,
         };
 
         window.phorumCalendarEdit = function(ev) {
-            if (!eventTitleInput) return; // Not logged in
-            
-            // Populate form
+            if (!eventTitleInput) return;
             eventIdInput.value = ev.event_id;
             eventTitleInput.value = ev.title;
             eventDescInput.value = ev.description || '';
-            eventDateInput.value = ev.date;
-            
+            eventDateInput.value = ev.event_date || ev.date;
             formActionTitle.innerText = "Modifier l'événement";
             btnCancel.style.display = 'inline-block';
-            
-            // Scroll to form
-            document.getElementById('event-editor-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('event-editor-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
             eventTitleInput.focus();
         };
 
@@ -227,8 +173,7 @@ html, body, #wrapper, #phorum, #content, #forum-content, #cadre,
         if (btnSave) {
             btnSave.addEventListener('click', function() {
                 var title = eventTitleInput.value.trim();
-                if (!title) { alert("Veuillez saisir un titre."); return; }
-                
+                if (!title) { alert("Saisissez un titre."); return; }
                 var formData = new FormData(document.getElementById('event-form'));
                 btnSave.disabled = true;
                 fetch(getUrl("save"), { method: 'POST', body: formData })
@@ -253,13 +198,6 @@ html, body, #wrapper, #phorum, #content, #forum-content, #cadre,
         
         calendar.onDateClick(function(event, date) {
             updateDateSelection(date);
-            if (eventTitleInput) {
-                // Focus add form on click
-                document.getElementById('event-editor-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                if (eventIdInput.value === '') {
-                     eventTitleInput.focus();
-                }
-            }
         });
 
         function escapeHtml(text) {

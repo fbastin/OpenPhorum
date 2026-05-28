@@ -4,7 +4,7 @@
 include/db/config.php
 
 # Phorum cache
-cache/
+/cache/
 
 # User uploads
 files/

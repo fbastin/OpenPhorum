@@ -2243,6 +2243,11 @@ function phorum_database_error($error)
     // clean page in the admin interface).
     phorum_ob_clean();
 
+    // Send 500 HTTP status code.
+    if (!headers_sent()) {
+        header("HTTP/1.1 500 Internal Server Error");
+    }
+
     /*
      * [hook]
      *     database_error

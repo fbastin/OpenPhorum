@@ -198,19 +198,10 @@ function mod_user_image_gallery_read($messages)
              $author = phorum_api_user_get($message["user_id"]);
         }
 
-        $url = phorum_get_url(PHORUM_ADDON_URL, 'module=user_image_gallery', 'view=gallery', 'user='.$message['user_id'] );
-
-        // If the author has no image_gallery enabled, we're done.
-//        if (empty($author["mod_user_image_gallery"]["user_image_gallery"]) ||
-//            $author["mod_user_image_gallery"]["image_gallery"] == -1) {
-//            $cache[$message["user_id"]] = 0; // negative caching.
-//            continue;
-//        }
-
+        // Use the new gallery system
+        $url = '/gallery.php?q=' . urlencode(strtolower($author['username']));
 
         // This user has an image_gallery. Add it to the message data.
-//        $file_id = $author["mod_user_image_gallery"]["image_gallery"];
-//        $url = str_replace('%file_id%', $file_id, $file_url_template);
         // mod_user_image_gallery = backward compatibilty.
         $messages[$messageid]["mod_user_image_gallery"] =
             $messages[$messageid]["user_image_gallery"] = $url;
@@ -259,7 +250,7 @@ function mod_user_image_gallery_profile($profile)
     $files = phorum_api_file_list('image_g', $user_id, NULL);
     
     if (!empty($files)) {
-        $profile["URL"]["user_image_gallery"] = phorum_get_url(PHORUM_ADDON_URL, 'module=user_image_gallery', 'view=gallery', 'user='.$user_id );
+        $profile["URL"]["user_image_gallery"] = '/gallery.php?q=' . urlencode(strtolower($profile['username']));
     }
     
     return $profile;
@@ -338,6 +329,24 @@ function mod_user_image_gallery_get_keywords_array () {
 function mod_user_image_gallery_addon () {
 
     global $PHORUM;
+
+    // Redirect public gallery views to the new gallery system
+    $view = $PHORUM['args']['view'] ?? 'gallery';
+    if ($view === 'gallery' || $view === 'image') {
+        $redirect_url = '/gallery.php';
+        if (isset($PHORUM['args']['user'])) {
+            $user_id = (int)$PHORUM['args']['user'];
+            if ($user_id > 0) {
+                $author = phorum_api_user_get($user_id);
+                if ($author && !empty($author['username'])) {
+                    $redirect_url = '/gallery.php?q=' . urlencode(strtolower($author['username']));
+                }
+            }
+        }
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . $redirect_url);
+        exit;
+    }
 
     require_once('./include/format_functions.php');
     require_once('./include/forum_functions.php');

@@ -28,6 +28,14 @@ require_once("./common.php");
 
 if (isset($PHORUM["args"]["phorum_redirect_to"])) {
     $redir = urldecode($PHORUM["args"]["phorum_redirect_to"]);
+
+    // SEC-01: Validation for Open Redirect
+    if (preg_match("!^(?:https?:)?(?://|\\\\\\\\)!i", $redir)) {
+        if (strpos($redir, $PHORUM['http_path']) !== 0) {
+            $redir = phorum_get_url(PHORUM_INDEX_URL);
+        }
+    }
+
     phorum_redirect_by_url($redir);
 } else {
     header("Location: index.php");

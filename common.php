@@ -23,19 +23,51 @@ if ( basename( __FILE__ ) == basename( $_SERVER["PHP_SELF"] ) ) exit();
 // Define phorum_page if not already set (e.g. when loaded externally).
 if (!defined('phorum_page')) define('phorum_page', 'index');
 
+// TECH-01: Secure randomization polyfill for PHP < 7.0
+if (!function_exists('random_int')) {
+    function random_int($min, $max) {
+        if (!is_int($min) || !is_int($max)) {
+            trigger_error('random_int(): $min and $max must be integers', E_USER_WARNING);
+            return null;
+        }
+        if ($min > $max) {
+            trigger_error('random_int(): $min must be less than or equal to $max', E_USER_WARNING);
+            return null;
+        }
+        return mt_rand($min, $max);
+    }
+}
+if (!function_exists('random_bytes')) {
+    function random_bytes($length) {
+        if (!is_int($length) || $length <= 0) {
+            trigger_error('random_bytes(): $length must be a positive integer', E_USER_WARNING);
+            return false;
+        }
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            $bytes = openssl_random_pseudo_bytes($length, $strong);
+            if ($strong === true) return $bytes;
+        }
+        $bytes = '';
+        for ($i = 0; $i < $length; $i++) {
+            $bytes .= chr(mt_rand(0, 255));
+        }
+        return $bytes;
+    }
+}
+
 
 // ----------------------------------------------------------------------
 // Initialize variables and constants and load required libraries
 // ----------------------------------------------------------------------
 
 // the Phorum version
-define( "PHORUM", "5.2.18" );
+define( "PHORUM", "5.2.19" );
 
 // our database schema version in format of year-month-day-serial
 define( "PHORUM_SCHEMA_VERSION", "2010101500" );
 
 // our database patch level in format of year-month-day-serial
-define( "PHORUM_SCHEMA_PATCHLEVEL", "2008091900" );
+define( "PHORUM_SCHEMA_PATCHLEVEL", "2026052800" );
 
 // Initialize the global $PHORUM variable, which holds all Phorum data.
 global $PHORUM;
@@ -600,11 +632,31 @@ if ( !defined( "PHORUM_ADMIN" ) ) {
             $PHORUM['user']['new_private_messages'] =
                 phorum_db_pm_checknew($PHORUM['user']['user_id']);
         }
-    }
 
-    /*
-     * [hook]
-     *     common_post_user
+        // TECH-02: Force password change.
+        if (!empty($PHORUM['user']['force_password_change']) &&
+            phorum_page !== 'login' &&
+            phorum_page !== 'logout' &&
+            !(phorum_page === 'control' &&
+              ((isset($PHORUM['args']['panel']) &&
+                $PHORUM['args']['panel'] === PHORUM_CC_PASSWORD) ||
+               (isset($_REQUEST['panel']) &&
+                $_REQUEST['panel'] === PHORUM_CC_PASSWORD)))) {
+            phorum_redirect_by_url(phorum_get_url(
+                PHORUM_CONTROLCENTER_URL,
+                "panel=" . PHORUM_CC_PASSWORD
+            ));
+            exit();
+            }
+            }
+
+            // SEC-05: Clickjacking protection
+            header("X-Frame-Options: SAMEORIGIN");
+
+            /*
+            * [hook]
+            *     common_post_user
+
      *
      * [description]
      *     This hook gives modules a chance to override Phorum variables
@@ -1957,6 +2009,8 @@ function phorum_get_language_info()
 
 function phorum_redirect_by_url( $redir_url )
 {
+    global $PHORUM;
+
     // Some browsers strip the anchor from the URL in case we redirect
     // from a POSTed page :-/. So here we wrap the redirect,
     // to work around that problem.
@@ -1967,17 +2021,28 @@ function phorum_redirect_by_url( $redir_url )
         );
     }
 
-    // check for response splitting and valid http(s) URLs
-    if(preg_match("/\s/", $redir_url) || !preg_match("!^https?://!i", $redir_url)){
+    // SEC-01: Validation for Open Redirect
+    // If it's an absolute URL, check if it's within our site.
+    // Relative URLs (no http(s):// or //) are always allowed.
+    if (preg_match("!^(?:https?:)?(?://|\\\\\\\\)!i", $redir_url)) {
+        if (strpos($redir_url, $PHORUM['http_path']) !== 0) {
+            $redir_url = phorum_get_url(PHORUM_INDEX_URL);
+        }
+    }
+
+    // check for response splitting
+    if(preg_match("/\s/", $redir_url)){
         $redir_url = phorum_get_url(PHORUM_INDEX_URL);
     }
 
     if ( stristr( $_SERVER['SERVER_SOFTWARE'], "Microsoft-IIS" ) ) {
+        // SEC-02: Escape for XSS
+        $esc_redir_url = htmlspecialchars($redir_url, ENT_COMPAT, $PHORUM["DATA"]["HCHARSET"]);
         // the ugly IIS-hack to avoid crashing IIS
         print "<html><head>\n<title>Redirecting ...</title>\n";
-        print "<meta http-equiv=\"refresh\" content=\"0; URL=$redir_url\">";
+        print "<meta http-equiv=\"refresh\" content=\"0; URL=$esc_redir_url\">";
         print "</head>\n";
-        print "<body><a href=\"$redir_url\">Redirecting ...</a></body>\n";
+        print "<body><a href=\"$esc_redir_url\">Redirecting ...</a></body>\n";
         print "</html>";
     } else {
         // our standard-way

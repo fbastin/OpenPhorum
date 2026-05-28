@@ -47,6 +47,14 @@ if ($attach_count)
             phorum_get_url(PHORUM_FILE_URL, "file={$data['file_id']}", "filename=".urlencode($data['name']), "download=1");
         $previewmessage["attachments"][$nr]["size"] =
             phorum_filesize($data["size"]);
+
+        // SEC-04: Escape filename and description for preview.
+        $previewmessage["attachments"][$nr]["name"] =
+            htmlspecialchars($data["name"], ENT_COMPAT, $PHORUM["DATA"]["HCHARSET"]);
+        if (isset($data["description"])) {
+            $previewmessage["attachments"][$nr]["description"] =
+                htmlspecialchars($data["description"], ENT_COMPAT, $PHORUM["DATA"]["HCHARSET"]);
+        }
     }
 }
 

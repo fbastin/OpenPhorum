@@ -79,6 +79,22 @@ define('phorum_page','addon');
 
 include_once( "./common.php" );
 
+// SEC-03: Banlist check.
+include_once( "./include/profile_functions.php" );
+$ban_check = array(array(NULL, PHORUM_BAD_IPS));
+if ($PHORUM["DATA"]["LOGGEDIN"]) {
+    $ban_check[] = array($PHORUM["user"]["username"], PHORUM_BAD_NAMES);
+    $ban_check[] = array($PHORUM["user"]["email"], PHORUM_BAD_EMAILS);
+    $ban_check[] = array($PHORUM["user"]["user_id"], PHORUM_BAD_USERID);
+}
+$ban_error = phorum_check_bans($ban_check);
+if ($ban_error) {
+    $PHORUM["DATA"]["OKMSG"] = $ban_error;
+    phorum_build_common_urls();
+    phorum_output("message");
+    exit();
+}
+
 // Bail out early if there are no modules enabled that implement
 // the addon hook.
 if (! isset($PHORUM["hooks"]["addon"])) trigger_error(

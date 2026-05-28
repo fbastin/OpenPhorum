@@ -317,6 +317,7 @@ $GLOBALS['PHORUM']['API']['user_fields'] = array
   'moderation_email'        => 'bool',
   'moderator_data'          => 'array',
   'settings_data'           => 'array',
+  'force_password_change'   => 'bool',
 
    // Fields that are used for passing on information about user related,
    // data, which is not stored in a standard user table field.
@@ -2167,7 +2168,10 @@ function phorum_api_user_session_create($type, $reset = 0)
                 PHORUM_SESSION_LONG_TERM,
                 $user['user_id'].':'.$sessid_lt,
                 $timeout,
-                $PHORUM['session_path'], $PHORUM['session_domain']
+                $PHORUM['session_path'],
+                $PHORUM['session_domain'],
+                FALSE,
+                TRUE
             );
         } else {
             // Add the session id to the URL building GET variables.
@@ -2187,7 +2191,10 @@ function phorum_api_user_session_create($type, $reset = 0)
                 PHORUM_SESSION_SHORT_TERM,
                 $user['user_id'].':'.$user['sessid_st'],
                 $user['sessid_st_timeout'],
-                $PHORUM['session_path'], $PHORUM['session_domain']
+                $PHORUM['session_path'],
+                $PHORUM['session_domain'],
+                FALSE,
+                TRUE
             );
         }
     }
@@ -2198,7 +2205,10 @@ function phorum_api_user_session_create($type, $reset = 0)
             PHORUM_SESSION_ADMIN,
             $user['user_id'].':'.$sessid_admin,
             0, // admin sessions are destroyed as soon as the browser closes
-            $PHORUM['session_path'], $PHORUM['session_domain']
+            $PHORUM['session_path'],
+            $PHORUM['session_domain'],
+            FALSE,
+            TRUE
         );
     }
 
@@ -2654,16 +2664,25 @@ function phorum_api_user_session_destroy($type)
         if ($type == PHORUM_FORUM_SESSION) {
             setcookie(
                 PHORUM_SESSION_SHORT_TERM, '', time()-86400,
-                $PHORUM['session_path'], $PHORUM['session_domain']
+                $PHORUM['session_path'],
+                $PHORUM['session_domain'],
+                FALSE,
+                TRUE
             );
             setcookie(
                 PHORUM_SESSION_LONG_TERM, '', time()-86400,
-                $PHORUM['session_path'], $PHORUM['session_domain']
+                $PHORUM['session_path'],
+                $PHORUM['session_domain'],
+                FALSE,
+                TRUE
             );
         } elseif ($type == PHORUM_ADMIN_SESSION) {
             setcookie(
                 PHORUM_SESSION_ADMIN, '', time()-86400,
-                $PHORUM['session_path'], $PHORUM['session_domain']
+                $PHORUM['session_path'],
+                $PHORUM['session_domain'],
+                FALSE,
+                TRUE
             );
         } else {
             trigger_error(

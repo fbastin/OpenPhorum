@@ -244,8 +244,7 @@ function phorum_mod_forum_subscriptions_get_user_forums($check_posts = FALSE) {
     }
     $reverse_order = array_reverse($order, true);
     
-    reset($reverse_order);
-    while (list(, $forum) = each($reverse_order)) {
+    foreach ($reverse_order as $forum_id => $forum) {
         if (!empty($forum["folder_flag"]) && empty($forum["childcount"]) && empty($subscriptions[$forum["forum_id"]])) {
             if (isset($forum["parent_id"])) { 
                 $reverse_order[$forum["parent_id"]]["childcount"] -= 1;

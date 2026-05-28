@@ -83,7 +83,7 @@ if ($mode == "reply" || $mode == "quote")
         {
             $quoted = phorum_strip_body($dbmessage["body"], false);
             $quoted = str_replace("\n", "\n> ", $quoted);
-            $quoted = wordwrap(trim($quoted), 50, "\n> ", true);
+            $quoted = wordwrap(trim($quoted), 75, "\n> ", true);
             $quoted = "$author " .
                       "{$PHORUM["DATA"]["LANG"]["Wrote"]}:\n" .
                       str_repeat("-", 55) . "\n> $quoted\n\n\n";

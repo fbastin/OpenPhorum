@@ -1,0 +1,29 @@
+# OpenPhorum .gitignore
+
+# Database configuration
+include/db/config.php
+
+# Phorum cache
+cache/
+
+# User uploads
+files/
+
+# Temporary and test files
+test_db.php
+test.txt
+
+# Backup and log files
+*.bak
+*.bak.*
+log/
+
+# IDE and OS specific files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env*

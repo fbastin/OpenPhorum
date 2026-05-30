@@ -18,9 +18,12 @@
         <div class="calendar-events-panel">
             <div class="events-panel-header">
                 <h3 class="events-panel-title">&Eacute;v&eacute;nements le <span id="selected-date-str">-</span></h3>
-                {IF CALENDAR->is_logged_in}
-                <button type="button" id="btn-open-add" class="btn-add-event">+ Ajouter</button>
-                {/IF}
+                <div class="events-panel-actions">
+                    <a href="{CALENDAR->ajax_url},action=export" class="btn-export-cal" title="Exporter au format iCal (.ics)">Exporter</a>
+                    {IF CALENDAR->is_logged_in}
+                    <button type="button" id="btn-open-add" class="btn-add-event">+ Ajouter</button>
+                    {/IF}
+                </div>
             </div>
             <div id="events-container" class="events-scroll">S&eacute;lectionnez une date.</div>
             {IF NOT CALENDAR->is_logged_in}

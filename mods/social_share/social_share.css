@@ -1,34 +1,31 @@
 .social-share-container {
-    margin: 15px 0;
-    padding: 10px;
-    border-top: 1px solid #eee;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: 10px;
+    vertical-align: middle;
 }
 
 .social-share-label {
-    font-size: 13px;
-    font-weight: bold;
-    color: #666;
-    margin-right: 5px;
+    display: none; /* Hide label to save space in the actions row */
 }
 
 .social-share-btn {
     display: inline-block;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: #ccc;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    background-color: #777;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 18px;
-    transition: transform 0.2s, background-color 0.2s;
+    background-size: 12px;
+    transition: transform 0.1s, background-color 0.2s;
+    opacity: 0.8;
 }
 
 .social-share-btn:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
+    opacity: 1;
 }
 
 /* Icons */

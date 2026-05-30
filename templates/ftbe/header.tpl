@@ -12,8 +12,8 @@ function randImage($path)
 		// read throught all files
 		foreach ($images as $img) 
 		{
-			// check file mime type like (jpeg,jpg,gif,png), you can limit or allow certain file type	
-			if (preg_match('/[.](jpeg|jpg|gif|png)$/i', basename($img))) { $arrayImage[] = $img; }
+			// check file mime type like (jpeg,jpg,gif,png,webp), you can limit or allow certain file type	
+			if (preg_match('/[.](jpeg|jpg|gif|png|webp)$/i', basename($img))) { $arrayImage[] = $img; }
 		}
 		
 		return($arrayImage); // return every images back as an array
@@ -70,7 +70,7 @@ display: inline;
 {ELSE}
   <link rel="stylesheet" type="text/css" href="{URL->CSS}" media="screen" />
   <link rel="stylesheet" type="text/css" href="{URL->CSS_PRINT}" media="print" />
-  <link rel="stylesheet" type="text/css" href="/css/tireur.min.css?v=20260530a" media="all"/>
+  <link rel="stylesheet" type="text/css" href="/css/tireur.css?v=20260530b" media="all"/>
 {/IF}
 
 {! Load Javascript code. This code origins from core Phorum javascript }

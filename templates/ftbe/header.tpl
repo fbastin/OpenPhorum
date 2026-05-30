@@ -70,7 +70,7 @@ display: inline;
 {ELSE}
   <link rel="stylesheet" type="text/css" href="{URL->CSS}" media="screen" />
   <link rel="stylesheet" type="text/css" href="{URL->CSS_PRINT}" media="print" />
-  <link rel="stylesheet" type="text/css" href="/css/tireur.css?v=20260530a" media="all"/>
+  <link rel="stylesheet" type="text/css" href="/css/tireur.min.css?v=20260530a" media="all"/>
 {/IF}
 
 {! Load Javascript code. This code origins from core Phorum javascript }
@@ -134,6 +134,7 @@ Some Icons courtesy of:
 <meta property="og:url" content="https://www.tireur.org/forum/{IF URL->READ}{URL->READ}{ELSE}{URL->INDEX}{/IF}" />
 <meta property="og:image" content="https://www.tireur.org/images/logo-site.png" />
 <meta property="og:locale" content="fr_BE" />
+<meta name="theme-color" content="#141D26">
 </head>
 
 {! Start of the page body. }

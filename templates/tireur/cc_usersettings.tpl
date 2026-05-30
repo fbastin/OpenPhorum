@@ -10,6 +10,12 @@
             {IF PROFILE->USERPROFILE}
                 <dt>{LANG->RealName}:&nbsp;</dt>
                 <dd><input type="text" name="real_name" size="30" value="{PROFILE->real_name}" /></dd>
+                <dt>Date de naissance (AAAA-MM-JJ):&nbsp;</dt>
+                <dd>
+                    <input type="text" name="user_birthday" size="10" maxlength="10" value="{PROFILE->user_birthday}" />
+                    &nbsp;&nbsp;
+                    <input type="checkbox" name="user_birthday_privacy" value="1" {IF PROFILE->user_birthday_privacy 1}checked="checked"{/IF} /> Garder priv&eacute;e
+                </dd>
             {/IF}
 
             {IF PROFILE->SIGSETTINGS}

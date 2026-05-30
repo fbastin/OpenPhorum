@@ -83,7 +83,7 @@ $frm->addbreak("Configure the starting position for the map");
 $frm->addmessage(
     "Using the map below, you can configure the default state for the map.
      This state is shown in case a user did not yet set a position or if
-     he/she unsets the position. The map's center, zoom level and map type
+     he/she unsets the position. The map's center and zoom level 
      are all stored for defining the default state."
 );
 
@@ -92,7 +92,7 @@ $map = mod_google_maps_build_maptool('map-editor', array(
     'map_latitude'    => $PHORUM['mod_google_maps']['latitude'],
     'map_longitude'   => $PHORUM['mod_google_maps']['longitude'],
     'map_zoom'        => $PHORUM['mod_google_maps']['zoom'],
-    'map_type'        => $PHORUM['mod_google_maps']['type'],
+    'map_type'        => 'roadmap',
 
     // We need to specify these here explicitly, because otherwise
     // the currently active map center, zoom and type would be used

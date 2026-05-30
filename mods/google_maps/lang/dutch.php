@@ -13,8 +13,7 @@ $PHORUM["DATA"]["LANG"]["mod_google_maps"] = array
     "Clear"               => "Lokatie wissen",
     "Location"            => "Lokatie",
     "NoLocationSet"       => "Geen lokatie ingesteld",
-    "IncompatibleBrowser" => "Sorry, maar uw browser ondersteunt Google " .
-                             "Maps niet.",
+    "IncompatibleBrowser" => "Sorry, maar uw browser ondersteunt OpenStreetMap niet.",
     "NoSearchResults"     => "Sorry, maar uw zoekopdracht heeft geen " .
                              "resultaten opgeleverd.",
     "ProfileTitle"        => "Lokatie van deze gebruiker:",

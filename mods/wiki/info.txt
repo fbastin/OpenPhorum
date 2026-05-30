@@ -1,9 +1,0 @@
-title: Wiki
-desc: Wiki sur les armes
-author: Fabian Bastin (tireur.org@gmail.com)
-url: http://www.tireur.org
-category: integration
-required_version: 5.2.0
-version: 0.0.1
-
-hook: after_header

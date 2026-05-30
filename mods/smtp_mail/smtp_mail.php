@@ -39,6 +39,7 @@ function phorum_smtp_send_messages ($data)
 			  
 			$mail = new PHPMailer();  
 			$mail->PluginDir = "./mods/smtp_mail/phpmailer/";
+			$mail->SMTPDebug = empty($settings['show_errors']) ? 0 : 2;
 			  
             $mail->CharSet  = $PHORUM["DATA"]["CHARSET"];
             $mail->Encoding = $PHORUM["DATA"]["MAILENCODING"];

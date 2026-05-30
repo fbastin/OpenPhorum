@@ -230,13 +230,16 @@
                     var html = '';
                     for (var i = 0; i < data.length; i++) {
                         var ev = data[i];
-                        var canEdit = USER_ID > 0 && (IS_ADMIN || USER_ID == ev.user_id);
-                        html += '<div class="event-item' + (canEdit ? ' editable' : '') + '" data-idx="' + i + '">';
+                        var canEdit = USER_ID > 0 && (IS_ADMIN || USER_ID == ev.user_id) && ev.type !== 'birthday';
+                        var isBirthday = ev.type === 'birthday';
+                        html += '<div class="event-item' + (canEdit ? ' editable' : '') + (isBirthday ? ' is-birthday' : '') + '" data-idx="' + i + '">';
                         if (canEdit) {
-                            html += '<span class="btn-delete-event" data-id="' + ev.event_id + '" title="Supprimer">&times;</span>';
+                            html += '<span class="btn-delete-event" title="Supprimer">&times;</span>';
                         }
-                        html += '<div class="event-title">' + esc(ev.title) + '</div>';
-                        html += '<div class="event-author">Par ' + esc(ev.username) + '</div>';
+                        html += '<div class="event-title">' + (isBirthday ? '🎂 ' : '') + esc(ev.title) + '</div>';
+                        if (!isBirthday) {
+                            html += '<div class="event-author">Par ' + esc(ev.username) + '</div>';
+                        }
                         if (ev.description) {
                             html += '<div class="event-desc">' + esc(ev.description) + '</div>';
                         }
@@ -244,16 +247,19 @@
                     }
                     $events.innerHTML = html;
 
-                    var items = $events.querySelectorAll('.event-item.editable');
+                    var items = $events.querySelectorAll('.event-item');
                     for (var j = 0; j < items.length; j++) {
                         (function(el) {
                             var idx = parseInt(el.getAttribute('data-idx'));
-                            el.addEventListener('click', function() { openModal('edit', data[idx]); });
+                            var ev = data[idx];
+                            if (ev.type !== 'birthday') {
+                                el.addEventListener('click', function() { openModal('edit', ev); });
+                            }
                             var del = el.querySelector('.btn-delete-event');
                             if (del) {
                                 del.addEventListener('click', function(e) {
                                     e.stopPropagation();
-                                    deleteEvent(data[idx].event_id);
+                                    deleteEvent(ev.event_id);
                                 });
                             }
                         })(items[j]);

@@ -67,7 +67,17 @@ define( "PHORUM", "5.2.23" );
 define( "PHORUM_SCHEMA_VERSION", "2010101500" );
 
 // our database patch level in format of year-month-day-serial
-define( "PHORUM_SCHEMA_PATCHLEVEL", "2026052800" );
+define( "PHORUM_SCHEMA_PATCHLEVEL", "2008091900" );
+
+/*
+// Send headers to prevent caching of dynamic Phorum pages.
+// This ensures that session changes (login/logout) are reflected immediately.
+if (!defined('PHORUM_ADMIN') && !empty($_SERVER['REMOTE_ADDR'])) {
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+}
+*/
 
 // Initialize the global $PHORUM variable, which holds all Phorum data.
 global $PHORUM;

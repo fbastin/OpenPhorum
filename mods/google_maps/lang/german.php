@@ -19,7 +19,7 @@ $PHORUM["DATA"]["LANG"]["mod_google_maps"] = array
     "NoLocationSet"       => "Kein Standort ausgew&auml;hlt",
     "IncompatibleBrowser" => "Sorry, Ihr Browser ist inkompatibel." .
                              "Die ben&ouml;tigten Funktionen fehlen " .
-                             "f&uuml;r Google Maps.",
+                             "f&uuml;r OpenStreetMap.",
     "NoSearchResults"     => "Sorry, es wurden keine Ergebnisse f&uuml;r " .
                              "Ihre Suchanfrage gefunden.",
     "ProfileTitle"        => "Standort dieses Benutzers:",

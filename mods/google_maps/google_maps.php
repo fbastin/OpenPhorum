@@ -90,7 +90,7 @@ function phorum_mod_google_maps_cc_panel($data)
 }
 
 // Hook: profile
-// Setup the google map code for the user profile.
+// Setup the OpenStreetMap code for the user profile.
 function phorum_mod_google_maps_profile($profile)
 {
     global $PHORUM;

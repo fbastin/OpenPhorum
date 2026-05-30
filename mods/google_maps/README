@@ -1,8 +1,8 @@
-Module  : Google Maps Module
+Module  : OpenStreetMap Module
 Version : 2.0.5
 Author  : Maurice Makaay <maurice@phorum.org>
 
-This module implements Google Maps functionality in the user profile.
+This module implements OpenStreetMap functionality in the user profile.
 The user can indicate in the control center where he/she lives and this
 location can be displayed to others on the profile viewing screen.
 
@@ -39,7 +39,7 @@ Contents:
 - Login as administrator in Phorum's administrative interface and
   go to the "Modules" section;
 
-- Enable the module "Google Maps".
+- Enable the module "OpenStreetMap".
 
 - Configure the module through the module's settings page.
 
@@ -66,14 +66,14 @@ Contents:
   - Login as administrator in Phorum's administrative interface and
     go to the "Modules" section;
 
-  - Disable the module "Google Maps".
+  - Disable the module "OpenStreetMap".
 
   - Delete the directory "mods/google_maps" within your Phorum installation
     (but keep of course customized template files if you have those).
 
   - Move the new "google_maps" directory to the "mods" directory.
 
-  - Go to the Modules administration and enable the module "Google Maps".
+  - Go to the Modules administration and enable the module "OpenStreetMap".
 
 
 3. Customization
@@ -94,7 +94,7 @@ Contents:
  3.2 User control center
  -----------------------
 
-  By default, the module will add the Google map editor to the user
+  By default, the module will add the OpenStreetMap editor to the user
   profile screen on the "Edit My Profile" page. In case you want to
   fully customize where and how the map is shown inside the control center,
   you can disable automatic displaying of the map tool through the module
@@ -116,7 +116,7 @@ Contents:
  3.3 User profile screen
  -----------------------
 
-  By default, the module will add the Google map for the user to the bottom
+  By default, the module will add the OpenStreetMap for the user to the bottom
   of the profile page. In case you want to fully customize the way in which
   the map is displayed on the profile page, you can disable automatic
   displaying of the map through the module settings. After that, you can edit

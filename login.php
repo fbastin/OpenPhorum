@@ -54,11 +54,17 @@ if ($PHORUM['DATA']['LOGGEDIN'] && !empty($PHORUM["args"]["logout"])) {
 
     phorum_api_user_session_destroy(PHORUM_FORUM_SESSION);
 
-    // Determine the URL to redirect the user to. The hook "after_logout"
-    // can be used by module writers to set a custom redirect URL.
-    if (isset($_SERVER["HTTP_REFERER"]) && !empty($_SERVER['HTTP_REFERER'])) {
+    // Determine the URL to redirect the user to.
+    // 1. Respect the 'redir' argument if present
+    if (!empty($PHORUM["args"]["redir"])) {
+        $url = urldecode($PHORUM["args"]["redir"]);
+    }
+    // 2. Use HTTP_REFERER if available
+    elseif (isset($_SERVER["HTTP_REFERER"]) && !empty($_SERVER['HTTP_REFERER'])) {
         $url = $_SERVER["HTTP_REFERER"];
-    } else {
+    } 
+    // 3. Fallback to forum list
+    else {
         $url = phorum_get_url(PHORUM_LIST_URL);
     }
 

@@ -1,6 +1,12 @@
 Changelog:
 ----------
 
+2026-05-29 v2.0.5-OSM (Tireur.org)
+
+    - Transitioned from Google Maps API to OpenStreetMap and Leaflet.
+    - Updated documentation and labels to reflect the new provider.
+    - Preserved data compatibility with existing user locations.
+
 2011-04-11 v2.0.5 (Maurice Makaay)
 
     - Restored the functionality of searching for the user's location
@@ -209,10 +215,10 @@ Changelog:
     - If a user saved some profile data on another control center page
       than the page on which the Google map was, then the location
       info would get lost. This bug is now fixed.
-      Thanks to Bert Körn for reporting this problem.
+      Thanks to Bert Kï¿½rn for reporting this problem.
 
     - Added language support (german_du.php).
-      Also thanks to Bert Körn for this one.
+      Also thanks to Bert Kï¿½rn for this one.
 
     - Changed Stammgast -> Benutzer in the German language file and
       created a german_sie.php based on german_du.php.

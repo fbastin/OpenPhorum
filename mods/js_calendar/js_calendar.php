@@ -97,19 +97,50 @@ function phorum_mod_js_calendar_list_events() {
     $prefix = $PHORUM['DBCONFIG']['table_prefix'];
     $quoted_date = phorum_db_interact(DB_RETURN_QUOTED, $date);
 
+    // 1. Fetch standard events
     $sql = "SELECT e.*, u.username FROM phorum_calendar_events e JOIN {$prefix}_users u ON e.user_id = u.user_id WHERE e.event_date = '$quoted_date' ORDER BY e.created_at ASC";
     $res = phorum_db_interact(DB_RETURN_RES, $sql);
 
     $results = array();
     if ($res) {
         while ($row = phorum_db_fetch_row($res, DB_RETURN_ASSOC)) {
+            $row['type'] = 'event';
             $results[] = $row;
         }
     }
+
+    // 2. Fetch birthdays for this day/month (ignoring year)
+    $day_month = substr($date, 5); // MM-DD
+    $sql_bday = "SELECT u.user_id, u.username, b.data as birthday 
+                 FROM {$prefix}_users u 
+                 JOIN {$prefix}_user_custom_fields b ON u.user_id = b.user_id AND b.type = 22
+                 LEFT JOIN {$prefix}_user_custom_fields p ON u.user_id = p.user_id AND p.type = 23
+                 WHERE b.data LIKE '%-$day_month' 
+                 AND (p.data IS NULL OR p.data = '0')
+                 AND u.active = 1";
+    $res_bday = phorum_db_interact(DB_RETURN_RES, $sql_bday);
+    if ($res_bday) {
+        while ($row = phorum_db_fetch_row($res_bday, DB_RETURN_ASSOC)) {
+            $results[] = array(
+                'event_id'    => 'bday_' . $row['user_id'],
+                'user_id'     => $row['user_id'],
+                'username'    => $row['username'],
+                'title'       => "Anniversaire de " . $row['username'],
+                'description' => "Date de naissance : " . $row['birthday'],
+                'event_date'  => $date,
+                'type'        => 'birthday'
+            );
+        }
+    }
+
     return $results;
 }
 
 function phorum_mod_js_calendar_list_all_dates() {
+    $PHORUM = $GLOBALS['PHORUM'];
+    $prefix = $PHORUM['DBCONFIG']['table_prefix'];
+    
+    // Standard events dates
     $res = phorum_db_interact(DB_RETURN_RES, "SELECT DISTINCT event_date FROM phorum_calendar_events");
     $results = array();
     if ($res) {
@@ -117,7 +148,29 @@ function phorum_mod_js_calendar_list_all_dates() {
             $results[] = $row['event_date'];
         }
     }
-    return $results;
+
+    // Birthdays dates (we only care about the current view typically, 
+    // but for simplicity we can return birthdays that match users)
+    // To avoid returning thousands of dates, we could just return those in a range,
+    // but js_calendar list_all_dates is used for highlighting.
+    // Since birthdays repeat every year, this logic is tricky for "list_all_dates".
+    // For now, let's keep it to standard events and we'll handle birthday highlighting in JS if needed,
+    // or just return birthdays for the current year.
+    $year = date('Y');
+    $sql_bday = "SELECT DISTINCT SUBSTR(b.data, 6) as md
+                 FROM {$prefix}_user_custom_fields b
+                 LEFT JOIN {$prefix}_user_custom_fields p ON b.user_id = p.user_id AND p.type = 23
+                 WHERE b.type = 22 AND (p.data IS NULL OR p.data = '0')";
+    $res_bday = phorum_db_interact(DB_RETURN_RES, $sql_bday);
+    if ($res_bday) {
+        while ($row = phorum_db_fetch_row($res_bday, DB_RETURN_ASSOC)) {
+            $results[] = $year . '-' . $row['md'];
+            $results[] = ($year+1) . '-' . $row['md'];
+            $results[] = ($year-1) . '-' . $row['md'];
+        }
+    }
+
+    return array_unique($results);
 }
 
 function phorum_mod_js_calendar_save_event() {

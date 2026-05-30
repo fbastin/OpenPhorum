@@ -285,6 +285,17 @@
     transition: transform 0.15s, border-color 0.15s;
 }
 
+.event-item.is-birthday {
+    background: #fffdf2;
+    border-color: #ffe066;
+    border-left-color: #fab005; /* Golden birthday color */
+}
+
+.event-item.is-birthday .event-title {
+    color: #8a6d3b;
+    font-weight: 700;
+}
+
 .event-item.editable:hover {
     transform: translateX(4px);
     border-color: var(--color-accent, #2980b9);

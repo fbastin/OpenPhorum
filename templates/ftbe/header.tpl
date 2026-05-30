@@ -128,6 +128,12 @@ Some Icons courtesy of:
   FAMFAMFAM - http://www.famfamfam.com/lab/icons/silk/
   Tango Project - http://tango-project.org/
 -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Tireur.org" />
+<meta property="og:title" content="{HTML_TITLE}" />
+<meta property="og:url" content="https://www.tireur.org/forum/{IF URL->READ}{URL->READ}{ELSE}{URL->INDEX}{/IF}" />
+<meta property="og:image" content="https://www.tireur.org/images/logo-site.png" />
+<meta property="og:locale" content="fr_BE" />
 </head>
 
 {! Start of the page body. }

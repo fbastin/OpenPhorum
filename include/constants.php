@@ -2,18 +2,18 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//   Copyright (C) 2010  Phorum Development Team                              //
+//   Copyright (C) 2010  OpenPhorum Development Team                              //
 //   http://www.phorum.org                                                    //
 //                                                                            //
 //   This program is free software. You can redistribute it and/or modify     //
-//   it under the terms of either the current Phorum License (viewable at     //
-//   phorum.org) or the Phorum License that was distributed with this file    //
+//   it under the terms of either the current OpenPhorum License (viewable at     //
+//   phorum.org) or the OpenPhorum License that was distributed with this file    //
 //                                                                            //
 //   This program is distributed in the hope that it will be useful,          //
 //   but WITHOUT ANY WARRANTY, without even the implied warranty of           //
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     //
 //                                                                            //
-//   You should have received a copy of the Phorum License                    //
+//   You should have received a copy of the OpenPhorum License                    //
 //   along with this program.                                                 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -26,8 +26,8 @@
 
     define("PHORUM_FILE_EXTENSION", "php");
 
-    // The maximum number of messages that Phorum will remember as being
-    // read, per forum per user. Phorum will trim off older read flags
+    // The maximum number of messages that OpenPhorum will remember as being
+    // read, per forum per user. OpenPhorum will trim off older read flags
     // if this limit is hit.
     define("PHORUM_MAX_READ_COUNT_PER_FORUM", 1000);
 
@@ -173,7 +173,7 @@
     define("PHORUM_CC_GROUP_MODERATION", "groupmod");
     define("PHORUM_CC_GROUP_MEMBERSHIP", "groups");
 
-    // Phorum up/down status
+    // OpenPhorum up/down status
     define("PHORUM_MASTER_STATUS_NORMAL", "normal");
     define("PHORUM_MASTER_STATUS_READ_ONLY", "read-only");
     define("PHORUM_MASTER_STATUS_ADMIN_ONLY", "admin-only");

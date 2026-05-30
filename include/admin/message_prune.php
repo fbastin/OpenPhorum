@@ -2,18 +2,18 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//   Copyright (C) 2010  Phorum Development Team                              //
+//   Copyright (C) 2010  OpenPhorum Development Team                              //
 //   http://www.phorum.org                                                    //
 //                                                                            //
 //   This program is free software. You can redistribute it and/or modify     //
-//   it under the terms of either the current Phorum License (viewable at     //
-//   phorum.org) or the Phorum License that was distributed with this file    //
+//   it under the terms of either the current OpenPhorum License (viewable at     //
+//   phorum.org) or the OpenPhorum License that was distributed with this file    //
 //                                                                            //
 //   This program is distributed in the hope that it will be useful,          //
 //   but WITHOUT ANY WARRANTY, without even the implied warranty of           //
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     //
 //                                                                            //
-//   You should have received a copy of the Phorum License                    //
+//   You should have received a copy of the OpenPhorum License                    //
 //   along with this program.                                                 //
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -577,27 +577,27 @@ foreach($ruledefs as $filter => $def) {
 <script type="text/javascript">
 //<![CDATA[
 
-// Class PhorumFilterRule
-// This class describes a single Phorum filter rule.
-function PhorumFilterRule(conf)
+// Class OpenPhorumFilterRule
+// This class describes a single OpenPhorum filter rule.
+function OpenPhorumFilterRule(conf)
 {
     // Check if we have all required config information.
     if (conf == null) {
-        throw("Illegal call of PhorumFilterRule(): no config set");
+        throw("Illegal call of OpenPhorumFilterRule(): no config set");
         return;
     }
     if (conf.parent == null) {
-        throw("Illegal call of PhorumFilterRule(): no parent in the config");
+        throw("Illegal call of OpenPhorumFilterRule(): no parent in the config");
         return;
     }
     if (conf.index == null) {
-        throw("Illegal call of PhorumFilterRule(): no index in the config");
+        throw("Illegal call of OpenPhorumFilterRule(): no index in the config");
         return;
     }
 
     // Object properties -------------------------------------------------
 
-    // Information relating to the PhorumFilter object which created this rule.
+    // Information relating to the OpenPhorumFilter object which created this rule.
     this.parent = conf.parent;
     this.index  = conf.index;
 
@@ -845,17 +845,17 @@ function PhorumFilterRule(conf)
     this.onSelectFieldChange();
 }
 
-// Class PhorumFilter
-// This class describes a set of Phorum filter rules.
-function PhorumFilter(conf)
+// Class OpenPhorumFilter
+// This class describes a set of OpenPhorum filter rules.
+function OpenPhorumFilter(conf)
 {
     // Check if we have all required config information.
     if (conf == null) {
-        throw("Illegal call of PhorumFilter(): no config set");
+        throw("Illegal call of OpenPhorumFilter(): no config set");
         return;
     }
     if (conf.parent == null) {
-        throw("Illegal call of PhorumFilter(): no parent in the config");
+        throw("Illegal call of OpenPhorumFilter(): no parent in the config");
         return;
     }
 
@@ -870,11 +870,11 @@ function PhorumFilter(conf)
 
     this.addFilterRule = function(conf)
     {
-        // Create a PhorumFilterRule object.
+        // Create a OpenPhorumFilterRule object.
         if (conf == null) conf = {};
         conf.parent = this;
         conf.index  = this.index++;
-        var ruleobj = new PhorumFilterRule(conf);
+        var ruleobj = new OpenPhorumFilterRule(conf);
 
         // Add the rule to the filter.
         this.parent.appendChild(ruleobj.container);
@@ -922,7 +922,7 @@ function PhorumFilter(conf)
 }
 
 // Create the filter object.
-var filter = new PhorumFilter({
+var filter = new OpenPhorumFilter({
     "parent": document.getElementById("ruleset")
 });
 

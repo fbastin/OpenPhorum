@@ -4,14 +4,14 @@ all:
 	(cd ../../..; phpdoc \
 	       -f $(FILES) \
 	       -t docs/html/api \
-	       -ti "Phorum API Documentation" \
-	       -o HTML:frames:phphtmllib -dn PhorumAPI)
+	       -ti "OpenPhorum API Documentation" \
+	       -o HTML:frames:phphtmllib -dn OpenPhorumAPI)
 	cp index.html.custom index.html
 
 clean:
 	/bin/rm -f *.html
 	/bin/rm -fR media
 	/bin/rm -fR docs
-	/bin/rm -fR PhorumAPI
+	/bin/rm -fR OpenPhorumAPI
 	/bin/rm -fR __examplesource
 

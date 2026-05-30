@@ -2,18 +2,18 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//   Copyright (C) 2010  Phorum Development Team                              //
+//   Copyright (C) 2010  OpenPhorum Development Team                              //
 //   http://www.phorum.org                                                    //
 //                                                                            //
 //   This program is free software. You can redistribute it and/or modify     //
-//   it under the terms of either the current Phorum License (viewable at     //
-//   phorum.org) or the Phorum License that was distributed with this file    //
+//   it under the terms of either the current OpenPhorum License (viewable at     //
+//   phorum.org) or the OpenPhorum License that was distributed with this file    //
 //                                                                            //
 //   This program is distributed in the hope that it will be useful,          //
 //   but WITHOUT ANY WARRANTY, without even the implied warranty of           //
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     //
 //                                                                            //
-//   You should have received a copy of the Phorum License                    //
+//   You should have received a copy of the OpenPhorum License                    //
 //   along with this program.                                                 //
 ////////////////////////////////////////////////////////////////////////////////
 define('phorum_page','login');
@@ -88,7 +88,7 @@ if ($PHORUM['DATA']['LOGGEDIN'] && !empty($PHORUM["args"]["logout"])) {
      *
      * [when]
      *     In <filename>login.php</filename>, after a logout, just before
-     *     redirecting the user to a Phorum page.
+     *     redirecting the user to a OpenPhorum page.
      *
      * [input]
      *     The redirection URL.
@@ -243,13 +243,13 @@ if (count($_POST) > 0) {
          *     password_reset
          *
          * [availability]
-         *     Phorum 5 >= 5.2.13
+         *     OpenPhorum 5 >= 5.2.13
          *
          * [description]
          *     This hook is called after handling a password reset request.
          *     Based on whether a user account can be found for the
          *     provided email address and what the account status for that
-         *     user is, different actions are performed by Phorum before
+         *     user is, different actions are performed by OpenPhorum before
          *     calling this hook:
          *     <ul>
          *       <li>If no user account can be found for the provided email
@@ -368,11 +368,11 @@ if (count($_POST) > 0) {
                 trim($_POST["password"])
             );
 
-            // They are. Setup the active user and start a Phorum session.
+            // They are. Setup the active user and start a OpenPhorum session.
             if ($user_id)
             {
-                // Make the authenticated user the active Phorum user
-                // and start a Phorum user session. Because this is a fresh
+                // Make the authenticated user the active OpenPhorum user
+                // and start a OpenPhorum user session. Because this is a fresh
                 // login, we can enable the short term session and we request
                 // refreshing of the session id(s).
                 if (phorum_api_user_set_active_user(PHORUM_FORUM_SESSION, $user_id, PHORUM_FLAG_SESSION_ST) && phorum_api_user_session_create(PHORUM_FORUM_SESSION, PHORUM_SESSID_RESET_LOGIN)) {
@@ -441,7 +441,7 @@ if (count($_POST) > 0) {
                      *
                      * [when]
                      *     In <filename>login.php</filename>, after a successful
-                     *     login, just before redirecting the user to a Phorum
+                     *     login, just before redirecting the user to a OpenPhorum
                      *     page.
                      *
                      * [input]

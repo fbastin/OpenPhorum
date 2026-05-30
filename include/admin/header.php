@@ -2,24 +2,24 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//   Copyright (C) 2010  Phorum Development Team                              //
+//   Copyright (C) 2010  OpenPhorum Development Team                              //
 //   http://www.phorum.org                                                    //
 //                                                                            //
 //   This program is free software. You can redistribute it and/or modify     //
-//   it under the terms of either the current Phorum License (viewable at     //
-//   phorum.org) or the Phorum License that was distributed with this file    //
+//   it under the terms of either the current OpenPhorum License (viewable at     //
+//   phorum.org) or the OpenPhorum License that was distributed with this file    //
 //                                                                            //
 //   This program is distributed in the hope that it will be useful,          //
 //   but WITHOUT ANY WARRANTY, without even the implied warranty of           //
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     //
 //                                                                            //
-//   You should have received a copy of the Phorum License                    //
+//   You should have received a copy of the OpenPhorum License                    //
 //   along with this program.                                                 //
 ////////////////////////////////////////////////////////////////////////////////
 
     if(!defined("PHORUM_ADMIN")) return;
 
-    // load the default Phorum language
+    // load the default OpenPhorum language
     if(isset($PHORUM["default_forum_options"]["language"])){
         $lang = basename($PHORUM["default_forum_options"]["language"]);
         if (!file_exists("./include/lang/${lang}.php")) {
@@ -80,7 +80,7 @@
 ?>
 <html>
 <head>
-<title>Phorum Admin</title>
+<title>OpenPhorum Admin</title>
 <?php
 
 // meta data with the charset from the default language
@@ -134,7 +134,7 @@ function show_help(key)
 
 function hide_help()
 {
-    document.getElementById('helpdiv').style.display = 'none';
+    document.getElementById('helpdiv').style.none = 'none';
     document.getElementById('help-title').innerHTML = "";
     document.getElementById('help-text').innerHTML = "";
 }
@@ -144,7 +144,7 @@ function hide_help()
 <body>
 <div id="helpdiv">
 <div id="helpdiv-hide"><a href="javascript:hide_help();"><img border="0" src="<?php print $PHORUM['http_path'] ?>/images/close.gif" height="16" width="16" /></a></div>
-<div id="helpdiv-title">&nbsp;Phorum Admin Help</div>
+<div id="helpdiv-title">&nbsp;OpenPhorum Admin Help</div>
 <div id="helpdiv-content">
 <div id="help-title"></div>
 <div id="help-text"></div>
@@ -153,7 +153,7 @@ function hide_help()
 
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
 <tr>
-    <td class="statusbar_edge">Phorum Admin<small><br />version <?php echo PHORUM; ?></small></td>
+    <td class="statusbar_edge">OpenPhorum Admin<small><br />version <?php echo PHORUM; ?></small></td>
 <?php if(empty($module)){ // only show the versioncheck if you are on the front page of the admin ?>
     <td class="statusbar_edge" align="center" valign="middle">
       <iframe scrolling="no" frameborder="0" align="top" width="400" height="35" src="versioncheck.php"></iframe>
@@ -185,7 +185,7 @@ function hide_help()
 <form id="status-form" action="<?php echo phorum_admin_build_url('base'); ?>" method="post">
 <input type="hidden" name="phorum_admin_token" value="<?php echo $PHORUM['admin_token'];?>" />
 <input type="hidden" name="module" value="status" />
-Phorum Status:
+OpenPhorum Status:
 <select name="status" onChange="this.form.submit();">
 <option value="normal" <?php if($PHORUM["status"]=="normal") echo "selected"; ?>>Normal</option>
 <option value="read-only"<?php if($PHORUM["status"]=="read-only") echo "selected"; ?>>Read Only</option>
@@ -210,23 +210,23 @@ Phorum Status:
 <tr>
     <td valign="top">
 <?php
-        include_once "./include/admin/PhorumAdminMenu.php";
-        include_once "./include/admin/PhorumAdminMenuHookPosition.php";
+        include_once "./include/admin/OpenPhorumAdminMenu.php";
+        include_once "./include/admin/OpenPhorumAdminMenuHookPosition.php";
 
         /*
          * [hook]
          *     admin_menu
          *
          * [availability]
-         *     Phorum 5.2.16
+         *     OpenPhorum 5.2.16
          *
          * [description]
-         *     This hook allows to inject custom HTML into the Phorum admin
+         *     This hook allows to inject custom HTML into the OpenPhorum admin
          *     menu. The hook will receive an instance of
-         *     PhorumAdminMenuHookPosition which is required to determine at
-         *     which position in the Phorum admin menu the module author wishes
+         *     OpenPhorumAdminMenuHookPosition which is required to determine at
+         *     which position in the OpenPhorum admin menu the module author wishes
          *     to place his custom menu. Although any HTML can be injected, it
-         *     is advised to use the PhorumAdminMenu class.
+         *     is advised to use the OpenPhorumAdminMenu class.
          *
          *     Use the methods appendAt(position, html) and appendLast(html) to
          *     tell where you want them to appear.
@@ -238,7 +238,7 @@ Phorum Status:
          *     Admin header
          *
          * [input]
-         *     Object of PhorumAdminMenuHookPosition
+         *     Object of OpenPhorumAdminMenuHookPosition
          *
          * [output]
          *     Return the object
@@ -247,7 +247,7 @@ Phorum Status:
          *     <hookcode>
          *     function phorum_mod_foo_admin_menu($pos)
          *     {
-         *         $menu = new PhorumAdminMenu("MyImportantLinks");
+         *         $menu = new OpenPhorumAdminMenu("MyImportantLinks");
          *         $menu->addCustom(
          *             "Event log",
          *             phorum_admin_build_url(array(
@@ -267,11 +267,11 @@ Phorum Status:
          *
          *         $pos->appendLast($menu->getHtml());
          *
-         *         $menu = new PhorumAdminMenu("Who rocks?");
+         *         $menu = new OpenPhorumAdminMenu("Who rocks?");
          *         $menu->addCustom(
          *             "Guess!",
          *             "http://phorum.org/",
-         *             "Phorum rocks!",
+         *             "OpenPhorum rocks!",
          *             "_blank"
          *         );
          *
@@ -281,7 +281,7 @@ Phorum Status:
          *     }
          *     </hookcode>
          */
-        $layout = new PhorumAdminMenuHookPosition();
+        $layout = new OpenPhorumAdminMenuHookPosition();
         # It's an object, not necessary to return/re-assign it. And in case
         # some hook forgets to return, saves us troubles.
         phorum_hook('admin_menu', $layout);
@@ -289,29 +289,29 @@ Phorum Status:
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new PhorumAdminMenu("Main Menu");
+        $menu = new OpenPhorumAdminMenu("Main Menu");
 
         $menu->add("Admin Home", "", "Takes you to the default Admin page.");
-        $menu->add("Phorum Index", "index", "Takes you to the front page of the Phorum.");
+        $menu->add("OpenPhorum Index", "index", "Takes you to the front page of the OpenPhorum.");
         $menu->add("Log Out", "logout", "Logs you out of the admin.");
 
         $menu->show();
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new PhorumAdminMenu("Global Settings");
+        $menu = new OpenPhorumAdminMenu("Global Settings");
 
         $menu->add("General Settings", "settings", "Edit the global settings which affect the enter installation.");
         $menu->add("Cache Settings", "cache", "Edit the cache settings, like which cache layer to use and what to cache.");
         $menu->add("Ban Lists", "banlist", "Edits the list of banned names, email addresses and IP addresses.");
         $menu->add("Censor List", "badwords", "Edit the list of words that are censored in posts.");
-        $menu->add("Modules", "mods", "Administer the Phorum Modules that are installed.");
+        $menu->add("Modules", "mods", "Administer the OpenPhorum Modules that are installed.");
 
         $menu->show();
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new PhorumAdminMenu("Forums");
+        $menu = new OpenPhorumAdminMenu("Forums");
 
         $menu->add("Manage Forums", "", "Takes you to the default Admin page.");
         $menu->add("Default Settings", "forum_defaults", "Allows you to set defaults settings that can be inherited by forums.");
@@ -322,23 +322,23 @@ Phorum Status:
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new PhorumAdminMenu("Users/Groups");
+        $menu = new OpenPhorumAdminMenu("Users/Groups");
 
         $menu->add("Edit Users", "users", "Allows administrator to edit users including deactivating them.");
         $menu->add("Edit Groups", "groups", "Allows administrator to edit groups and their forum permissions.");
-        $menu->add("Custom Profiles", "customprofile", "Allows administrator to add fields to Phorum profile.");
+        $menu->add("Custom Profiles", "customprofile", "Allows administrator to add fields to OpenPhorum profile.");
 
         $menu->show();
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new PhorumAdminMenu("Maintenance");
+        $menu = new OpenPhorumAdminMenu("Maintenance");
 
         $menu->add("Check For New Version", "version", "Check for new releases.");
         $menu->add("Database Integrity", "rebuild", "Database Integrity Actions");
         $menu->add("Prune Messages", "message_prune", "Pruning old messages.");
         $menu->add("Purge Stale Files", "file_purge", "Purging stale files from the database.");
-        $menu->add("Purge cache", "cache_purge", "Purging the Phorum cache.");
+        $menu->add("Purge cache", "cache_purge", "Purging the OpenPhorum cache.");
         $menu->add("System Sanity Checks", "sanity_checks", "Perform a number of sanity checks on the system to identify possible problems.");
         $menu->add("Manage Language Files", "manage_languages", "Allows administrator to create new or updated versions of language files.");
 

@@ -2,18 +2,18 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//   Copyright (C) 2010  Phorum Development Team                              //
+//   Copyright (C) 2010  OpenPhorum Development Team                              //
 //   http://www.phorum.org                                                    //
 //                                                                            //
 //   This program is free software. You can redistribute it and/or modify     //
-//   it under the terms of either the current Phorum License (viewable at     //
-//   phorum.org) or the Phorum License that was distributed with this file    //
+//   it under the terms of either the current OpenPhorum License (viewable at     //
+//   phorum.org) or the OpenPhorum License that was distributed with this file    //
 //                                                                            //
 //   This program is distributed in the hope that it will be useful,          //
 //   but WITHOUT ANY WARRANTY, without even the implied warranty of           //
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     //
 //                                                                            //
-//   You should have received a copy of the Phorum License                    //
+//   You should have received a copy of the OpenPhorum License                    //
 //   along with this program.                                                 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -133,7 +133,7 @@
         phorum_admin_error($error);
     }
 
-    include_once "./include/admin/PhorumInputForm.php";
+    include_once "./include/admin/OpenPhorumInputForm.php";
     $groups=phorum_db_get_groups(0, TRUE);
 
     $forums=phorum_db_get_forums();
@@ -145,7 +145,7 @@
 
         $group=$groups[$_GET["group_id"]];
 
-        $frm = new PhorumInputForm ("", "post");
+        $frm = new OpenPhorumInputForm ("", "post");
 
         $frm->addbreak("Edit Group");
 
@@ -165,10 +165,10 @@
         $frm->addrow("Allow Membership Requests:", $frm->select_tag("open", $open_options, $group["open"], ""));
         $frm->show();
 
-        echo "<br /><hr class=\"PhorumAdminHR\" /><br />";
+        echo "<br /><hr class=\"OpenPhorumAdminHR\" /><br />";
 
 
-        $frm = new PhorumInputForm ("", "post", "Update");
+        $frm = new OpenPhorumInputForm ("", "post", "Update");
 
         $frm->hidden("module", "groups");
 
@@ -228,9 +228,9 @@
 
     if(empty($_REQUEST["edit"])){
 
-        $frm = new PhorumInputForm ("", "post");
+        $frm = new OpenPhorumInputForm ("", "post");
 
-        $frm->addbreak("Phorum Group Admin");
+        $frm->addbreak("OpenPhorum Group Admin");
 
         $frm->hidden("module", "groups");
 
@@ -241,22 +241,22 @@
         $frm->show();
 
         $frm_url = phorum_admin_build_url('base');
-        echo "<hr class=\"PhorumAdminHR\" />";
+        echo "<hr class=\"OpenPhorumAdminHR\" />";
         echo "<form action=\"$frm_url\" method=\"post\">\n";
         echo "<input type=\"hidden\" name=\"phorum_admin_token\" value=\"{$PHORUM['admin_token']}\">\n";
         echo "<input type=\"hidden\" name=\"module\" value=\"groups\">\n";
         echo "<input type=\"hidden\" name=\"action\" value=\"deleteGroups\">\n";
-        echo "<table border=\"0\" cellspacing=\"1\" cellpadding=\"0\" class=\"PhorumAdminTable\" width=\"100%\">\n";
+        echo "<table border=\"0\" cellspacing=\"1\" cellpadding=\"0\" class=\"OpenPhorumAdminTable\" width=\"100%\">\n";
         echo "<tr>\n";
-        echo "    <td class=\"PhorumAdminTableHead\">Group</td>\n";
-        echo "    <td class=\"PhorumAdminTableHead\">Delete</td>\n";
+        echo "    <td class=\"OpenPhorumAdminTableHead\">Group</td>\n";
+        echo "    <td class=\"OpenPhorumAdminTableHead\">Delete</td>\n";
         echo "</tr>\n";
 
         foreach($groups as $group){
             $edit_url = phorum_admin_build_url(array('module=groups','edit=1','group_id='.$group['group_id']));
             echo "<tr>\n";
-            echo "    <td class=\"PhorumAdminTableRow\"><a href=\"$edit_url\">".htmlspecialchars($group['name'])."</a></td>\n";
-            echo "    <td class=\"PhorumAdminTableRow\">Delete? <input type=\"checkbox\" name=\"deleteIds[]\" value=\"{$group['group_id']}\"></td>\n";
+            echo "    <td class=\"OpenPhorumAdminTableRow\"><a href=\"$edit_url\">".htmlspecialchars($group['name'])."</a></td>\n";
+            echo "    <td class=\"OpenPhorumAdminTableRow\">Delete? <input type=\"checkbox\" name=\"deleteIds[]\" value=\"{$group['group_id']}\"></td>\n";
             echo "</tr>\n";
         }
         echo "<tr><td colspan=\"2\" align=\"right\"><input type=\"submit\" name=\"submit\" value=\"Delete Selected\"></td></tr>";

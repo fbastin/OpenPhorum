@@ -19,7 +19,7 @@
 
     if(!defined("PHORUM_ADMIN")) return;
 
-    class OpenPhorumAdminMenu
+    class PhorumAdminMenu
     {
         var $_title;
         var $_id;
@@ -67,9 +67,9 @@
         {
             $html = '';
             if($this->_title){
-                $html .= "<div class=\"OpenPhorumAdminMenuTitle\">$this->_title</div>\n";
+                $html .= "<div class=\"PhorumAdminMenuTitle\">$this->_title</div>\n";
             }
-            $html .= "<div class=\"OpenPhorumAdminMenu\"";
+            $html .= "<div class=\"PhorumAdminMenu\"";
             if($this->_id) $html .= " id=\"$this->_id\"";
             $html .= ">";
 

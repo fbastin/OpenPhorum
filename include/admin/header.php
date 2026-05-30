@@ -210,8 +210,8 @@ OpenPhorum Status:
 <tr>
     <td valign="top">
 <?php
-        include_once "./include/admin/OpenPhorumAdminMenu.php";
-        include_once "./include/admin/OpenPhorumAdminMenuHookPosition.php";
+        include_once "./include/admin/PhorumAdminMenu.php";
+        include_once "./include/admin/PhorumAdminMenuHookPosition.php";
 
         /*
          * [hook]
@@ -223,10 +223,10 @@ OpenPhorum Status:
          * [description]
          *     This hook allows to inject custom HTML into the OpenPhorum admin
          *     menu. The hook will receive an instance of
-         *     OpenPhorumAdminMenuHookPosition which is required to determine at
+         *     PhorumAdminMenuHookPosition which is required to determine at
          *     which position in the OpenPhorum admin menu the module author wishes
          *     to place his custom menu. Although any HTML can be injected, it
-         *     is advised to use the OpenPhorumAdminMenu class.
+         *     is advised to use the PhorumAdminMenu class.
          *
          *     Use the methods appendAt(position, html) and appendLast(html) to
          *     tell where you want them to appear.
@@ -238,7 +238,7 @@ OpenPhorum Status:
          *     Admin header
          *
          * [input]
-         *     Object of OpenPhorumAdminMenuHookPosition
+         *     Object of PhorumAdminMenuHookPosition
          *
          * [output]
          *     Return the object
@@ -247,7 +247,7 @@ OpenPhorum Status:
          *     <hookcode>
          *     function phorum_mod_foo_admin_menu($pos)
          *     {
-         *         $menu = new OpenPhorumAdminMenu("MyImportantLinks");
+         *         $menu = new PhorumAdminMenu("MyImportantLinks");
          *         $menu->addCustom(
          *             "Event log",
          *             phorum_admin_build_url(array(
@@ -267,7 +267,7 @@ OpenPhorum Status:
          *
          *         $pos->appendLast($menu->getHtml());
          *
-         *         $menu = new OpenPhorumAdminMenu("Who rocks?");
+         *         $menu = new PhorumAdminMenu("Who rocks?");
          *         $menu->addCustom(
          *             "Guess!",
          *             "http://phorum.org/",
@@ -281,7 +281,7 @@ OpenPhorum Status:
          *     }
          *     </hookcode>
          */
-        $layout = new OpenPhorumAdminMenuHookPosition();
+        $layout = new PhorumAdminMenuHookPosition();
         # It's an object, not necessary to return/re-assign it. And in case
         # some hook forgets to return, saves us troubles.
         phorum_hook('admin_menu', $layout);
@@ -289,7 +289,7 @@ OpenPhorum Status:
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new OpenPhorumAdminMenu("Main Menu");
+        $menu = new PhorumAdminMenu("Main Menu");
 
         $menu->add("Admin Home", "", "Takes you to the default Admin page.");
         $menu->add("OpenPhorum Index", "index", "Takes you to the front page of the OpenPhorum.");
@@ -299,7 +299,7 @@ OpenPhorum Status:
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new OpenPhorumAdminMenu("Global Settings");
+        $menu = new PhorumAdminMenu("Global Settings");
 
         $menu->add("General Settings", "settings", "Edit the global settings which affect the enter installation.");
         $menu->add("Cache Settings", "cache", "Edit the cache settings, like which cache layer to use and what to cache.");
@@ -311,7 +311,7 @@ OpenPhorum Status:
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new OpenPhorumAdminMenu("Forums");
+        $menu = new PhorumAdminMenu("Forums");
 
         $menu->add("Manage Forums", "", "Takes you to the default Admin page.");
         $menu->add("Default Settings", "forum_defaults", "Allows you to set defaults settings that can be inherited by forums.");
@@ -322,7 +322,7 @@ OpenPhorum Status:
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new OpenPhorumAdminMenu("Users/Groups");
+        $menu = new PhorumAdminMenu("Users/Groups");
 
         $menu->add("Edit Users", "users", "Allows administrator to edit users including deactivating them.");
         $menu->add("Edit Groups", "groups", "Allows administrator to edit groups and their forum permissions.");
@@ -332,7 +332,7 @@ OpenPhorum Status:
 
         echo $layout->fetchAndRemoveNext();
 
-        $menu = new OpenPhorumAdminMenu("Maintenance");
+        $menu = new PhorumAdminMenu("Maintenance");
 
         $menu->add("Check For New Version", "version", "Check for new releases.");
         $menu->add("Database Integrity", "rebuild", "Database Integrity Actions");

@@ -133,7 +133,7 @@
         phorum_admin_error($error);
     }
 
-    include_once "./include/admin/OpenPhorumInputForm.php";
+    include_once "./include/admin/PhorumInputForm.php";
     $groups=phorum_db_get_groups(0, TRUE);
 
     $forums=phorum_db_get_forums();
@@ -145,7 +145,7 @@
 
         $group=$groups[$_GET["group_id"]];
 
-        $frm = new OpenPhorumInputForm ("", "post");
+        $frm = new PhorumInputForm ("", "post");
 
         $frm->addbreak("Edit Group");
 
@@ -168,7 +168,7 @@
         echo "<br /><hr class=\"OpenPhorumAdminHR\" /><br />";
 
 
-        $frm = new OpenPhorumInputForm ("", "post", "Update");
+        $frm = new PhorumInputForm ("", "post", "Update");
 
         $frm->hidden("module", "groups");
 
@@ -228,7 +228,7 @@
 
     if(empty($_REQUEST["edit"])){
 
-        $frm = new OpenPhorumInputForm ("", "post");
+        $frm = new PhorumInputForm ("", "post");
 
         $frm->addbreak("OpenPhorum Group Admin");
 

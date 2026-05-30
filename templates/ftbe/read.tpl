@@ -37,19 +37,21 @@
                             <strong>{LANG->Admin}</strong><br />
                         {/IF}
                         {IF MESSAGES->user}
-                            {LANG->DateReg}: {MESSAGES->user->date_added}<br />
-                            {LANG->Posts}: {MESSAGES->user->posts}<br/>
+                            <div class="message-user-details">
+                                {LANG->DateReg}: {MESSAGES->user->date_added}<br />
+                                {LANG->Posts}: {MESSAGES->user->posts}<br/>
+                                {IF MESSAGES->user->city}
+                                  {MESSAGES->user->city}, {MESSAGES->user->country}<br/>
+                                {/IF}
+                                {IF MESSAGES->user_image_gallery}
+                                  <a href="{MESSAGES->user_image_gallery}">Galerie personnelle</a><br />
+                                {/IF}
+                                {MESSAGES->user->DONATOR}
+                                {IF MESSAGES->user->MODERATOR}
+                                    <br/>{MESSAGES->user->MODERATOR}
+                                {/IF}
+                            </div>
                         {/IF}
-    {IF MESSAGES->user->city}
-      {MESSAGES->user->city},
-      {MESSAGES->user->country}
-      <br/>
-    {/IF}
-    {IF MESSAGES->user_image_gallery}
-      <a href="{MESSAGES->user_image_gallery}">Galerie personnelle</a><br />
-    {/IF}
-    {IF MESSAGES->user->DONATOR} {MESSAGES->user->DONATOR}<br/> {/IF}
-    {MESSAGES->user->MODERATOR}
     </td>
     <td valign="top">
     <small>

@@ -2,8 +2,11 @@
 
 function mod_twitter_url(){
     global $PHORUM;
+    $settings = isset($PHORUM["mod_twitter"]) ? $PHORUM["mod_twitter"] : array();
 
-    $PHORUM["DATA"]["URL"]["TWITTER"] = "http://www.twitter.com/".$PHORUM["mod_twitter"]["username"];
+    if (!empty($settings["username"])) {
+        $PHORUM["DATA"]["URL"]["TWITTER"] = "http://www.twitter.com/".$settings["username"];
+    }
 }
 
 function mod_twitter_posts($message){
@@ -12,6 +15,11 @@ function mod_twitter_posts($message){
     
     // check that all settings are given:
     $settings = $PHORUM["mod_twitter"];
+    
+    // Ensure forum_list and new_posts exist
+    if (!isset($settings['forum_list'])) $settings['forum_list'] = array();
+    if (!isset($settings['new_posts'])) $settings['new_posts'] = 0;
+
     if(empty($settings['consumer_key']) ||
        empty($settings['consumer_secret']) ||
        empty($settings['user_token']) ||
@@ -24,7 +32,7 @@ function mod_twitter_posts($message){
     }
 
     if(($settings["new_posts"]==0 || $message["parent_id"]==0) 
-       && in_array($message['forum_id'],$PHORUM["mod_twitter"]["forum_list"])){
+       && in_array($message['forum_id'],$settings["forum_list"])){
 
         // Format the read URL.
         $url = phorum_get_url(
@@ -59,10 +67,10 @@ function mod_twitter_posts($message){
 
         require './mods/twitter/tmhOAuth/tmhOAuth.php';
         $tmhOAuth = new tmhOAuth(array(
-          'consumer_key' => $PHORUM["mod_twitter"]['consumer_key'],
-          'consumer_secret' => $PHORUM["mod_twitter"]['consumer_secret'],
-          'user_token' => $PHORUM["mod_twitter"]['user_token'],
-          'user_secret' => $PHORUM["mod_twitter"]['user_secret'],
+          'consumer_key' => $settings['consumer_key'],
+          'consumer_secret' => $settings['consumer_secret'],
+          'user_token' => $settings['user_token'],
+          'user_secret' => $settings['user_secret'],
         ));
         
         $tmhOAuth->request('POST', $tmhOAuth->url('1/statuses/update'), array(

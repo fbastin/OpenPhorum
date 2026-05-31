@@ -338,7 +338,7 @@ function mod_onlineusers_get_guest_list()
 function mod_onlineusers_update()
 {
     global $PHORUM;
-    $data = $PHORUM['mod_onlineusers']['data'];
+    $data = isset($PHORUM['mod_onlineusers']['data']) ? $PHORUM['mod_onlineusers']['data'] : array();
 
     $data['users']       = mod_onlineusers_get_user_list();
     $data['usercount']   = count($data['users']);

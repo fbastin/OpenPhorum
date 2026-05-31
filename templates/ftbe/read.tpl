@@ -46,7 +46,9 @@
                                 {IF MESSAGES->user_image_gallery}
                                   <a href="{MESSAGES->user_image_gallery}">Galerie personnelle</a><br />
                                 {/IF}
-                                {MESSAGES->user->DONATOR}
+                                {IF MESSAGES->user->DONATOR}
+                                    {MESSAGES->user->DONATOR}
+                                {/IF}
                                 {IF MESSAGES->user->MODERATOR}
                                     <br/>{MESSAGES->user->MODERATOR}
                                 {/IF}
